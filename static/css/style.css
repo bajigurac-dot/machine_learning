@@ -1122,12 +1122,12 @@ input[type="range"].app-slider {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(15, 23, 42, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 2000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -1144,10 +1144,46 @@ input[type="range"].app-slider {
   border-radius: var(--radius-lg);
   width: 90%;
   max-width: 580px;
-  padding: 26px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 22px 24px 16px 24px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
   transform: translateY(15px);
   transition: transform 0.2s ease;
+}
+
+.modal-dialog:has(.modal-body-scroll),
+#modal-student-grade-card .modal-dialog {
+  overflow: hidden;
+}
+
+.modal-body-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 4px;
+  margin-bottom: 8px;
+}
+
+.modal-sticky-footer {
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  background: #ffffff;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  z-index: 20;
+}
+
+.modal-sticky-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .modal-backdrop.open .modal-dialog {
@@ -2142,12 +2178,38 @@ input[type="range"].app-slider {
 
   /* Modals */
   .modal-dialog {
-    width: 95% !important;
-    max-width: 95vw !important;
+    width: 96% !important;
+    max-width: 96vw !important;
     max-height: 90vh !important;
-    padding: 20px 16px !important;
+    padding: 16px 14px 12px 14px !important;
     border-radius: var(--radius-md) !important;
     overflow-y: auto !important;
+  }
+
+  .modal-dialog:has(.modal-body-scroll),
+  #modal-student-grade-card .modal-dialog {
+    overflow: hidden !important;
+  }
+
+  .modal-sticky-footer {
+    flex-direction: column-reverse !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding-top: 10px !important;
+    background: #ffffff !important;
+  }
+
+  .modal-sticky-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .modal-sticky-footer .btn, .modal-sticky-actions .btn {
+    width: 100% !important;
+    min-height: 46px !important;
+    font-size: 0.94rem !important;
+    justify-content: center !important;
   }
 
   /* Tables */

@@ -99,13 +99,20 @@ const ELearning = {
     }
 
     // Tombol Cetak & Unduh PDF Kartu Nilai
+    const onPrintCard = () => {
+      const nisn = this.currentCardNisn || (this.studentSession ? this.studentSession.nisn : '');
+      if (!nisn) return;
+      window.open(`/api/elearning/student/card/print?nisn=${encodeURIComponent(nisn)}`, '_blank');
+    };
+
     const btnCardPrint = document.getElementById('btn-card-print-preview');
     if (btnCardPrint) {
-      btnCardPrint.addEventListener('click', () => {
-        const nisn = this.currentCardNisn || (this.studentSession ? this.studentSession.nisn : '');
-        if (!nisn) return;
-        window.open(`/api/elearning/student/card/print?nisn=${encodeURIComponent(nisn)}`, '_blank');
-      });
+      btnCardPrint.addEventListener('click', onPrintCard);
+    }
+
+    const btnCardPrintTop = document.getElementById('btn-card-print-preview-top');
+    if (btnCardPrintTop) {
+      btnCardPrintTop.addEventListener('click', onPrintCard);
     }
 
     const btnCardPdf = document.getElementById('btn-card-download-pdf');

@@ -1435,120 +1435,128 @@
 
   <!-- Modal Kartu Nilai Siswa (KHS) -->
   <div class="modal-backdrop" id="modal-student-grade-card">
-    <div class="modal-dialog" style="max-width: 840px; max-height: 92vh; overflow-y: auto;">
-      <div class="panel-header" style="border-bottom: 2px solid #10b981; padding-bottom: 12px; margin-bottom: 16px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+    <div class="modal-dialog" style="max-width: 840px;">
+      <div class="panel-header" style="border-bottom: 2px solid #10b981; padding-bottom: 12px; margin-bottom: 12px; flex-direction: row; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 12px rgba(16,185,129,0.3); flex-shrink: 0;">
             🎓
           </div>
-          <div>
-            <div class="panel-title" style="color: #065f46; font-size: 1.15rem; font-weight: 800;">
-              Kartu Hasil Ujian CBT & Lab Coding (KHS) — SMK Cahaya Pertiwi
+          <div style="min-width: 0;">
+            <div class="panel-title" style="color: #065f46; font-size: 1rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              Kartu Hasil Ujian Siswa (KHS)
             </div>
-            <div class="panel-subtitle" style="font-size: 0.78rem;">
-              Studio ML Python & AI Learning Center • Instruktur: Thoriq Azis, S.Kom
+            <div class="panel-subtitle" style="font-size: 0.74rem;">
+              SMK Cahaya Pertiwi • Thoriq Azis, S.Kom
             </div>
           </div>
         </div>
-        <button class="btn btn-sm btn-secondary modal-close" onclick="document.getElementById('modal-student-grade-card').classList.remove('open')">✕</button>
-      </div>
-
-      <!-- Profil & Identitas Siswa -->
-      <div class="grid-3" style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
-        <div>
-          <span style="font-size: 0.72rem; color: #475569; display: block;">Nama Lengkap Siswa:</span>
-          <b id="card-student-name" style="font-size: 0.95rem; color: #065f46;">-</b>
-        </div>
-        <div>
-          <span style="font-size: 0.72rem; color: #475569; display: block;">NISN Resmi:</span>
-          <b id="card-student-nisn" style="font-family: var(--font-mono); font-size: 0.95rem; color: #0f172a;">-</b>
-        </div>
-        <div>
-          <span style="font-size: 0.72rem; color: #475569; display: block;">Kelas & Sekolah:</span>
-          <b id="card-student-class" style="font-size: 0.95rem; color: #065f46;">-</b>
-        </div>
-      </div>
-
-      <!-- Kartu Ringkasan Indeks Nilai -->
-      <div class="grid-4" style="gap: 10px; margin-bottom: 18px;">
-        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
-          <span class="stat-title" style="font-size: 0.7rem;">Total Ujian Selesai</span>
-          <span class="stat-value" id="card-total-exams" style="font-size: 1.25rem; color: #0f172a;">0</span>
-          <span class="stat-desc">Paket Ujian</span>
-        </div>
-        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
-          <span class="stat-title" style="font-size: 0.7rem;">Rata-rata Nilai</span>
-          <span class="stat-value" id="card-avg-score" style="font-size: 1.25rem; color: #059669;">0.0</span>
-          <span class="stat-desc">Skala 0 - 100</span>
-        </div>
-        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
-          <span class="stat-title" style="font-size: 0.7rem;">Status KKM (75)</span>
-          <span class="stat-value" id="card-status-badge" style="font-size: 0.9rem; font-weight: 800; color: #059669;">-</span>
-          <span class="stat-desc" id="card-pass-fail-count">0 Lulus / 0 Remedial</span>
-        </div>
-        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
-          <span class="stat-title" style="font-size: 0.7rem;">Predikat Akhir</span>
-          <span class="stat-value" id="card-predicate" style="font-size: 0.8rem; font-weight: 800; color: #0f172a;">-</span>
-          <span class="stat-desc">Evaluasi Kompetensi</span>
-        </div>
-      </div>
-
-      <!-- Tabel Daftar Nilai Ujian Siswa -->
-      <div style="margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <h4 style="font-size: 0.88rem; font-weight: 700; color: #0f172a; margin: 0;">
-            📋 Riwayat Pengerjaan Soal & Capaian Skor:
-          </h4>
-          <span style="font-size: 0.72rem; color: #64748b;">Standar KKM: <b>75.0</b></span>
-        </div>
-        
-        <div class="table-container" style="max-height: 280px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px;">
-          <table class="data-table" style="width: 100%; font-size: 0.78rem;">
-            <thead>
-              <tr style="background: #065f46; color: white;">
-                <th style="width: 35px; text-align: center;">No</th>
-                <th>Paket Ujian & Mapel</th>
-                <th style="width: 110px; text-align: center;">Waktu Selesai</th>
-                <th style="width: 75px; text-align: center;">Durasi</th>
-                <th style="width: 65px; text-align: center;">Nilai</th>
-                <th style="width: 95px; text-align: center;">Status</th>
-                <th style="width: 70px; text-align: center;">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="card-exams-tbody">
-              <tr>
-                <td colspan="7" style="text-align: center; padding: 20px; color: var(--text-dim);">
-                  Memuat data kartu nilai...
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Box Container Rincian Soal (Tampil saat Siswa Klik tombol '🔍 Rincian') -->
-      <div id="card-detail-breakdown-box" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <h5 style="font-size: 0.84rem; font-weight: 700; color: #065f46; margin: 0;" id="card-detail-title">
-            🔍 Rincian Jawaban Soal Ujian
-          </h5>
-          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('card-detail-breakdown-box').style.display='none'" style="font-size: 0.7rem; padding: 2px 8px;">
-            ✕ Tutup Rincian
+        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <button class="btn btn-primary btn-sm" id="btn-card-print-preview-top" style="font-weight: 700; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 6px 12px; font-size: 0.8rem; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+            🖨️ Cetak KHS
           </button>
+          <button class="btn btn-sm btn-secondary modal-close" onclick="document.getElementById('modal-student-grade-card').classList.remove('open')">✕</button>
         </div>
-        <div id="card-detail-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;"></div>
       </div>
 
-      <!-- Footer Action Buttons -->
-      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 14px; flex-wrap: wrap; gap: 10px;">
+      <!-- Scrollable Modal Body -->
+      <div class="modal-body-scroll">
+        <!-- Profil & Identitas Siswa -->
+        <div class="grid-3" style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
+          <div>
+            <span style="font-size: 0.72rem; color: #475569; display: block;">Nama Lengkap Siswa:</span>
+            <b id="card-student-name" style="font-size: 0.95rem; color: #065f46;">-</b>
+          </div>
+          <div>
+            <span style="font-size: 0.72rem; color: #475569; display: block;">NISN Resmi:</span>
+            <b id="card-student-nisn" style="font-family: var(--font-mono); font-size: 0.95rem; color: #0f172a;">-</b>
+          </div>
+          <div>
+            <span style="font-size: 0.72rem; color: #475569; display: block;">Kelas & Sekolah:</span>
+            <b id="card-student-class" style="font-size: 0.95rem; color: #065f46;">-</b>
+          </div>
+        </div>
+
+        <!-- Kartu Ringkasan Indeks Nilai -->
+        <div class="grid-4" style="gap: 10px; margin-bottom: 18px;">
+          <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+            <span class="stat-title" style="font-size: 0.7rem;">Total Ujian Selesai</span>
+            <span class="stat-value" id="card-total-exams" style="font-size: 1.25rem; color: #0f172a;">0</span>
+            <span class="stat-desc">Paket Ujian</span>
+          </div>
+          <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+            <span class="stat-title" style="font-size: 0.7rem;">Rata-rata Nilai</span>
+            <span class="stat-value" id="card-avg-score" style="font-size: 1.25rem; color: #059669;">0.0</span>
+            <span class="stat-desc">Skala 0 - 100</span>
+          </div>
+          <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+            <span class="stat-title" style="font-size: 0.7rem;">Status KKM (75)</span>
+            <span class="stat-value" id="card-status-badge" style="font-size: 0.9rem; font-weight: 800; color: #059669;">-</span>
+            <span class="stat-desc" id="card-pass-fail-count">0 Lulus / 0 Remedial</span>
+          </div>
+          <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+            <span class="stat-title" style="font-size: 0.7rem;">Predikat Akhir</span>
+            <span class="stat-value" id="card-predicate" style="font-size: 0.8rem; font-weight: 800; color: #0f172a;">-</span>
+            <span class="stat-desc">Evaluasi Kompetensi</span>
+          </div>
+        </div>
+
+        <!-- Tabel Daftar Nilai Ujian Siswa -->
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h4 style="font-size: 0.88rem; font-weight: 700; color: #0f172a; margin: 0;">
+              📋 Riwayat Pengerjaan Soal & Capaian Skor:
+            </h4>
+            <span style="font-size: 0.72rem; color: #64748b;">Standar KKM: <b>75.0</b></span>
+          </div>
+          
+          <div class="table-container" style="max-height: 260px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px;">
+            <table class="data-table" style="width: 100%; font-size: 0.78rem;">
+              <thead>
+                <tr style="background: #065f46; color: white;">
+                  <th style="width: 35px; text-align: center;">No</th>
+                  <th>Paket Ujian & Mapel</th>
+                  <th style="width: 110px; text-align: center;">Waktu Selesai</th>
+                  <th style="width: 75px; text-align: center;">Durasi</th>
+                  <th style="width: 65px; text-align: center;">Nilai</th>
+                  <th style="width: 95px; text-align: center;">Status</th>
+                  <th style="width: 70px; text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="card-exams-tbody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 20px; color: var(--text-dim);">
+                    Memuat data kartu nilai...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Box Container Rincian Soal (Tampil saat Siswa Klik tombol '🔍 Rincian') -->
+        <div id="card-detail-breakdown-box" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h5 style="font-size: 0.84rem; font-weight: 700; color: #065f46; margin: 0;" id="card-detail-title">
+              🔍 Rincian Jawaban Soal Ujian
+            </h5>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('card-detail-breakdown-box').style.display='none'" style="font-size: 0.7rem; padding: 2px 8px;">
+              ✕ Tutup Rincian
+            </button>
+          </div>
+          <div id="card-detail-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;"></div>
+        </div>
+      </div>
+
+      <!-- Sticky Footer Action Buttons -->
+      <div class="modal-sticky-footer">
         <button class="btn btn-secondary" onclick="document.getElementById('modal-student-grade-card').classList.remove('open')">
-          Tutup
+          ✕ Tutup
         </button>
-        <div style="display: flex; gap: 8px;">
+        <div class="modal-sticky-actions">
           <button class="btn btn-secondary" id="btn-card-download-pdf">
             📥 Unduh PDF Resmi
           </button>
-          <button class="btn btn-primary" id="btn-card-print-preview">
+          <button class="btn btn-primary" id="btn-card-print-preview" style="font-weight: 700; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 12px rgba(16,185,129,0.35);">
             🖨️ Cetak Kartu Nilai (Print)
           </button>
         </div>
