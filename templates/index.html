@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Studio ML Python — AutoML & AI Copilot</title>
   
   <!-- Favicon -->
@@ -474,17 +474,19 @@
             <!-- Left: Interactive Chat -->
             <div class="ai-chat-section">
               <div class="ai-chat-header">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <span style="font-size: 1.4rem;">🎓</span>
-                  <div>
-                    <div style="font-weight: 700; font-size: 0.98rem; color: var(--text-main);">AI Tutor Python & ML (Mentor: Thoriq Azis, S.Kom)</div>
-                    <div style="font-size: 0.74rem; font-weight: 600; color: #059669;" id="ai-active-provider-badge">
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                  <span style="font-size: 1.35rem; flex-shrink: 0;">🎓</span>
+                  <div style="min-width: 0;">
+                    <div style="font-weight: 700; font-size: 0.94rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                      AI Tutor Python & ML (Mentor: Thoriq Azis, S.Kom)
+                    </div>
+                    <div style="font-size: 0.73rem; font-weight: 600; color: #059669; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="ai-active-provider-badge">
                       🟢 Built-in Local Engine (Offline & Unlimited)
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-secondary btn-sm" id="btn-download-chat-md">
-                  📥 Unduh Jobsheet / PRD (.md)
+                <button class="btn btn-secondary btn-sm" id="btn-download-chat-md" style="flex-shrink: 0;">
+                  📥 <span class="btn-text-hide-mobile">Unduh Jobsheet / PRD </span>(.md)
                 </button>
               </div>
 

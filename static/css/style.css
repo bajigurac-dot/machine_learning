@@ -883,6 +883,9 @@ input[type="range"].app-slider {
   line-height: 1.6;
   color: var(--text-body);
   box-shadow: var(--shadow-sm);
+  word-break: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
 }
 
 .chat-msg.user .chat-bubble {
@@ -2015,27 +2018,48 @@ input[type="range"].app-slider {
     width: 100% !important;
   }
 
+  .ai-copilot-container {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: unset !important;
+    gap: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
   .ai-chat-section {
     width: 100% !important;
+    max-width: 100% !important;
     flex: unset !important;
-    height: 540px !important;
-    max-height: 72vh !important;
+    height: calc(100dvh - 170px) !important;
+    min-height: 540px !important;
     border-radius: var(--radius-md) !important;
     overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07) !important;
   }
 
   .ai-chat-header {
-    padding: 12px 14px !important;
+    padding: 10px 14px !important;
     display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 10px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    flex-shrink: 0 !important;
   }
 
   .ai-chat-header #btn-download-chat-md {
-    width: 100% !important;
-    justify-content: center !important;
-    font-size: 0.8rem !important;
+    width: auto !important;
+    padding: 6px 12px !important;
+    font-size: 0.76rem !important;
+    font-weight: 600 !important;
+    flex-shrink: 0 !important;
   }
 
   .ai-quick-prompts-bar {
@@ -2043,33 +2067,122 @@ input[type="range"].app-slider {
     overflow-x: auto !important;
     flex-wrap: nowrap !important;
     -webkit-overflow-scrolling: touch !important;
-    gap: 8px !important;
-    padding: 10px 12px !important;
+    gap: 6px !important;
+    padding: 8px 10px !important;
     background: #ffffff !important;
     border-bottom: 1px solid var(--border-subtle) !important;
+    flex-shrink: 0 !important;
+    scrollbar-width: none !important;
+  }
+
+  .ai-quick-prompts-bar::-webkit-scrollbar {
+    display: none !important;
   }
 
   .btn-quick-prompt {
     white-space: nowrap !important;
     flex-shrink: 0 !important;
-    font-size: 0.78rem !important;
-    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
+    padding: 5px 12px !important;
+    border-radius: 20px !important;
   }
 
   .chat-messages-box {
-    padding: 12px !important;
-    gap: 10px !important;
+    padding: 14px 12px !important;
+    gap: 14px !important;
     flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    background: #f8fafc !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .chat-msg {
-    max-width: 95% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 8px !important;
+  }
+
+  .chat-msg.user {
+    justify-content: flex-end !important;
+  }
+
+  .chat-msg.user .chat-bubble {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #ffffff !important;
+    border-radius: 14px 14px 2px 14px !important;
+  }
+
+  .chat-msg.ai .chat-bubble {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px 14px 14px 2px !important;
+  }
+
+  .chat-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1rem !important;
+    flex-shrink: 0 !important;
   }
 
   .chat-bubble {
-    padding: 10px 14px !important;
-    font-size: 0.88rem !important;
+    padding: 12px 14px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.65 !important;
+    max-width: calc(100% - 40px) !important;
+    min-width: 0 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+    box-sizing: border-box !important;
+  }
+
+  .chat-code-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 10px 0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .chat-code-header {
+    padding: 6px 10px !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .code-badge-group {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  .code-actions-group {
+    margin-left: auto !important;
+    gap: 4px !important;
+  }
+
+  .btn-code-action {
+    padding: 3px 8px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .chat-code-card pre {
+    padding: 10px 12px !important;
+    font-size: 0.78rem !important;
     line-height: 1.5 !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: pre !important;
+    box-sizing: border-box !important;
   }
 
   .chat-input-bar {
@@ -2078,19 +2191,45 @@ input[type="range"].app-slider {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
+    background: #ffffff !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 10 !important;
   }
 
   .chat-input-field {
     flex: 1 !important;
-    min-height: 42px !important;
-    font-size: 15px !important;
-    padding: 8px 12px !important;
+    min-height: 46px !important;
+    font-size: 16px !important; /* CRITICAL: 16px font-size prevents mobile Safari & Chrome from auto-zooming! */
+    padding: 10px 16px !important;
+    border-radius: 24px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #f8fafc !important;
+  }
+
+  .chat-input-field:focus {
+    background: #ffffff !important;
+    border-color: #10b981 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
   }
 
   #btn-send-chat {
     flex-shrink: 0 !important;
-    padding: 8px 14px !important;
-    min-height: 42px !important;
+    padding: 10px 18px !important;
+    min-height: 46px !important;
+    border-radius: 24px !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+  }
+
+  /* Prevent mobile browser auto-zoom on any form inputs */
+  input, textarea, select, .app-input, .app-select {
+    font-size: 16px !important;
   }
 
   .ai-tools-sidebar {
