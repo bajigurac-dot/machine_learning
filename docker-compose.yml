@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    container_name: studio_ml_app
+    restart: unless-stopped
+    ports:
+      # Port 80 HTTP (siswa bisa langsung akses http://IP_SERVER tanpa ketik :7860)
+      - "80:7860"
+    volumes:
+      # Folder persistensi: Database studio_ml.db tersimpan permanen di host disk
+      - ./data:/app/data
+    environment:
+      - DATABASE_PATH=/app/data/studio_ml.db
+      - PYTHONUNBUFFERED=1
+    deploy:
+      resources:
+        limits:
+          memory: 850M

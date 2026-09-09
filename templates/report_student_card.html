@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kartu Hasil Ujian Siswa (KHS) — {{ student.name if student else 'Siswa' }} ({{ student.nisn if student else '-' }})</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 24px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .print-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 36px 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .no-print-bar {
+      max-width: 860px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #047857;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #f8fafc;
+    }
+
+    /* KOP SURAT */
+    .header-kop {
+      text-align: center;
+      border-bottom: 2.5px solid #059669;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+    .kop-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #065f46;
+      letter-spacing: 0.04em;
+    }
+    .kop-subtitle {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 3px;
+    }
+    .kop-desc {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* IDENTITAS SISWA */
+    .student-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin-bottom: 18px;
+      font-size: 12.5px;
+    }
+    .info-row {
+      display: flex;
+      gap: 8px;
+    }
+    .info-label {
+      color: #475569;
+      width: 120px;
+      flex-shrink: 0;
+    }
+    .info-value {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* KPI SCORECARD */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .kpi-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #047857;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .kpi-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: #065f46;
+    }
+    .kpi-val.pass {
+      color: #059669;
+    }
+    .kpi-val.fail {
+      color: #e11d48;
+    }
+
+    /* TABEL NILAI */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+    .score-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .score-table th {
+      background: #065f46;
+      color: #ffffff;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 700;
+      border: 1px solid #047857;
+    }
+    .score-table td {
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+    .score-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .score-table tr {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .score-val-cell {
+      text-align: center;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .score-val-cell.pass {
+      color: #059669;
+    }
+    .score-val-cell.fail {
+      color: #e11d48;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .badge-pass {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .badge-fail {
+      background: #ffe4e6;
+      color: #9f1239;
+      border: 1px solid #fecdd3;
+    }
+
+    /* NOTES & TANDA TANGAN */
+    .notes-box {
+      font-size: 11px;
+      color: #475569;
+      line-height: 1.5;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 24px;
+    }
+    .signature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 16px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .sig-col {
+      text-align: left;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .sig-col.right {
+      text-align: right;
+    }
+    .sig-space {
+      height: 55px;
+    }
+
+    /* RESPONSIVE LAYOUT UNTUK LAYAR KECIL / MOBILE */
+    @media screen and (max-width: 680px) {
+      body {
+        padding: 12px;
+      }
+      .print-container {
+        padding: 20px 14px;
+      }
+      .no-print-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .no-print-bar > div:last-child {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .student-info-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .signature-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .sig-col.right {
+        text-align: left;
+      }
+    }
+
+    /* PENGATURAN CETAK PRINTER RESMI (A4 PORTRAIT) */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .no-print-bar {
+        display: none !important;
+      }
+      .print-container {
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        border: none !important;
+      }
+      .score-table tr, .signature-grid, .kpi-grid, .notes-box {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 12mm 15mm 12mm 15mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BILAH AKSI TIDAK DICETAK -->
+  <div class="no-print-bar">
+    <div>
+      <a href="javascript:if(window.history.length>1){window.history.back();}else{window.location.href='/';}" class="btn btn-secondary">
+        ⬅️ Kembali ke Aplikasi
+      </a>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <a href="/api/elearning/student/card/pdf?nisn={{ (student.nisn|string)|urlencode if student else '' }}" class="btn btn-secondary" target="_blank">
+        📥 Unduh Berkas PDF Resmi
+      </a>
+      <button onclick="window.print()" class="btn btn-primary">
+        🖨️ Cetak Kartu Nilai (Print / Save as PDF)
+      </button>
+    </div>
+  </div>
+
+  <div class="print-container">
+    <!-- KOP RESMI -->
+    <div class="header-kop">
+      <div class="kop-title">SMK CAHAYA PERTIWI</div>
+      <div class="kop-subtitle">KARTU HASIL UJIAN CBT & LAB PRAKTIK CODING (KHS)</div>
+      <div class="kop-desc">Studio ML Python & AI Learning Center • Instruktur: Thoriq Azis, S.Kom</div>
+    </div>
+
+    <!-- IDENTITAS SISWA -->
+    <div class="student-info-grid">
+      <div class="info-row">
+        <div class="info-label">Nama Lengkap:</div>
+        <div class="info-value">{{ student.name if student else '-' }}</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Kelas & Sekolah:</div>
+        <div class="info-value">{{ student.class_name if student else '-' }}</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">NISN Resmi:</div>
+        <div class="info-value"><code style="font-size: 13px; color: #065f46; font-family: monospace;">{{ student.nisn if student else '-' }}</code></div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Waktu Cetak:</div>
+        <div class="info-value">{{ print_date }}</div>
+      </div>
+    </div>
+
+    <!-- STATISTIK INDEKS PRESTASI -->
+    {% set avg_score = (summary.average_score or 0)|float if summary else 0.0 %}
+    {% set is_overall_pass = (summary.overall_passed if summary else false) %}
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Total Ujian Diikuti</div>
+        <div class="kpi-val">{{ summary.total_exams if summary else 0 }} Paket</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Rata-rata Nilai</div>
+        <div class="kpi-val {% if is_overall_pass %}pass{% else %}fail{% endif %}">
+          {{ "%.1f"|format(avg_score) }}
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Status KKM (75.0)</div>
+        <div class="kpi-val {% if is_overall_pass %}pass{% else %}fail{% endif %}" style="font-size: 14px;">
+          {% if is_overall_pass %}KOMPETEN{% else %}PERLU REMEDIAL{% endif %}
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Predikat Akhir</div>
+        <div class="kpi-val" style="font-size: 13px;">
+          {{ summary.predicate if summary else '-' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- TABEL HASIL UJIAN -->
+    <div class="table-responsive">
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th style="width: 35px; text-align: center;">No</th>
+            <th style="width: 120px;">Waktu Selesai</th>
+            <th>Paket Ujian & Praktik</th>
+            <th style="width: 140px;">Mata Pelajaran</th>
+            <th style="width: 75px; text-align: center;">Durasi</th>
+            <th style="width: 65px; text-align: center;">Skor</th>
+            <th style="width: 50px; text-align: center;">KKM</th>
+            <th style="width: 100px; text-align: center;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if attempts and attempts|length > 0 %}
+            {% for att in attempts %}
+            {% set score_val = (att.score or 0)|float %}
+            {% set is_passed = (att.is_passed == 1 or score_val >= 75.0) %}
+            {% set dur_total = (att.duration_seconds or 0)|int %}
+            {% set dur_m = dur_total // 60 %}
+            {% set dur_s = dur_total % 60 %}
+            {% set sub_time = (att.submitted_at|string)[:16]|replace('T', ' ') if att.submitted_at else '-' %}
+            <tr>
+              <td style="text-align: center;">{{ loop.index }}</td>
+              <td style="font-size: 11px; color: #475569;">{{ sub_time }}</td>
+              <td><b>{{ att.exam_title or '-' }}</b></td>
+              <td>{{ att.exam_subject or '-' }}</td>
+              <td style="text-align: center;">{{ "%02d"|format(dur_m) }}m {{ "%02d"|format(dur_s) }}s</td>
+              <td class="score-val-cell {% if is_passed %}pass{% else %}fail{% endif %}">
+                {{ "%.1f"|format(score_val) }}
+              </td>
+              <td style="text-align: center; color: #64748b;">75.0</td>
+              <td style="text-align: center;">
+                {% if is_passed %}
+                  <span class="badge badge-pass">✅ KOMPETEN</span>
+                {% else %}
+                  <span class="badge badge-fail">⚠️ REMEDIAL</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 28px; color: #64748b;">
+                <i>Belum ada catatan ujian yang diselesaikan oleh siswa ini.</i>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CATATAN SEKOLAH -->
+    <div class="notes-box">
+      <b>Ketentuan Penilaian Standar SMK Cahaya Pertiwi:</b><br/>
+      1. Standar Kriteria Ketuntasan Minimal (KKM) kejuruan adalah <b>75.0</b>.<br/>
+      2. Nilai evaluasi diperoleh dari akumulasi evaluasi butir soal pilihan ganda teori dan hasil validasi auto-checker lab coding Python / SQL.<br/>
+      3. Kartu ini merupakan dokumen sah hasil evaluasi belajar mandiri siswa pada platform CBT Studio ML Python.
+    </div>
+
+    <!-- TANDA TANGAN PENGESAHAN -->
+    <div class="signature-grid">
+      <div class="sig-col">
+        Mengetahui,<br/>
+        <b>Kepala SMK Cahaya Pertiwi</b>
+        <div class="sig-space"></div>
+        <b><u>M. Tarmizi Aziz, SE, M.Pd</u></b><br/>
+        <span style="color: #64748b;">NIP. ___________________________</span>
+      </div>
+      <div class="sig-col right">
+        Bogor, {{ sign_date }}<br/>
+        <b>Guru Pengampu & Instruktur</b>
+        <div class="sig-space"></div>
+        <b><u>Thoriq Azis, S.Kom</u></b><br/>
+        <span style="color: #64748b;">Instruktur AI & Rekayasa Perangkat Lunak</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

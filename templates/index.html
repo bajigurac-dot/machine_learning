@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio ML Python — AutoML & AI Copilot</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-badge">⚡</div>
+        <div class="logo-text">
+          <h1>Studio ML Python</h1>
+          <span>AutoML & AI Copilot</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Fase 1: Eksperimen Cepat</div>
+        <div class="nav-item active" data-tab="tab-automl" id="nav-automl">
+          <span class="nav-icon">🚀</span>
+          <span>Coba Langsung</span>
+          <span class="nav-tag green">AutoML</span>
+        </div>
+
+        <div class="nav-section-title">Fase 2: Studio Model & Data</div>
+        <div class="nav-item" data-tab="tab-data" id="nav-data">
+          <span class="nav-icon">📊</span>
+          <span>Kelola Data</span>
+        </div>
+        <div class="nav-item" data-tab="tab-models" id="nav-models">
+          <span class="nav-icon">🧠</span>
+          <span>Pilih Model</span>
+        </div>
+        <div class="nav-item" data-tab="tab-eval" id="nav-eval">
+          <span class="nav-icon">📈</span>
+          <span>Evaluasi Hasil</span>
+        </div>
+
+        <div class="nav-section-title">Mode Belajar SMK & PRD</div>
+        <div class="nav-item" data-tab="tab-ai" id="nav-ai">
+          <span class="nav-icon">🎓</span>
+          <span>AI Tutor SMK & PRD</span>
+          <span class="nav-tag green">VS Code</span>
+        </div>
+
+        <div class="nav-section-title">Akademik & CBT Ujian</div>
+        <div class="nav-item" data-tab="tab-elearning" id="nav-elearning">
+          <span class="nav-icon">📝</span>
+          <span>E-Learning & Ujian</span>
+          <span class="nav-tag green">Lab Coding</span>
+        </div>
+
+        <div class="nav-section-title">Fase 3: Ekspor & Persistensi</div>
+        <div class="nav-item" data-tab="tab-code" id="nav-code">
+          <span class="nav-icon">🐍</span>
+          <span>Kode Python</span>
+        </div>
+        <div class="nav-item" data-tab="tab-projects" id="nav-projects">
+          <span class="nav-icon">💾</span>
+          <span>Simpan Proyek</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="current-status-box">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-weight: 700; color: #fff;">Status Engine</span>
+            <span class="nav-tag green">Online</span>
+          </div>
+          <div style="color: var(--text-dim); font-size: 0.72rem;">
+            <span class="status-indicator"></span>Python 3.11 • Scikit-Learn
+          </div>
+          <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.7rem; color: #34d399; font-weight: 600;">
+            👨‍💻 Dev: Thoriq Azis, S.Kom
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT WRAPPER -->
+    <div class="main-wrapper">
+      <!-- TOP BAR -->
+      <header class="top-bar">
+        <div class="top-info">
+          <h2 class="page-title" id="top-page-title">🚀 Coba Langsung (AutoML 1-Klik)</h2>
+          <div class="dataset-pill" id="badge-active-dataset">📂 titanic</div>
+          <div class="dataset-pill" id="task-type-badge">🎯 Klasifikasi</div>
+        </div>
+
+        <div class="top-actions">
+          <button class="btn btn-secondary btn-sm" id="btn-save-project-modal">
+            💾 Simpan Proyek
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-open-settings" title="Pengaturan AI Copilot">
+            ⚙️ Pengaturan AI
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT VIEWPORT -->
+      <main class="content-viewport">
+        
+        <!-- ==================== TAB 1: COBA LANGSUNG (AUTOML) ==================== -->
+        <section id="tab-automl" class="tab-view">
+          <div class="hero-banner">
+            <h2 class="hero-title">Model Machine Learning yang Belajar Sendiri</h2>
+            <p class="hero-p">
+              Pilih data contoh atau unggah data Anda, tentukan target prediksi, dan biarkan sistem melatih seluruh algoritma secara otomatis (*AutoML*) untuk menemukan model dengan akurasi tertinggi dalam hitungan detik.
+            </p>
+
+            <div class="automl-quick-bar">
+              <div class="quick-select-group">
+                <span class="quick-label">Pilih Data Contoh:</span>
+                <select class="app-select" id="quick-dataset-select">
+                  <option value="titanic" selected>🚢 Titanic Survival (Klasifikasi)</option>
+                  <option value="iris">🌸 Iris Flower (Klasifikasi Multi-Kelas)</option>
+                  <option value="salary">💼 Prediksi Gaji & Pengalaman (Regresi)</option>
+                  <option value="customer_churn">👥 Customer Churn (Klasifikasi)</option>
+                  <option value="housing">🏡 Prediksi Harga Rumah (Regresi)</option>
+                  <option value="diabetes">🩺 Skrining Diabetes (Klasifikasi)</option>
+                </select>
+              </div>
+
+              <div class="quick-select-group">
+                <span class="quick-label">Kolom Target:</span>
+                <select class="app-select" id="quick-target-select"></select>
+              </div>
+
+              <div class="quick-select-group">
+                <span class="quick-label">Data Uji:</span>
+                <select class="app-select" id="quick-split-ratio">
+                  <option value="0.2" selected>20% (Test) : 80% (Train)</option>
+                  <option value="0.25">25% (Test) : 75% (Train)</option>
+                  <option value="0.3">30% (Test) : 70% (Train)</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary btn-lg" id="btn-run-automl" style="margin-left: auto;">
+                ⚡ Mulai Belajar Mandiri (AutoML)
+              </button>
+            </div>
+          </div>
+
+          <!-- AI Recommendation Box -->
+          <div class="glass-panel" id="recom-explanation-box" style="margin-bottom: 24px;"></div>
+
+          <!-- AutoML Leaderboard Grid -->
+          <div class="grid-2">
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">🏆 Leaderboard Peringkat Model</div>
+                  <div class="panel-subtitle">Hasil benchmark seluruh algoritma yang dilatih simultan</div>
+                </div>
+              </div>
+              <div class="leaderboard-list" id="automl-leaderboard-container">
+                <div style="text-align: center; color: var(--text-dim); padding: 36px;">
+                  Klik tombol <b>"Mulai Belajar Mandiri (AutoML)"</b> di atas untuk menjalankan pelatihan otomatis.
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">📊 Perbandingan Visual Skor</div>
+                  <div class="panel-subtitle">Akurasi / R² Score relatif antar model</div>
+                </div>
+              </div>
+              <div id="automl-leaderboard-chart" style="padding-top: 10px;">
+                <div style="text-align: center; color: var(--text-dim); padding: 36px;">
+                  Grafik perbandingan akan ditampilkan setelah pelatihan selesai.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 2: KELOLA DATA ==================== -->
+        <section id="tab-data" class="tab-view hidden">
+          <!-- Summary Stat Cards -->
+          <div class="grid-3" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <span class="stat-title">Total Baris Data</span>
+              <span class="stat-value" id="stat-total-rows">0</span>
+              <span class="stat-desc">Sampel observasi dalam dataset</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Total Kolom / Fitur</span>
+              <span class="stat-value" id="stat-total-cols">0</span>
+              <span class="stat-desc">Variabel input & target</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Baris Duplikat</span>
+              <span class="stat-value" id="stat-dup-rows">0</span>
+              <span class="stat-desc">Dapat dibersihkan secara instan</span>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-bottom: 24px;">
+            <!-- Upload Dropzone -->
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div class="panel-title">📁 Tambah Data Baru (Upload)</div>
+              </div>
+              <div class="upload-dropzone" id="upload-dropzone">
+                <div style="font-size: 2.2rem; margin-bottom: 8px;">📥</div>
+                <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;">Tarik & Lepas File CSV / Excel (.xlsx)</div>
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">atau klik untuk memilih file dari komputer Anda</div>
+                <button class="btn btn-secondary btn-sm" type="button">Pilih File</button>
+                <input type="file" id="file-upload-input" accept=".csv, .xlsx, .xls" class="hidden" />
+              </div>
+            </div>
+
+            <!-- Cleaning Controls -->
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div class="panel-title">🧹 Bersihkan Data (Data Cleaning)</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+                    Nilai Hilang Numerik:
+                  </label>
+                  <select class="app-select" id="clean-num-strategy" style="width: 100%;">
+                    <option value="median" selected>Imputasi Median (Rekomendasi - Tahan Outlier)</option>
+                    <option value="mean">Imputasi Mean (Rata-rata)</option>
+                    <option value="zero">Isi Angka 0</option>
+                    <option value="drop">Hapus Baris yang Kosong</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+                    Nilai Hilang Kategorikal / Teks:
+                  </label>
+                  <select class="app-select" id="clean-cat-strategy" style="width: 100%;">
+                    <option value="mode" selected>Imputasi Modus (Nilai Tersering)</option>
+                    <option value="unknown">Isi "Unknown"</option>
+                    <option value="drop">Hapus Baris yang Kosong</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                  <input type="checkbox" id="clean-drop-duplicates" checked />
+                  <label for="clean-drop-duplicates" style="font-size: 0.82rem; color: #cbd5e1; cursor: pointer;">
+                    Hapus baris duplikat secara otomatis
+                  </label>
+                </div>
+
+                <button class="btn btn-gradient-cyan" id="btn-apply-cleaning" style="margin-top: 6px;">
+                  ⚡ Terapkan Pembersihan Data
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Preview Table -->
+          <div class="glass-panel" style="margin-bottom: 24px;">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">👁️ Pratinjau Isi Data (15 Baris Pertama)</div>
+                <div class="panel-subtitle">Tinjau nilai aktual dalam dataset aktif</div>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="preview-data-table"></table>
+            </div>
+          </div>
+
+          <!-- Columns Breakdown -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div class="panel-title">📋 Ringkasan & Kesehatan Kolom</div>
+            </div>
+            <div id="columns-summary-list" class="grid-2"></div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 3: PILIH MODEL ==================== -->
+        <section id="tab-models" class="tab-view hidden">
+          <div class="glass-panel" style="margin-bottom: 24px;">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">🎯 Konfigurasi Percobaan Model</div>
+                <div class="panel-subtitle">Tentukan target prediksi dan rasio pembagian data</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+              <div class="quick-select-group">
+                <span class="quick-label">Pilih Kolom Target (y):</span>
+                <select class="app-select" id="model-target-select"></select>
+              </div>
+              <div class="quick-select-group">
+                <span class="quick-label">Rasio Test Split:</span>
+                <select class="app-select" id="model-split-ratio">
+                  <option value="0.2" selected>20% Data Uji</option>
+                  <option value="0.25">25% Data Uji</option>
+                  <option value="0.3">30% Data Uji</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 24px;">
+            <!-- Model Cards Grid -->
+            <div style="flex: 3;">
+              <div class="panel-title" style="margin-bottom: 16px;">🃏 Kartu Model Tersedia</div>
+              <div class="model-cards-grid" id="models-cards-container"></div>
+            </div>
+
+            <!-- Hyperparameter Tuning Sidebar -->
+            <div style="flex: 2;">
+              <div class="glass-panel">
+                <div class="panel-header">
+                  <div>
+                    <div class="panel-title">⚙️ Sesuaikan Hyperparameter</div>
+                    <div class="panel-subtitle">Optimalisasi parameter spesifik model</div>
+                  </div>
+                </div>
+                <div id="hyperparam-controls-container"></div>
+                <button class="btn btn-primary" id="btn-train-single-model" style="width: 100%; margin-top: 20px; justify-content: center;">
+                  🚀 Latih Model Ini Sekarang
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 4: EVALUASI HASIL ==================== -->
+        <section id="tab-eval" class="tab-view hidden">
+          <!-- Main Score Highlight -->
+          <div class="glass-panel" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(6, 182, 212, 0.08));">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <span style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">
+                  Hasil Pelatihan Model Aktif
+                </span>
+                <h2 style="font-size: 1.8rem; font-weight: 800; margin-top: 4px;" id="eval-active-model-name">
+                  RandomForestClassifier
+                </h2>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 0.8rem; color: var(--text-dim); font-weight: 600;" id="eval-primary-score-name">Akurasi</div>
+                <div style="font-size: 2.8rem; font-weight: 800; color: var(--accent-emerald);" id="eval-primary-score-val">
+                  88.5%
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Classification Metrics Panel -->
+          <div id="eval-classification-metrics" class="grid-4" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <span class="stat-title">Akurasi (Accuracy)</span>
+              <span class="stat-value" id="metric-accuracy-val">0%</span>
+              <span class="stat-desc">Proporsi prediksi benar</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Presisi (Precision)</span>
+              <span class="stat-value" id="metric-precision-val">0%</span>
+              <span class="stat-desc">Ketepatan tebakan positif</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Recall (Sensitivitas)</span>
+              <span class="stat-value" id="metric-recall-val">0%</span>
+              <span class="stat-desc">Kemampuan menemukan positif</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">F1-Score</span>
+              <span class="stat-value" id="metric-f1-val">0%</span>
+              <span class="stat-desc">Harmonic mean presisi & recall</span>
+            </div>
+          </div>
+
+          <!-- Regression Metrics Panel -->
+          <div id="eval-regression-metrics" class="grid-3 hidden" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <span class="stat-title">R-Squared (R²)</span>
+              <span class="stat-value" id="metric-r2-val">0.00</span>
+              <span class="stat-desc">Variansi target yang dijelaskan</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Root Mean Squared Error (RMSE)</span>
+              <span class="stat-value" id="metric-rmse-val">0.00</span>
+              <span class="stat-desc">Akar rata-rata kuadrat selisih</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Mean Absolute Error (MAE)</span>
+              <span class="stat-value" id="metric-mae-val">0.00</span>
+              <span class="stat-desc">Rata-rata deviasi absolut</span>
+            </div>
+          </div>
+
+          <!-- Visuals: Confusion Matrix & Feature Importance -->
+          <div class="grid-2" style="margin-bottom: 24px;">
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">🎯 Confusion Matrix</div>
+                  <div class="panel-subtitle">Matriks perbandingan prediksi vs aktual</div>
+                </div>
+              </div>
+              <div id="confusion-matrix-container" style="overflow-x: auto;">
+                <p style="color: var(--text-dim); text-align: center; padding: 24px;">Hanya tersedia untuk model Klasifikasi.</p>
+              </div>
+            </div>
+
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">⭐ Bobot Kepentingan Fitur (Feature Importance)</div>
+                  <div class="panel-subtitle">Variabel yang paling mempengaruhi keputusan model</div>
+                </div>
+              </div>
+              <div id="feature-importance-container"></div>
+            </div>
+          </div>
+
+          <!-- Live Interactive Prediction Sandbox -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">🧪 Prediksi Interaktif Langsung (Live Sandbox)</div>
+                <div class="panel-subtitle">Masukkan nilai variabel baru untuk mengetes prediksi model secara real-time</div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div>
+                <div id="live-prediction-inputs" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; max-height: 280px; overflow-y: auto; padding-right: 8px;"></div>
+                <button class="btn btn-gradient-cyan" id="btn-run-live-predict" style="margin-top: 18px; width: 100%; justify-content: center;">
+                  🔮 Jalankan Prediksi Sekarang
+                </button>
+              </div>
+
+              <div class="prediction-box">
+                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">
+                  Hasil Prediksi Model:
+                </span>
+                <div class="prediction-result-val" id="live-pred-result-val">—</div>
+                <div id="live-pred-probabilities"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 5: AI COPILOT & PRD CHAT (SMK PYTHON TUTOR) ==================== -->
+        <section id="tab-ai" class="tab-view hidden">
+          <div class="ai-copilot-container">
+            <!-- Left: Interactive Chat -->
+            <div class="ai-chat-section">
+              <div class="ai-chat-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 1.4rem;">🎓</span>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.98rem; color: var(--text-main);">AI Tutor Python & ML (Mentor: Thoriq Azis, S.Kom)</div>
+                    <div style="font-size: 0.74rem; font-weight: 600; color: #059669;" id="ai-active-provider-badge">
+                      🟢 Built-in Local Engine (Offline & Unlimited)
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="btn-download-chat-md">
+                  📥 Unduh Jobsheet / PRD (.md)
+                </button>
+              </div>
+
+              <!-- Quick Prompts Bar (SMK Python Learning Topics) -->
+              <div class="ai-quick-prompts-bar">
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Ajari saya materi Looping (for dan while) di Python dari dasar, siapkan script latihan dan langkah menjalankannya di VS Code">
+                  🔄 Belajar Looping (For/While)
+                </button>
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Ajari saya percabangan kondisi if-else di Python dengan studi kasus penentu nilai kelulusan SMK, script lengkap, dan cara run di VS Code">
+                  🔀 Percabangan (If-Else)
+                </button>
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Ajari saya membuat fungsi def dengan parameter dan return value di Python beserta panduan eksekusi di VS Code">
+                  📦 Membuat Fungsi (Def)
+                </button>
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Ajari saya struktur data List dan Dictionary di Python, contoh script manipulasi data siswa SMK, dan panduan run di VS Code">
+                  📑 List & Dictionary
+                </button>
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Ajari saya membuat program Machine Learning pertama di Python menggunakan VS Code dari dataset hingga evaluasi akurasi">
+                  🤖 Machine Learning di VS Code
+                </button>
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Buatkan Lembar Kerja Praktikum Siswa (Jobsheet PRD) Python untuk latihan mandiri di VS Code">
+                  📄 Buat Jobsheet PRD Siswa
+                </button>
+              </div>
+
+              <!-- Messages Container -->
+              <div class="chat-messages-box" id="chat-messages-container"></div>
+
+              <!-- Chat Input Bar -->
+              <div class="chat-input-bar">
+                <input type="text" class="chat-input-field" id="chat-input-text" placeholder="Tanya materi Python (contoh: cara looping for/while, if-else, fungsi def, atau buat model ML di VS Code)..." />
+                <button class="btn btn-primary" id="btn-send-chat">
+                  Kirim 🚀
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: AI Tools & VS Code Guide Sidebar -->
+            <div class="ai-tools-sidebar">
+              <div class="glass-panel">
+                <div class="panel-header">
+                  <div class="panel-title">⚡ Generator Jobsheet Siswa</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <button class="btn btn-outline-indigo" id="btn-quick-prd" style="justify-content: flex-start;">
+                    📄 1-Klik Buat Jobsheet PRD Siswa
+                  </button>
+                  <button class="btn btn-outline-indigo" id="btn-open-spec-modal" style="justify-content: flex-start;">
+                    📝 Form Spesifikasi Fitur & Task
+                  </button>
+                </div>
+              </div>
+
+              <div class="glass-panel">
+                <div class="panel-header">
+                  <div class="panel-title">💻 Panduan Praktik di VS Code</div>
+                </div>
+                <div class="vscode-guide-steps">
+                  <div class="guide-step-item">
+                    <span class="step-num">1</span>
+                    <div>
+                      <b>Tanya AI Mentor</b>
+                      <p>Ketik materi (misal: looping, if-else, fungsi, atau ML).</p>
+                    </div>
+                  </div>
+                  <div class="guide-step-item">
+                    <span class="step-num">2</span>
+                    <div>
+                      <b>Dapatkan Skrip & Panduan</b>
+                      <p>AI menyiapkan kode beranotasi dan nama file rekomendasi.</p>
+                    </div>
+                  </div>
+                  <div class="guide-step-item">
+                    <span class="step-num">3</span>
+                    <div>
+                      <b>Salin / Unduh ke VS Code</b>
+                      <p>Klik tombol <i>"Salin Kode"</i> atau <i>"Unduh .py"</i> di pesan AI.</p>
+                    </div>
+                  </div>
+                  <div class="guide-step-item">
+                    <span class="step-num">4</span>
+                    <div>
+                      <b>Jalankan di Terminal</b>
+                      <p>Buka terminal (<kbd>Ctrl</kbd>+<kbd>`</kbd>), ketik <code>python nama_file.py</code>.</p>
+                    </div>
+                  </div>
+                  <div class="guide-step-item">
+                    <span class="step-num">5</span>
+                    <div>
+                      <b>Tantangan Mandiri</b>
+                      <p>Modifikasi kode di VS Code untuk latihan problem solving!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: E-LEARNING & CBT UJIAN SMK ==================== -->
+        <section id="tab-elearning" class="tab-view hidden">
+          
+          <!-- 1. LOBBY SISWA & DAFTAR UJIAN -->
+          <div id="elearning-view-lobby">
+            <div class="hero-banner" style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div style="max-width: 680px;">
+                <div class="dataset-pill" style="margin-bottom: 8px; display: inline-flex;">🎓 CBT & Lab Praktik SMK Cahaya Pertiwi</div>
+                <h2 class="hero-title">E-Learning & Ujian Mandiri Coding & AI — SMK Cahaya Pertiwi</h2>
+                <p class="hero-p">
+                  Platform pembelajaran dan ujian mandiri siswa SMK Cahaya Pertiwi yang dikembangkan oleh <b>Thoriq Azis, S.Kom</b>. Selesaikan kuis interaktif dan ulangan semester untuk mata pelajaran Coding (Python, SQL) dan Machine Learning dengan verifikasi otomatis (ceklis hijau / silang merah) sesuai durasi waktu yang telah ditentukan!
+                </p>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-open-admin-login" style="flex-shrink: 0;">
+                🔐 Masuk sebagai Guru / Admin
+              </button>
+            </div>
+
+            <!-- 1. Kotak Login Siswa (Tampil saat Siswa Belum Login) -->
+            <div class="glass-panel" id="elearning-student-login-card" style="margin-bottom: 24px; border: 1.5px solid #a7f3d0; background: linear-gradient(135deg, rgba(236,253,245,0.8), #ffffff);">
+              <div class="panel-header" style="margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+                    🔑
+                  </div>
+                  <div>
+                    <div class="panel-title" style="color: #065f46; font-size: 1.15rem; font-weight: 800;">Portal Masuk Siswa — SMK Cahaya Pertiwi</div>
+                    <div class="panel-subtitle">Silakan login menggunakan Nama Lengkap dan NISN untuk membuka akses paket soal kuis, ulangan & lab coding.</div>
+                  </div>
+                </div>
+                <span class="nav-tag rose" style="font-weight: 700; font-size: 0.72rem;">🔒 Status: Belum Login</span>
+              </div>
+
+              <div class="grid-3" style="align-items: flex-end;">
+                <div>
+                  <label class="form-label-sm" style="font-weight: 700; color: #0f172a;">NISN Resmi Siswa: <span style="color: #ef4444;">*</span></label>
+                  <input type="text" class="app-input" id="student-login-nisn" placeholder="Ketik NISN (Contoh: 006 atau 001)" style="width: 100%; border-color: #cbd5e1;" autocomplete="off" />
+                  <div id="student-login-status" style="font-size: 0.74rem; margin-top: 4px; display: none;"></div>
+                </div>
+                <div>
+                  <label class="form-label-sm" style="font-weight: 700; color: #0f172a;">Nama Lengkap Siswa:</label>
+                  <input type="text" class="app-input" id="student-login-name" placeholder="Terisi otomatis atau ketik nama Anda" style="width: 100%; border-color: #cbd5e1;" />
+                </div>
+                <div>
+                  <label class="form-label-sm" style="font-weight: 700; color: #0f172a;">Kelas & Sekolah:</label>
+                  <input type="text" class="app-input" id="student-login-class" readonly placeholder="Terisi otomatis dari database..." style="width: 100%; border-color: #cbd5e1; background: #f8fafc; font-weight: 600; color: #065f46;" />
+                </div>
+              </div>
+
+              <div style="margin-top: 14px; padding: 8px 12px; background: rgba(16,185,129,0.08); border-radius: 8px; font-size: 0.76rem; color: #047857; display: flex; align-items: center; gap: 8px;">
+                <span>💡</span>
+                <span><b>Contoh NISN Terdaftar:</b> <code>006</code> (Thoriq Azis), <code>001</code> (Ahmad Rizki), <code>002</code> (Budi Santoso), <code>003</code> (Citra Dewi), <code>004</code> (Deni Pratama). Ketik NISN untuk mendeteksi identitas otomatis!</span>
+              </div>
+
+              <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(16,185,129,0.15); padding-top: 14px; flex-wrap: wrap; gap: 12px;">
+                <div style="font-size: 0.82rem; color: #64748b; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #ef4444; font-weight: 700;">⚠️ PENTING:</span> Masukkan NISN resmi Anda untuk membuka soal ujian atau melihat kartu nilai.
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <button class="btn btn-secondary" id="btn-student-view-card-login" style="border-color: #10b981; color: #065f46; font-weight: 700;">
+                    📜 Cek Kartu Nilai Siswa
+                  </button>
+                  <button class="btn btn-primary" id="btn-student-login" style="padding: 9px 24px;">
+                    🔑 Masuk & Buka Soal Ujian
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Kotak Sesi Siswa Aktif (Tampil saat Siswa Sudah Login) -->
+            <div class="glass-panel hidden" id="elearning-student-active-card" style="margin-bottom: 24px; border: 1.5px solid #10b981; background: linear-gradient(135deg, #ecfdf5, #f0fdf4);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
+                    🎓
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <h4 id="active-student-name" style="font-size: 1.12rem; font-weight: 800; color: #065f46; margin: 0;">Thoriq Azis</h4>
+                      <span class="nav-tag green" style="font-weight: 700;">✅ Terverifikasi Masuk</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: #047857; margin-top: 4px;">
+                      NISN: <b id="active-student-nisn" style="font-family: var(--font-mono); color: #065f46;">0058192841</b> • 
+                      Kelas: <b id="active-student-class" style="color: #065f46;">XII - SMK Cahaya Pertiwi</b>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <button class="btn btn-primary btn-sm" id="btn-open-student-grade-card" style="background: linear-gradient(135deg, #10b981, #059669); font-weight: 700; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+                    📜 Kartu Nilai Saya (<span id="active-student-exam-count">0</span> Ujian)
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btn-student-logout" style="border-color: #fca5a5; color: #be123c; font-weight: 600;">
+                    🚪 Keluar / Ganti Siswa
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Daftar Paket Ujian Aktif -->
+            <div class="panel-header" style="margin-bottom: 12px;">
+              <div>
+                <div class="panel-title">📋 Daftar Paket Kuis & Ulangan Aktif</div>
+                <div class="panel-subtitle">Pilih ujian yang ingin dikerjakan, perhatikan durasi waktu yang tersedia</div>
+              </div>
+            </div>
+            <div class="grid-2" id="elearning-exams-list">
+              <div style="color: var(--text-dim); text-align: center; padding: 24px; grid-column: span 2;">
+                Memuat daftar paket ujian...
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. RUANG UJIAN AKTIF (EXAM ROOM) -->
+          <div id="elearning-view-exam" class="hidden">
+            <!-- Top Sticky Exam Bar -->
+            <div class="exam-top-bar">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.4rem;">📝</span>
+                <div>
+                  <h3 id="exam-active-title" style="font-size: 1.05rem; font-weight: 700; color: var(--text-main);">Judul Ujian</h3>
+                  <div style="font-size: 0.74rem; color: var(--text-muted);">
+                    Peserta: <b id="exam-student-badge" style="color: #059669;">Ahmad Rizki</b>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Countdown Timer -->
+              <div class="exam-timer-wrapper">
+                <div class="exam-timer-box" id="exam-timer-box">
+                  <span class="timer-icon">⏱️</span>
+                  <span id="exam-timer-display" style="font-family: var(--font-mono); font-weight: 700; font-size: 1.15rem;">15:00</span>
+                </div>
+                <div class="timer-progress-bg">
+                  <div class="timer-progress-fill" id="exam-timer-progress" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <!-- Tombol Selesai Ujian -->
+              <button class="btn btn-primary" id="btn-finish-exam">
+                Selesai & Kumpulkan 📤
+              </button>
+            </div>
+
+            <!-- Exam Layout: Left Question Viewport, Right Question Navigator -->
+            <div class="exam-main-grid">
+              
+              <!-- Left: Current Question Card -->
+              <div class="glass-panel" id="exam-question-card">
+                <div class="exam-question-header">
+                  <span class="nav-tag green" id="exam-q-number">Soal 1 dari 4</span>
+                  <span class="nav-tag purple" id="exam-q-type-badge">Pilihan Ganda</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: var(--accent-emerald); margin-left: auto;" id="exam-q-points">
+                    20 Poin
+                  </span>
+                </div>
+
+                <div class="exam-question-body">
+                  <div id="exam-q-text" style="font-size: 0.96rem; font-weight: 600; line-height: 1.6; color: var(--text-main); margin-bottom: 20px;">
+                    Teks Pertanyaan
+                  </div>
+
+                  <!-- Container 1: Pilihan Ganda (MCQ) -->
+                  <div id="exam-mcq-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+
+                  <!-- Container 2: Praktik Coding (Python / SQL) -->
+                  <div id="exam-code-container" class="hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span style="font-size: 0.78rem; font-weight: 700; color: #059669;" id="exam-code-lang-label">
+                        🐍 Editor Python Interaktif
+                      </span>
+                      <button class="btn btn-secondary btn-sm" id="btn-reset-code" type="button" style="font-size: 0.72rem; padding: 3px 8px;">
+                        🔄 Reset Kode Awal
+                      </button>
+                    </div>
+
+                    <textarea class="exam-code-editor" id="exam-code-editor" spellcheck="false" rows="9"></textarea>
+
+                    <div class="code-actions-bar">
+                      <button class="btn btn-primary btn-sm" id="btn-run-student-code" type="button">
+                        ▶️ Jalankan & Cek Solusi
+                      </button>
+                      <span id="exam-code-run-status" style="font-size: 0.8rem; font-weight: 600;"></span>
+                    </div>
+
+                    <!-- Feedback Box (✅ Ceklis Hijau atau ❌ Silang Merah) -->
+                    <div id="exam-code-feedback" class="exam-feedback-card hidden">
+                      <div class="feedback-badge" id="exam-feedback-badge">
+                        <!-- Icon and status will be injected -->
+                      </div>
+                      <div style="font-size: 0.76rem; color: #94a3b8; margin: 6px 0 4px;">Output Terminal:</div>
+                      <pre class="exam-terminal-box" id="exam-terminal-output"></pre>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Footer Navigation Buttons -->
+                <div class="exam-footer-nav">
+                  <button class="btn btn-secondary" id="btn-prev-question">
+                    ⬅️ Soal Sebelumnya
+                  </button>
+                  <button class="btn btn-primary" id="btn-next-question">
+                    Soal Berikutnya ➡️
+                  </button>
+                </div>
+              </div>
+
+              <!-- Right: Palette Question Navigator -->
+              <div class="glass-panel" style="align-self: flex-start;">
+                <div class="panel-header">
+                  <div>
+                    <div class="panel-title">🔢 Navigasi Soal</div>
+                    <div class="panel-subtitle">Klik nomor untuk melompat</div>
+                  </div>
+                </div>
+                <div class="exam-palette-grid" id="exam-palette-container"></div>
+
+                <div class="palette-legend">
+                  <div class="legend-item"><span class="legend-dot answered"></span> Sudah Dijawab</div>
+                  <div class="legend-item"><span class="legend-dot active"></span> Sedang Dibuka</div>
+                  <div class="legend-item"><span class="legend-dot empty"></span> Belum Dijawab</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. HALAMAN HASIL / NILAI SISWA -->
+          <div id="elearning-view-result" class="hidden">
+            <div class="glass-panel" style="max-width: 820px; margin: 0 auto 24px; text-align: center; padding: 36px 24px;">
+              <div id="result-trophy-icon" style="font-size: 3rem; margin-bottom: 8px;">🏆</div>
+              <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">
+                Hasil Evaluasi Ujian Mandiri
+              </h2>
+              <p style="color: var(--text-muted); font-size: 0.9rem;" id="result-exam-title-display">
+                Paket Ujian Selesai Dikerjakan
+              </p>
+
+              <!-- Nilai Scorecard Highlight -->
+              <div class="result-score-badge-card">
+                <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #059669; letter-spacing: 0.06em;">
+                  Nilai Akhir Ujian (Skala 100)
+                </span>
+                <div class="result-score-val" id="result-score-val">85.0</div>
+                <div class="result-predicate-pill" id="result-predicate-badge">KOMPETEN</div>
+              </div>
+
+              <!-- Identitas & Statistik Singkat -->
+              <div class="grid-3" style="margin: 20px 0; text-align: left;">
+                <div class="stat-card">
+                  <span class="stat-title">Nama Siswa</span>
+                  <span class="stat-value" id="result-student-name" style="font-size: 1rem;">Ahmad Rizki</span>
+                  <span class="stat-desc" id="result-student-class">XII - SMK Cahaya Pertiwi</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-title">Poin Diperoleh</span>
+                  <span class="stat-value" id="result-points-earned" style="font-size: 1.1rem; color: #059669;">85 / 100</span>
+                  <span class="stat-desc">Akumulasi Bobot Soal</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-title">Waktu Pengerjaan</span>
+                  <span class="stat-value" id="result-duration-val" style="font-size: 1.1rem;">08m 42s</span>
+                  <span class="stat-desc">Dari batas waktu yang tersedia</span>
+                </div>
+              </div>
+
+              <!-- Rincian Ceklis / Silang per Nomor Soal -->
+              <div style="text-align: left; margin-top: 24px;">
+                <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">
+                  📋 Rincian Evaluasi Tiap Butir Soal:
+                </h4>
+                <div id="result-breakdown-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" id="btn-back-to-lobby" style="margin-top: 28px;">
+                Kembali ke Beranda E-Learning 🏠
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. DASHBOARD ADMIN / GURU -->
+          <div id="elearning-view-admin" class="hidden">
+            <div class="hero-banner" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <div>
+                <div class="dataset-pill" style="margin-bottom: 6px;">🔐 Mode Guru / Administrator</div>
+                <h2 class="hero-title" style="font-size: 1.4rem;">Panel Pengelolaan Ujian CBT & Bank Soal</h2>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary btn-sm" id="btn-open-change-password-modal" title="Ubah Password Akun Guru">
+                  🔑 Ganti Password
+                </button>
+                <button class="btn btn-primary btn-sm" id="btn-open-create-exam-modal">
+                  ➕ Buat Paket Ujian Baru
+                </button>
+                <button class="btn btn-secondary btn-sm" id="btn-admin-logout">
+                  🚪 Keluar Mode Guru
+                </button>
+              </div>
+            </div>
+
+            <!-- Admin Sub-Navigation -->
+            <div class="admin-nav-tabs">
+              <button class="admin-nav-btn active" data-admin-tab="admin-tab-exams" id="btn-admin-tab-exams">
+                📚 Paket Ujian & Durasi Waktu
+              </button>
+              <button class="admin-nav-btn" data-admin-tab="admin-tab-scores" id="btn-admin-tab-scores">
+                📊 Rekapitulasi Nilai Siswa
+              </button>
+              <button class="admin-nav-btn" data-admin-tab="admin-tab-students" id="btn-admin-tab-students">
+                👥 Master Data Siswa Resmi
+              </button>
+            </div>
+
+            <!-- Tab Admin 1: Paket Ujian -->
+            <div id="admin-tab-exams" class="admin-tab-content">
+              <div class="glass-panel">
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Judul Ujian</th>
+                        <th>Mata Pelajaran</th>
+                        <th>Durasi Waktu</th>
+                        <th>Jumlah Soal</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="admin-exams-table-body">
+                      <tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Memuat data ujian...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Admin 2: Rekapitulasi Nilai -->
+            <div id="admin-tab-scores" class="admin-tab-content hidden">
+              <div class="glass-panel">
+                <div class="panel-header">
+                  <div>
+                    <div class="panel-title">🏆 Buku Nilai & Rekapitulasi Hasil Ujian Siswa</div>
+                    <div class="panel-subtitle">Hasil penilaian otomatis seluruh siswa yang telah mengumpulkan ujian</div>
+                  </div>
+                </div>
+
+                <!-- Filter Bar: Kelas & Tanggal -->
+                <div style="display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 16px; padding: 12px 16px; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.18); border-radius: 8px;">
+                  <div style="flex: 1; min-width: 200px;">
+                    <label class="form-label-sm" style="font-weight: 700; color: #065f46; margin-bottom: 4px; display: block;">
+                      🏫 Filter Kelas:
+                    </label>
+                    <select class="app-select" id="filter-score-class" style="width: 100%; background: #ffffff;">
+                      <option value="">-- Semua Kelas --</option>
+                      <option value="X - SMK Cahaya Pertiwi">X - SMK Cahaya Pertiwi</option>
+                      <option value="XI - SMK Cahaya Pertiwi">XI - SMK Cahaya Pertiwi</option>
+                      <option value="XII - SMK Cahaya Pertiwi">XII - SMK Cahaya Pertiwi</option>
+                    </select>
+                  </div>
+                  <div style="flex: 1; min-width: 180px;">
+                    <label class="form-label-sm" style="font-weight: 700; color: #065f46; margin-bottom: 4px; display: block;">
+                      📅 Filter Tanggal Ujian:
+                    </label>
+                    <input type="date" class="app-input" id="filter-score-date" style="width: 100%; background: #ffffff;" />
+                  </div>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-secondary btn-sm" id="btn-reset-score-filter" type="button" style="height: 38px; display: flex; align-items: center; gap: 6px;">
+                      🔄 Reset
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btn-export-scores-pdf" type="button" style="height: 38px; display: flex; align-items: center; gap: 6px; background: #059669;" title="Unduh Berkas PDF Resmi">
+                      📥 Unduh PDF
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="btn-print-scores" type="button" style="height: 38px; display: flex; align-items: center; gap: 6px; border-color: #059669; color: #065f46;" title="Pratinjau & Cetak Laporan Resmi">
+                      🖨️ Cetak Laporan
+                    </button>
+                  </div>
+                </div>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Waktu Selesai</th>
+                        <th>Nama Siswa</th>
+                        <th>NISN</th>
+                        <th>Kelas</th>
+                        <th>Paket Ujian</th>
+                        <th>Nilai Akhir</th>
+                        <th>Status</th>
+                        <th>Durasi</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="admin-submissions-table-body">
+                      <tr><td colspan="9" style="text-align: center; color: var(--text-dim);">Belum ada data nilai masuk.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Admin 3: Master Data Siswa -->
+            <div id="admin-tab-students" class="admin-tab-content hidden">
+              <div class="glass-panel" style="margin-bottom: 20px;">
+                <div class="panel-header">
+                  <div>
+                    <div class="panel-title">➕ Daftarkan Siswa Baru ke Master Database SMK Cahaya Pertiwi</div>
+                    <div class="panel-subtitle">Hanya siswa yang terdaftar yang dapat login dan mengerjakan soal ujian CBT</div>
+                  </div>
+                </div>
+                <div class="grid-3" style="align-items: flex-end;">
+                  <div>
+                    <label class="form-label-sm" style="font-weight: 700;">NISN Siswa:</label>
+                    <input type="text" class="app-input" id="admin-new-student-nisn" placeholder="Contoh: 011" style="width: 100%;" />
+                  </div>
+                  <div>
+                    <label class="form-label-sm" style="font-weight: 700;">Nama Lengkap Siswa:</label>
+                    <input type="text" class="app-input" id="admin-new-student-name" placeholder="Contoh: Rian Saputra" style="width: 100%;" />
+                  </div>
+                  <div>
+                    <label class="form-label-sm" style="font-weight: 700;">Kelas & Sekolah:</label>
+                    <select class="app-select" id="admin-new-student-class" style="width: 100%;">
+                      <option value="X - SMK Cahaya Pertiwi">X - SMK Cahaya Pertiwi</option>
+                      <option value="XI - SMK Cahaya Pertiwi">XI - SMK Cahaya Pertiwi</option>
+                      <option value="XII - SMK Cahaya Pertiwi">XII - SMK Cahaya Pertiwi</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="margin-top: 14px; text-align: right;">
+                  <button class="btn btn-primary btn-sm" id="btn-admin-add-student">
+                    ➕ Daftarkan Siswa Ini
+                  </button>
+                </div>
+              </div>
+
+              <div class="glass-panel">
+                <div class="panel-header">
+                  <div>
+                    <div class="panel-title">📋 Daftar Siswa Terdaftar (Master Data Siswa)</div>
+                    <div class="panel-subtitle">Siswa-siswa berikut yang berhak mengakses dan mengerjakan ujian CBT</div>
+                  </div>
+                </div>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>NISN</th>
+                        <th>Nama Lengkap</th>
+                        <th>Kelas</th>
+                        <th>Waktu Terdaftar</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="admin-students-table-body">
+                      <tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Memuat data siswa...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================== TAB 6: KODE PYTHON ==================== -->
+        <section id="tab-code" class="tab-view hidden">
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">🐍 Skrip Pelatihan Python Mandiri (Scikit-Learn)</div>
+                <div class="panel-subtitle">Dihasilkan secara otomatis dan siap dijalankan di terminal atau VS Code</div>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary btn-sm" id="btn-copy-code">
+                  📋 Salin Kode
+                </button>
+                <button class="btn btn-primary btn-sm" id="btn-download-code">
+                  💾 Unduh File .py
+                </button>
+              </div>
+            </div>
+
+            <div class="code-wrapper" id="python-code-display">
+# Memuat kode Python...
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 7: SIMPAN PROYEK ==================== -->
+        <section id="tab-projects" class="tab-view hidden">
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">💾 Riwayat Proyek & Percobaan Tersimpan</div>
+                <div class="panel-subtitle">Database lokal SQLite (studio_ml.db)</div>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nama Proyek</th>
+                    <th>Dataset</th>
+                    <th>Tipe Model</th>
+                    <th>Target Kolom</th>
+                    <th>Waktu Dibuat</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="projects-table-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Modal Generate Spec -->
+  <div class="modal-backdrop" id="modal-spec-generator">
+    <div class="modal-dialog">
+      <div class="panel-header">
+        <div class="panel-title">📝 Generator Spesifikasi Fitur & Task</div>
+        <button class="btn btn-sm btn-secondary modal-close">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+            Nama Fitur:
+          </label>
+          <input type="text" class="app-input" id="spec-feature-name" placeholder="misal: Automated Model Retraining Pipeline" style="width: 100%;" />
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+            Tujuan Utama (Goal):
+          </label>
+          <input type="text" class="app-input" id="spec-feature-goal" placeholder="misal: Melakukan retrain model otomatis jika akurasi drop di bawah 80%" style="width: 100%;" />
+        </div>
+        <div class="grid-2">
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+              Target Pengguna:
+            </label>
+            <input type="text" class="app-input" id="spec-target-user" value="MLOps Engineer & Operator" style="width: 100%;" />
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+              Tingkat Kompleksitas:
+            </label>
+            <select class="app-select" id="spec-complexity" style="width: 100%;">
+              <option value="Low">Rendah (Low)</option>
+              <option value="Medium" selected>Menengah (Medium)</option>
+              <option value="High">Tinggi (High)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-submit-spec" style="margin-top: 12px; justify-content: center;">
+          ⚡ Buat Spec & Breakdown Task Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Save Project -->
+  <div class="modal-backdrop" id="modal-save-project">
+    <div class="modal-dialog">
+      <div class="panel-header">
+        <div class="panel-title">💾 Simpan Percobaan ke Proyek</div>
+        <button class="btn btn-sm btn-secondary modal-close">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+            Nama Proyek:
+          </label>
+          <input type="text" class="app-input" id="input-project-name" placeholder="Proyek Prediksi ML" style="width: 100%;" />
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+            Deskripsi / Catatan:
+          </label>
+          <textarea class="app-input" id="input-project-desc" rows="3" placeholder="Catatan eksperimen..." style="width: 100%; resize: vertical;"></textarea>
+        </div>
+        <button class="btn btn-primary" id="btn-confirm-save-project" style="margin-top: 8px; justify-content: center;">
+          Simpan ke Database
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Settings (AI Provider & API Key) -->
+  <div class="modal-backdrop" id="modal-settings">
+    <div class="modal-dialog">
+      <div class="panel-header">
+        <div class="panel-title">⚙️ Pengaturan AI Copilot</div>
+        <button class="btn btn-sm btn-secondary modal-close">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+            Penyedia Model AI (Provider):
+          </label>
+          <select class="app-select" id="settings-ai-provider" style="width: 100%;">
+            <option value="local" selected>Built-in Local Expert Engine (Offline, Cepat, Tanpa Kuota)</option>
+            <option value="gemini">Google Gemini API (Cloud LLM)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">
+            API Key (Opsional - Diperlukan jika memilih Gemini):
+          </label>
+          <div style="display: flex; gap: 8px;">
+            <input type="password" class="app-input" id="settings-ai-key" placeholder="Masukkan Gemini API Key..." style="flex: 1;" />
+            <button class="btn btn-secondary btn-sm" id="btn-test-gemini" type="button">
+              🔌 Uji Koneksi
+            </button>
+          </div>
+          <div id="gemini-test-result" style="font-size: 0.8rem; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none;"></div>
+          <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 6px;">
+            API key disimpan secara privat di peramban lokal (localStorage) Anda.
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-save-settings" style="margin-top: 10px; justify-content: center;">
+          Simpan Pengaturan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Login Guru / Admin -->
+  <div class="modal-backdrop" id="modal-admin-login">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="panel-header">
+        <div class="panel-title">🔐 Login Guru / Administrator CBT</div>
+        <button class="btn btn-sm btn-secondary modal-close">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <p style="font-size: 0.8rem; color: var(--text-muted);">
+          Masukkan kredensial pengajar untuk mengelola paket ujian, bank soal, dan melihat rekapitulasi nilai siswa.
+        </p>
+        <div>
+          <label class="form-label-sm">Username:</label>
+          <input type="text" class="app-input" id="admin-login-user" value="guru" style="width: 100%;" />
+        </div>
+        <div>
+          <label class="form-label-sm">Password Guru:</label>
+          <input type="password" class="app-input" id="admin-login-pass" value="guru123" style="width: 100%;" />
+        </div>
+        <div id="admin-login-error" style="color: var(--accent-rose); font-size: 0.8rem; font-weight: 600; display: none;"></div>
+        <button class="btn btn-primary" id="btn-submit-admin-login" style="margin-top: 6px; justify-content: center;">
+          Masuk ke Dashboard Guru 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Buat Paket Ujian Baru (Admin) -->
+  <div class="modal-backdrop" id="modal-create-exam">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="panel-header">
+        <div class="panel-title">➕ Buat Paket Ujian CBT Baru</div>
+        <button class="btn btn-sm btn-secondary modal-close">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <label class="form-label-sm">Judul Ujian:</label>
+          <input type="text" class="app-input" id="new-exam-title" placeholder="Contoh: Ulangan Tengah Semester - Python & AI" style="width: 100%;" />
+        </div>
+        <div class="grid-2">
+          <div>
+            <label class="form-label-sm">Mata Pelajaran:</label>
+            <input type="text" class="app-input" id="new-exam-subject" placeholder="Pemrograman Web & AI" style="width: 100%;" />
+          </div>
+          <div>
+            <label class="form-label-sm">Durasi Waktu (Menit):</label>
+            <input type="number" class="app-input" id="new-exam-duration" value="30" min="5" max="180" style="width: 100%;" />
+          </div>
+        </div>
+        <div>
+          <label class="form-label-sm">Deskripsi / Catatan Petunjuk:</label>
+          <textarea class="app-input" id="new-exam-desc" rows="2" placeholder="Petunjuk pengerjaan bagi siswa..." style="width: 100%; resize: vertical;"></textarea>
+        </div>
+        <button class="btn btn-primary" id="btn-save-new-exam" style="margin-top: 8px; justify-content: center;">
+          Simpan Paket Ujian
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah Soal (Admin) -->
+  <div class="modal-backdrop" id="modal-add-question">
+    <div class="modal-dialog" style="max-width: 580px; max-height: 90vh; overflow-y: auto;">
+      <div class="panel-header">
+        <div class="panel-title">📝 Tambah Butir Soal ke Ujian</div>
+        <button class="btn btn-sm btn-secondary modal-close">✕</button>
+      </div>
+      <input type="hidden" id="modal-q-exam-id" value="" />
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="grid-2">
+          <div>
+            <label class="form-label-sm">Tipe Soal:</label>
+            <select class="app-select" id="new-q-type" style="width: 100%;">
+              <option value="mcq">Pilihan Ganda (MCQ)</option>
+              <option value="code_python">Praktik Coding Python</option>
+              <option value="code_sql">Praktik Coding SQL</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label-sm">Bobot Nilai (Poin):</label>
+            <input type="number" class="app-input" id="new-q-points" value="25" min="5" max="100" style="width: 100%;" />
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label-sm">Pertanyaan / Instruksi Soal:</label>
+          <textarea class="app-input" id="new-q-text" rows="3" placeholder="Tuliskan pertanyaan atau studi kasus di sini..." style="width: 100%; resize: vertical;"></textarea>
+        </div>
+
+        <!-- Bagian Khusus MCQ -->
+        <div id="new-q-mcq-fields">
+          <label class="form-label-sm">Pilihan Jawaban (A, B, C, D):</label>
+          <input type="text" class="app-input" id="new-q-opt-a" placeholder="Pilihan A" style="width: 100%; margin-bottom: 6px;" />
+          <input type="text" class="app-input" id="new-q-opt-b" placeholder="Pilihan B" style="width: 100%; margin-bottom: 6px;" />
+          <input type="text" class="app-input" id="new-q-opt-c" placeholder="Pilihan C" style="width: 100%; margin-bottom: 6px;" />
+          <input type="text" class="app-input" id="new-q-opt-d" placeholder="Pilihan D" style="width: 100%; margin-bottom: 6px;" />
+          
+          <label class="form-label-sm" style="margin-top: 6px;">Kunci Jawaban Benar:</label>
+          <select class="app-select" id="new-q-correct-ans" style="width: 100%;">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+
+        <!-- Bagian Khusus Praktik Coding -->
+        <div id="new-q-code-fields" class="hidden">
+          <div>
+            <label class="form-label-sm">Template Kode Awal (Starter Code):</label>
+            <textarea class="app-input" id="new-q-starter-code" rows="3" placeholder="# Kode template yang akan tampil di editor siswa..." style="width: 100%; font-family: var(--font-mono);"></textarea>
+          </div>
+          <div style="margin-top: 8px;">
+            <label class="form-label-sm">Output Program yang Diharapkan (Expected Output):</label>
+            <textarea class="app-input" id="new-q-expected-output" rows="3" placeholder="Output eksak yang harus dihasilkan program siswa..." style="width: 100%; font-family: var(--font-mono);"></textarea>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-save-new-question" style="margin-top: 8px; justify-content: center;">
+          Simpan Butir Soal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Nilai Siswa (Admin) -->
+  <div class="modal-backdrop" id="modal-edit-score">
+    <div class="modal-dialog" style="max-width: 460px;">
+      <div class="panel-header">
+        <div class="panel-title">✏️ Edit Nilai Ujian Siswa</div>
+        <button class="btn btn-sm btn-secondary modal-close" onclick="document.getElementById('modal-edit-score').classList.remove('open')">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <input type="hidden" id="edit-score-sub-id" value="" />
+        <div>
+          <label class="form-label-sm">Nama Siswa:</label>
+          <input type="text" class="app-input" id="edit-score-student-name" readonly style="width: 100%; background: #f8fafc; font-weight: 600;" />
+        </div>
+        <div>
+          <label class="form-label-sm">Paket Ujian:</label>
+          <input type="text" class="app-input" id="edit-score-exam-title" readonly style="width: 100%; background: #f8fafc;" />
+        </div>
+        <div>
+          <label class="form-label-sm">Nilai Akhir Baru (Skala 0 - 100):</label>
+          <input type="number" step="0.1" min="0" max="100" class="app-input" id="edit-score-val" placeholder="Contoh: 85.0" style="width: 100%; font-size: 1.15rem; font-weight: 700; color: #059669;" />
+          <small style="color: var(--text-dim); display: block; margin-top: 4px;">
+            💡 Standar KKM SMK adalah 75.0 (Nilai ≥ 75.0 otomatis berstatus <b>KOMPETEN</b>).
+          </small>
+        </div>
+        <button class="btn btn-primary" id="btn-save-edited-score" style="margin-top: 8px; justify-content: center;">
+          💾 Simpan Perubahan Nilai
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ubah Password Akun Guru (Admin) -->
+  <div class="modal-backdrop" id="modal-change-password">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="panel-header">
+        <div class="panel-title">🔑 Ganti Password Akun Guru</div>
+        <button class="btn btn-sm btn-secondary modal-close" onclick="document.getElementById('modal-change-password').classList.remove('open')">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2px;">
+          Ganti password default (<b>guru123</b>) dengan password baru yang aman untuk akun pengajar Anda.
+        </p>
+        <div>
+          <label class="form-label-sm">Password Lama Saat Ini:</label>
+          <input type="password" class="app-input" id="change-pass-old" placeholder="Masukkan password lama saat ini..." style="width: 100%;" />
+        </div>
+        <div>
+          <label class="form-label-sm">Password Baru:</label>
+          <input type="password" class="app-input" id="change-pass-new" placeholder="Minimal 5 karakter..." style="width: 100%;" />
+        </div>
+        <div>
+          <label class="form-label-sm">Konfirmasi Password Baru:</label>
+          <input type="password" class="app-input" id="change-pass-confirm" placeholder="Ketik ulang password baru..." style="width: 100%;" />
+        </div>
+        <div id="change-pass-error" style="color: var(--accent-rose); font-size: 0.8rem; font-weight: 600; display: none;"></div>
+        <div id="change-pass-success" style="color: #059669; font-size: 0.8rem; font-weight: 600; display: none;"></div>
+        <div style="display: flex; gap: 8px; margin-top: 6px;">
+          <button class="btn btn-secondary" onclick="document.getElementById('modal-change-password').classList.remove('open')" style="flex: 1; justify-content: center;">
+            Batal
+          </button>
+          <button class="btn btn-primary" id="btn-submit-change-password" style="flex: 2; justify-content: center;">
+            💾 Simpan Password Baru
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Kartu Nilai Siswa (KHS) -->
+  <div class="modal-backdrop" id="modal-student-grade-card">
+    <div class="modal-dialog" style="max-width: 840px; max-height: 92vh; overflow-y: auto;">
+      <div class="panel-header" style="border-bottom: 2px solid #10b981; padding-bottom: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+            🎓
+          </div>
+          <div>
+            <div class="panel-title" style="color: #065f46; font-size: 1.15rem; font-weight: 800;">
+              Kartu Hasil Ujian CBT & Lab Coding (KHS) — SMK Cahaya Pertiwi
+            </div>
+            <div class="panel-subtitle" style="font-size: 0.78rem;">
+              Studio ML Python & AI Learning Center • Instruktur: Thoriq Azis, S.Kom
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-secondary modal-close" onclick="document.getElementById('modal-student-grade-card').classList.remove('open')">✕</button>
+      </div>
+
+      <!-- Profil & Identitas Siswa -->
+      <div class="grid-3" style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
+        <div>
+          <span style="font-size: 0.72rem; color: #475569; display: block;">Nama Lengkap Siswa:</span>
+          <b id="card-student-name" style="font-size: 0.95rem; color: #065f46;">-</b>
+        </div>
+        <div>
+          <span style="font-size: 0.72rem; color: #475569; display: block;">NISN Resmi:</span>
+          <b id="card-student-nisn" style="font-family: var(--font-mono); font-size: 0.95rem; color: #0f172a;">-</b>
+        </div>
+        <div>
+          <span style="font-size: 0.72rem; color: #475569; display: block;">Kelas & Sekolah:</span>
+          <b id="card-student-class" style="font-size: 0.95rem; color: #065f46;">-</b>
+        </div>
+      </div>
+
+      <!-- Kartu Ringkasan Indeks Nilai -->
+      <div class="grid-4" style="gap: 10px; margin-bottom: 18px;">
+        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+          <span class="stat-title" style="font-size: 0.7rem;">Total Ujian Selesai</span>
+          <span class="stat-value" id="card-total-exams" style="font-size: 1.25rem; color: #0f172a;">0</span>
+          <span class="stat-desc">Paket Ujian</span>
+        </div>
+        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+          <span class="stat-title" style="font-size: 0.7rem;">Rata-rata Nilai</span>
+          <span class="stat-value" id="card-avg-score" style="font-size: 1.25rem; color: #059669;">0.0</span>
+          <span class="stat-desc">Skala 0 - 100</span>
+        </div>
+        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+          <span class="stat-title" style="font-size: 0.7rem;">Status KKM (75)</span>
+          <span class="stat-value" id="card-status-badge" style="font-size: 0.9rem; font-weight: 800; color: #059669;">-</span>
+          <span class="stat-desc" id="card-pass-fail-count">0 Lulus / 0 Remedial</span>
+        </div>
+        <div class="stat-card" style="text-align: center; padding: 10px 8px; background: #ffffff; border: 1px solid #cbd5e1;">
+          <span class="stat-title" style="font-size: 0.7rem;">Predikat Akhir</span>
+          <span class="stat-value" id="card-predicate" style="font-size: 0.8rem; font-weight: 800; color: #0f172a;">-</span>
+          <span class="stat-desc">Evaluasi Kompetensi</span>
+        </div>
+      </div>
+
+      <!-- Tabel Daftar Nilai Ujian Siswa -->
+      <div style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h4 style="font-size: 0.88rem; font-weight: 700; color: #0f172a; margin: 0;">
+            📋 Riwayat Pengerjaan Soal & Capaian Skor:
+          </h4>
+          <span style="font-size: 0.72rem; color: #64748b;">Standar KKM: <b>75.0</b></span>
+        </div>
+        
+        <div class="table-container" style="max-height: 280px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px;">
+          <table class="data-table" style="width: 100%; font-size: 0.78rem;">
+            <thead>
+              <tr style="background: #065f46; color: white;">
+                <th style="width: 35px; text-align: center;">No</th>
+                <th>Paket Ujian & Mapel</th>
+                <th style="width: 110px; text-align: center;">Waktu Selesai</th>
+                <th style="width: 75px; text-align: center;">Durasi</th>
+                <th style="width: 65px; text-align: center;">Nilai</th>
+                <th style="width: 95px; text-align: center;">Status</th>
+                <th style="width: 70px; text-align: center;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="card-exams-tbody">
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 20px; color: var(--text-dim);">
+                  Memuat data kartu nilai...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Box Container Rincian Soal (Tampil saat Siswa Klik tombol '🔍 Rincian') -->
+      <div id="card-detail-breakdown-box" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h5 style="font-size: 0.84rem; font-weight: 700; color: #065f46; margin: 0;" id="card-detail-title">
+            🔍 Rincian Jawaban Soal Ujian
+          </h5>
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('card-detail-breakdown-box').style.display='none'" style="font-size: 0.7rem; padding: 2px 8px;">
+            ✕ Tutup Rincian
+          </button>
+        </div>
+        <div id="card-detail-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;"></div>
+      </div>
+
+      <!-- Footer Action Buttons -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 14px; flex-wrap: wrap; gap: 10px;">
+        <button class="btn btn-secondary" onclick="document.getElementById('modal-student-grade-card').classList.remove('open')">
+          Tutup
+        </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" id="btn-card-download-pdf">
+            📥 Unduh PDF Resmi
+          </button>
+          <button class="btn btn-primary" id="btn-card-print-preview">
+            🖨️ Cetak Kartu Nilai (Print)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="app-toast">Pesan notifikasi</div>
+
+  <!-- JavaScript Scripts -->
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/charts.js"></script>
+  <script src="/static/js/ai_copilot.js"></script>
+  <script src="/static/js/elearning.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

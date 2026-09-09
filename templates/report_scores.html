@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Rekapitulasi Nilai Siswa — SMK Cahaya Pertiwi</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 24px;
+      font-size: 13px;
+    }
+    .print-container {
+      max-width: 1060px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 36px 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .no-print-bar {
+      max-width: 1060px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #047857;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #f8fafc;
+    }
+
+    /* KOP SURAT */
+    .header-kop {
+      text-align: center;
+      border-bottom: 2.5px solid #059669;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .kop-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #065f46;
+      letter-spacing: 0.04em;
+    }
+    .kop-subtitle {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 2px;
+    }
+    .kop-desc {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* METADATA BAR */
+    .meta-box {
+      display: flex;
+      justify-content: space-between;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    .meta-item b {
+      color: #065f46;
+    }
+
+    /* TABEL DATA */
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+    .report-table th {
+      background: #059669;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 8px 10px;
+      font-size: 11.5px;
+      text-align: left;
+      border: 1px solid #047857;
+    }
+    .report-table td {
+      padding: 7px 10px;
+      font-size: 11.5px;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+    }
+    .report-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+
+    .badge-pass {
+      color: #059669;
+      font-weight: 800;
+    }
+    .badge-fail {
+      color: #e11d48;
+      font-weight: 800;
+    }
+
+    /* SUMMARY STATS */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .summary-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 14px;
+    }
+    .summary-title {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
+    .summary-val {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* TANDA TANGAN */
+    .signature-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 36px;
+      page-break-inside: avoid;
+    }
+    .sig-col {
+      width: 280px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .sig-space {
+      height: 64px;
+    }
+
+    /* PRINT SPECIFIC */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .no-print-bar {
+        display: none !important;
+      }
+      .print-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      @page {
+        size: A4 landscape;
+        margin: 15mm 12mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar (Hidden during Print) -->
+  <div class="no-print-bar">
+    <a href="javascript:window.close()" class="btn btn-secondary">
+      ← Tutup / Kembali ke Aplikasi
+    </a>
+    <div style="display: flex; gap: 8px;">
+      <a href="/api/elearning/admin/report/scores/pdf?class_name={{ class_filter or '' }}&date={{ date_filter or '' }}" class="btn btn-secondary" target="_blank">
+        📥 Unduh File PDF Asli (.pdf)
+      </a>
+      <button onclick="window.print()" class="btn btn-primary">
+        🖨️ Cetak / Simpan PDF (Ctrl + P)
+      </button>
+    </div>
+  </div>
+
+  <div class="print-container">
+    <!-- Kop Surat -->
+    <div class="header-kop">
+      <div class="kop-title">SMK CAHAYA PERTIWI</div>
+      <div class="kop-subtitle">LAPORAN REKAPITULASI NILAI UJIAN CBT & LAB PRAKTIK CODING</div>
+      <div class="kop-desc">Studio ML Python & AI Learning Center • Instruktur: Thoriq Azis, S.Kom</div>
+    </div>
+
+    <!-- Metadata Laporan -->
+    <div class="meta-box">
+      <div class="meta-item"><b>Filter Kelas:</b> {{ class_filter if class_filter and class_filter.lower() != 'semua' else 'Semua Kelas' }}</div>
+      <div class="meta-item"><b>Filter Tanggal:</b> {{ date_filter if date_filter else 'Semua Tanggal' }}</div>
+      <div class="meta-item"><b>Tanggal Cetak:</b> {{ today }}</div>
+      <div class="meta-item"><b>Total Peserta:</b> {{ submissions|length }} Siswa</div>
+    </div>
+
+    <!-- Tabel Nilai -->
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 35px;">No</th>
+          <th style="width: 110px;">Waktu Selesai</th>
+          <th style="width: 170px;">Nama Lengkap Siswa</th>
+          <th class="text-center" style="width: 75px;">NISN</th>
+          <th>Kelas</th>
+          <th>Paket Ujian</th>
+          <th class="text-center" style="width: 65px;">Nilai</th>
+          <th class="text-center" style="width: 95px;">Status</th>
+          <th class="text-center" style="width: 80px;">Durasi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if submissions %}
+          {% for s in submissions %}
+          {% set score_val = (s.score or 0)|float %}
+          {% set dur_total = (s.duration_seconds or 0)|int %}
+          {% set mins = dur_total // 60 %}
+          {% set secs = dur_total % 60 %}
+          {% set sub_date = (s.submitted_at|string)[:16]|replace('T', ' ') if s.submitted_at else '-' %}
+          <tr>
+            <td class="text-center">{{ loop.index }}</td>
+            <td><small>{{ sub_date }}</small></td>
+            <td><b>{{ s.student_name or '-' }}</b></td>
+            <td class="text-center" style="font-family: monospace;">{{ s.student_nisn or '-' }}</td>
+            <td>{{ s.student_class or '-' }}</td>
+            <td>{{ s.exam_title or '-' }}</td>
+            <td class="text-center"><b>{{ "%.1f"|format(score_val) }}</b></td>
+            <td class="text-center">
+              {% if score_val >= 75.0 %}
+                <span class="badge-pass">KOMPETEN</span>
+              {% else %}
+                <span class="badge-fail">REMEDIAL</span>
+              {% endif %}
+            </td>
+            <td class="text-center">{{ "%02dm %02ds"|format(mins, secs) }}</td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="9" class="text-center" style="padding: 24px; color: #64748b;">
+              Tidak ada data nilai siswa yang cocok dengan filter yang dipilih.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <!-- Statistik Ringkasan -->
+    {% if submissions %}
+      {% set scores = submissions|map(attribute='score')|list %}
+      {% set total = scores|length %}
+      {% set avg = (scores|sum / total) if total > 0 else 0 %}
+      {% set pass_count = submissions|selectattr('is_passed')|list|length %}
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-title">Rata-rata Nilai</div>
+          <div class="summary-val" style="color: #059669;">{{ "%.1f"|format(avg) }} / 100</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-title">Siswa Kompeten (KKM ≥ 75)</div>
+          <div class="summary-val" style="color: #059669;">{{ pass_count }} Siswa ({{ "%.1f"|format(pass_count / total * 100) }}%)</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-title">Siswa Perlu Remedial</div>
+          <div class="summary-val" style="color: #e11d48;">{{ total - pass_count }} Siswa</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-title">Total Lembar Jawaban</div>
+          <div class="summary-val">{{ total }} Data</div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Kolom Tanda Tangan -->
+    <div class="signature-row">
+      <div class="sig-col">
+        <div>Mengetahui,</div>
+        <b>Kepala SMK Cahaya Pertiwi</b>
+        <div class="sig-space"></div>
+        <div><b><u>M. Tarmizi Aziz, SE, M.Pd</u></b></div>
+        <div style="font-size: 11px; color: #64748b;">NIP. ___________________________</div>
+      </div>
+      <div class="sig-col">
+        <div>Bogor, {{ today }}</div>
+        <b>Guru Pengampu & Instruktur</b>
+        <div class="sig-space"></div>
+        <div><b><u>Thoriq Azis, S.Kom</u></b></div>
+        <div style="font-size: 11px; color: #64748b;">Instruktur AI & Pemrograman</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
