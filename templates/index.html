@@ -108,11 +108,11 @@
         </div>
 
         <div class="top-actions">
-          <button class="btn btn-secondary btn-sm" id="btn-save-project-modal">
-            💾 Simpan Proyek
+          <button class="btn btn-secondary btn-sm top-action-btn" id="btn-save-project-modal" title="Simpan Proyek">
+            <span>💾</span><span class="btn-text-hide-mobile"> Simpan</span>
           </button>
-          <button class="btn btn-secondary btn-sm" id="btn-open-settings" title="Pengaturan AI Copilot">
-            ⚙️ Pengaturan AI
+          <button class="btn btn-secondary btn-sm top-action-btn" id="btn-open-settings" title="Pengaturan AI Copilot">
+            <span>⚙️</span><span class="btn-text-hide-mobile"> Pengaturan</span>
           </button>
         </div>
       </header>
@@ -322,15 +322,15 @@
             </div>
           </div>
 
-          <div style="display: flex; gap: 24px;">
+          <div class="models-split-layout">
             <!-- Model Cards Grid -->
-            <div style="flex: 3;">
+            <div class="models-cards-col">
               <div class="panel-title" style="margin-bottom: 16px;">🃏 Kartu Model Tersedia</div>
               <div class="model-cards-grid" id="models-cards-container"></div>
             </div>
 
             <!-- Hyperparameter Tuning Sidebar -->
-            <div style="flex: 2;">
+            <div class="models-tuning-col">
               <div class="glass-panel">
                 <div class="panel-header">
                   <div>
@@ -448,7 +448,7 @@
 
             <div class="grid-2">
               <div>
-                <div id="live-prediction-inputs" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; max-height: 280px; overflow-y: auto; padding-right: 8px;"></div>
+                <div id="live-prediction-inputs" class="live-prediction-grid"></div>
                 <button class="btn btn-gradient-cyan" id="btn-run-live-predict" style="margin-top: 18px; width: 100%; justify-content: center;">
                   🔮 Jalankan Prediksi Sekarang
                 </button>
