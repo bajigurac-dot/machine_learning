@@ -70,16 +70,21 @@ const AICopilot = {
 
     this.appendMessage('ai', `### 🎓 Halo Sobat Siswa! Selamat Datang di AI Tutor Python & ML (Mentor: Thoriq Azis, S.Kom)
 
-Saya adalah asisten AI yang siap memandu Anda belajar pemrograman Python dari nol hingga mahir membuat Machine Learning mandiri dan mempraktikkannya langsung di **Visual Studio Code (VS Code)**!
+Saya adalah asisten AI yang siap memandu Anda belajar pemrograman Python secara terstruktur dari nol hingga mahir membuat Machine Learning mandiri dan mempraktikkannya langsung di **Visual Studio Code (VS Code)**!
 
-**🚀 Alur Belajar Mandiri Bersama AI Tutor:**
-1. **Pilih Materi di Pintasan Atas**: Ingin belajar *Looping (Perulangan)*, *Percabangan If-Else*, *Fungsi Def*, *List & Dict*, atau *Machine Learning*? Cukup klik tombol di atas atau ketik di kolom chat.
-2. **Dapatkan Skrip & Panduan Lengkap**: AI menyiapkan skrip kode bersih dengan komentar penjelasan, nama file rekomendasi, dan langkah menjalankannya di VS Code.
-3. **Salin atau Unduh Kode**: Klik tombol **"📋 Salin Kode"** atau **"📥 Unduh .py"** pada kotak kode di bawah.
-4. **Buka di VS Code & Jalankan di Terminal**: Buka terminal terintegrasi di VS Code (\`Ctrl + \`\`), lalu ketik \`python nama_file.py\` dan tekan Enter.
-5. **Selesaikan Tantangan Praktik Mandiri**: Di setiap materi ada tantangan seru untuk menguji kemampuan modifikasi kodingmu sendiri!
+**📚 Kurikulum Praktik Dasar Python Sesuai Urutan:**
+1. 📢 **Materi 1**: Cetak Teks ke Layar (\`print\`) & Format Teks
+2. 🏷️ **Materi 2**: Variabel & Tipe Data Dasar (\`str\`, \`int\`, \`float\`, \`bool\`)
+3. ⌨️ **Materi 3**: Menerima Input Pengguna (\`input()\`) & Operasi Aritmatika
+4. 🔀 **Materi 4**: Percabangan & Logika Kondisi (\`if-elif-else\`)
+5. 🔄 **Materi 5**: Perulangan / Looping (\`for\` & \`while\`)
+6. 📑 **Materi 6**: Struktur Data Kumpulan (\`List\` & \`Dictionary\`)
+7. 📦 **Materi 7**: Membuat Fungsi Modular (\`def\`, parameter & return)
+8. 🛡️ **Materi 8**: Penanganan Error / Exception (\`try - except\`)
+9. 🤖 **Materi 9**: Praktikum Machine Learning Pertama di VS Code
+10. 📄 **Materi 10**: Pembuatan Lembar Kerja Praktikum Siswa (Jobsheet PRD)
 
-*Silakan klik salah satu tombol materi di atas atau tanyakan kode apa pun yang ingin kamu pelajari!*`);
+*💡 Tips: Anda bisa mengklik tombol pintasan materi di atas, mengetik nomor materinya (contoh: ketik "1" atau "materi 1"), atau menanyakan kendala koding apa pun!*`);
   },
 
   async sendMessage() {
