@@ -1570,3 +1570,429 @@ input[type="range"].app-slider {
   font-weight: 700;
 }
 
+/* ==========================================================================
+   MOBILE RESPONSIVE SYSTEM (TABLET & SMARTPHONE)
+   Optimized for Student Mobile Access (AutoML & CBT Exams)
+   ========================================================================== */
+
+/* Base Mobile Helper Elements (Hidden on Desktop) */
+.mobile-menu-btn {
+  display: none;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.mobile-menu-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.sidebar-close-btn {
+  display: none;
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-left: auto;
+  transition: var(--transition);
+}
+
+.sidebar-close-btn:hover {
+  background: #e2e8f0;
+  color: var(--text-main);
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 12px;
+}
+
+/* ==================== TABLET BREAKPOINT (<= 1024px) ==================== */
+@media screen and (max-width: 1024px) {
+  .app-container {
+    height: 100vh;
+    position: relative;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  /* Off-canvas Sidebar Drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 285px;
+    max-width: 85vw;
+    z-index: 1200;
+    box-shadow: 4px 0 25px rgba(0, 0, 0, 0.18);
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Backdrop Overlay */
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1150;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .sidebar-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .main-wrapper {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .top-bar {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .exam-main-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ==================== SMARTPHONE BREAKPOINT (<= 768px) ==================== */
+@media screen and (max-width: 768px) {
+  /* Prevent horizontal screen spill */
+  html, body {
+    overflow-x: hidden;
+    font-size: 14px;
+  }
+
+  /* Header adjustments */
+  .top-bar {
+    height: auto;
+    min-height: 54px;
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .top-info {
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .page-title, #top-page-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
+  }
+
+  .dataset-pill {
+    display: none; /* Sembunyikan badge dataset di HP agar judul tidak terpotong */
+  }
+
+  .top-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .top-actions .btn {
+    padding: 6px 10px;
+    font-size: 0.74rem;
+  }
+
+  /* Main Viewport Content */
+  .content-viewport {
+    padding: 14px 12px 78px 12px; /* Ruang ekstra untuk Mobile Bottom Nav */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile Bottom Navigation Bar */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #ffffff;
+    border-top: 1px solid var(--border-subtle);
+    box-shadow: 0 -3px 14px rgba(0, 0, 0, 0.06);
+    z-index: 1000;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+  }
+
+  .mobile-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px 2px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    transition: var(--transition);
+  }
+
+  .mobile-nav-btn.active {
+    color: var(--accent-dark);
+  }
+
+  .mobile-nav-btn.active .mobile-nav-icon {
+    transform: scale(1.15);
+  }
+
+  .mobile-nav-btn.active .mobile-nav-label {
+    color: var(--accent-primary-hover);
+    font-weight: 700;
+  }
+
+  .mobile-nav-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: transform 0.15s ease;
+  }
+
+  .mobile-nav-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  /* Grid Layouts Stacked to 1 Column */
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Hero & AutoML Quick Bar */
+  .hero-banner {
+    padding: 18px 16px;
+  }
+
+  .hero-title {
+    font-size: 1.25rem;
+    line-height: 1.35;
+  }
+
+  .hero-p {
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+  }
+
+  .automl-quick-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .quick-select-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+  }
+
+  select.app-select, input.app-input {
+    width: 100%;
+    min-height: 44px; /* Nyaman disentuh jari */
+    font-size: 16px;  /* 16px mencegah auto-zoom pada Safari iPhone */
+  }
+
+  .btn {
+    min-height: 42px;
+    justify-content: center;
+  }
+
+  /* E-Learning CBT Ujian Khusus HP */
+  .exam-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    position: sticky;
+    top: 0;
+    z-index: 60;
+  }
+
+  .exam-timer-wrapper {
+    min-width: unset;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .exam-timer-box {
+    padding: 4px 12px;
+    font-size: 0.88rem;
+  }
+
+  .exam-question-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.86rem;
+  }
+
+  .mcq-option-label {
+    padding: 14px 14px;
+    font-size: 0.94rem;
+    min-height: 50px;
+    border-radius: var(--radius-md);
+    line-height: 1.45;
+  }
+
+  .exam-code-editor {
+    font-size: 14px;
+    min-height: 180px;
+    width: 100%;
+    line-height: 1.4;
+  }
+
+  .exam-palette-grid {
+    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    gap: 8px;
+  }
+
+  .palette-btn {
+    height: 44px;
+    font-size: 0.92rem;
+  }
+
+  .exam-footer-nav {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .exam-footer-nav .btn {
+    width: 100%;
+    min-height: 46px;
+    font-size: 0.92rem;
+  }
+
+  /* Admin tabs */
+  .admin-nav-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+
+  .admin-nav-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  /* Modals */
+  .modal-dialog {
+    width: 95%;
+    max-width: 95vw;
+    max-height: 90vh;
+    padding: 20px 16px;
+    border-radius: var(--radius-md);
+    overflow-y: auto;
+  }
+
+  /* Tables */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.82rem;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+
+  /* Code pre blocks */
+  pre, code {
+    font-size: 0.82rem;
+    word-break: break-word;
+  }
+}
+
+/* ==================== EXTRA SMALL PHONES (<= 480px) ==================== */
+@media screen and (max-width: 480px) {
+  .top-bar {
+    padding: 6px 10px;
+  }
+
+  .page-title, #top-page-title {
+    max-width: 140px;
+    font-size: 0.88rem;
+  }
+
+  .hero-banner {
+    padding: 14px 12px;
+  }
+
+  .hero-title {
+    font-size: 1.15rem;
+  }
+
+  .content-viewport {
+    padding: 10px 10px 76px 10px;
+  }
+}
+
+

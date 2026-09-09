@@ -31,7 +31,7 @@ const App = {
     this.refreshProjectList();
   },
 
-  // ==================== NAVIGATION TABS ====================
+  // ==================== NAVIGATION TABS & MOBILE DRAWER ====================
   bindNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
@@ -40,17 +40,63 @@ const App = {
         this.switchTab(tabId);
       });
     });
+
+    // Mobile bottom navigation items
+    const mobileNavBtns = document.querySelectorAll('.mobile-nav-btn[data-tab]');
+    mobileNavBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tabId = e.currentTarget.getAttribute('data-tab');
+        this.switchTab(tabId);
+      });
+    });
+
+    // Mobile drawer toggle & close
+    const sidebar = document.querySelector('.sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const toggleBtn = document.getElementById('btn-toggle-sidebar');
+    const closeBtn = document.getElementById('btn-close-sidebar');
+    const moreBtn = document.getElementById('mob-nav-more');
+
+    const openSidebar = () => {
+      if (sidebar) sidebar.classList.add('open');
+      if (backdrop) backdrop.classList.add('active');
+    };
+
+    const closeSidebar = () => {
+      if (sidebar) sidebar.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('active');
+    };
+
+    if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+    if (moreBtn) moreBtn.addEventListener('click', openSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if (backdrop) backdrop.addEventListener('click', closeSidebar);
   },
 
   switchTab(tabId) {
     this.state.activeTab = tabId;
 
-    // Update active class on nav
+    // Close mobile drawer if open
+    const sidebar = document.querySelector('.sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar) sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('active');
+
+    // Update active class on sidebar nav
     document.querySelectorAll('.nav-item').forEach(item => {
       if (item.getAttribute('data-tab') === tabId) {
         item.classList.add('active');
       } else {
         item.classList.remove('active');
+      }
+    });
+
+    // Update active class on mobile bottom nav
+    document.querySelectorAll('.mobile-nav-btn[data-tab]').forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
       }
     });
 

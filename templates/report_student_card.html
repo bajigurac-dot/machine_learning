@@ -34,6 +34,28 @@
       align-items: center;
       gap: 12px;
     }
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      .print-container {
+        padding: 18px 14px;
+      }
+      .no-print-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .no-print-bar .btn {
+        justify-content: center;
+      }
+      table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
     .btn {
       display: inline-flex;
       align-items: center;
