@@ -25,6 +25,7 @@ from ml_engine.ai_copilot import handle_ai_chat, generate_local_feature_spec, ge
 from ml_engine.elearning import (
     init_elearning_db, list_active_exams, get_exam_details, create_exam, delete_exam,
     add_question, delete_question, execute_python_code, execute_sql_query,
+    get_sql_mock_schema,
     submit_exam_answers, list_submissions, update_submission_score, delete_submission,
     generate_scores_pdf,
     verify_student_login, get_student_by_nisn, get_student_exam_attempts,
@@ -225,7 +226,8 @@ def api_train_single():
             "training_duration": result["training_duration"],
             "feature_importance": result["feature_importance"],
             "original_features": data_bundle["original_features"],
-            "target_classes": data_bundle["target_classes"]
+            "target_classes": data_bundle["target_classes"],
+            "rapor_smk": result.get("rapor_smk")
         }
         return jsonify({"success": True, "result": resp_data})
     except Exception as e:
@@ -703,8 +705,21 @@ def api_elearning_run_code():
         "is_correct": res["is_correct"],
         "actual_output": res["actual_output"],
         "expected_output": res.get("expected_output"),
+        "columns": res.get("columns", []),
+        "rows": res.get("rows", []),
+        "row_count": res.get("row_count", 0),
+        "execution_time_ms": res.get("execution_time_ms", 0),
+        "feedback_detail": res.get("feedback_detail", ""),
         "error": res.get("error")
     })
+
+@app.route("/api/elearning/sql/schema", methods=["GET"])
+def api_elearning_sql_schema():
+    try:
+        tables = get_sql_mock_schema()
+        return jsonify({"success": True, "tables": tables})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/api/elearning/submissions/submit", methods=["POST"])
 def api_elearning_submit_exam():

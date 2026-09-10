@@ -596,5 +596,67 @@ class TestELearningEngine(unittest.TestCase):
 
         delete_exam(test_exam_id)
 
+    def test_20_sql_mock_schema_api(self):
+        """Uji endpoint skema database mock SQLite lab SMK dan data sampelnya."""
+        res = self.client.get("/api/elearning/sql/schema")
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertTrue(data["success"])
+        self.assertIn("tables", data)
+        self.assertGreaterEqual(len(data["tables"]), 2)
+
+        table_names = [t["table_name"] for t in data["tables"]]
+        self.assertIn("siswa", table_names)
+        self.assertIn("nilai_mapel", table_names)
+
+        # Cek detail tabel siswa
+        siswa_table = next(t for t in data["tables"] if t["table_name"] == "siswa")
+        col_names = [c["name"] for c in siswa_table["columns"]]
+        self.assertIn("nisn", col_names)
+        self.assertIn("nama", col_names)
+        self.assertIn("nilai_kejuruan", col_names)
+        self.assertGreater(len(siswa_table["sample_rows"]), 0)
+
+    def test_21_enhanced_sql_execution(self):
+        """Uji eksekusi SQL dengan metadata terstruktur dan pembanding cerdas."""
+        # 1. Uji eksekusi dengan expected_output berupa query SELECT acuan
+        query_student = "SELECT nama, nilai_kejuruan FROM siswa WHERE nilai_kejuruan >= 80.0 ORDER BY nilai_kejuruan DESC"
+        query_ref = "SELECT nama, nilai_kejuruan FROM siswa WHERE nilai_kejuruan >= 80 ORDER BY nilai_kejuruan DESC;"
+        res_ref = execute_sql_query(query_student, query_ref)
+        self.assertTrue(res_ref["success"])
+        self.assertTrue(res_ref["is_correct"])
+        self.assertEqual(res_ref["columns"], ["nama", "nilai_kejuruan"])
+        self.assertEqual(res_ref["row_count"], 4)
+        self.assertGreaterEqual(res_ref["execution_time_ms"], 0)
+
+        # 2. Uji endpoint /api/elearning/code/run untuk SQL
+        res_api = self.client.post("/api/elearning/code/run", json={
+            "language": "sql",
+            "code": "SELECT nama, jurusan FROM siswa WHERE jurusan = 'RPL' ORDER BY id ASC",
+            "expected_output": None
+        })
+        self.assertEqual(res_api.status_code, 200)
+        json_data = res_api.get_json()
+        self.assertTrue(json_data["success"])
+        self.assertIn("columns", json_data)
+        self.assertIn("rows", json_data)
+        self.assertGreater(json_data["row_count"], 0)
+
+    def test_22_enhanced_python_execution_and_whitespace(self):
+        """Uji toleransi whitespace dan pesan bantuan error pada eksekusi kode Python."""
+        # Toleransi trailing whitespace pada baris output
+        code_space = "print('1   ')\nprint('2 ')"
+        expected = "1\n2"
+        res_ws = execute_python_code(code_space, expected)
+        self.assertTrue(res_ws["success"])
+        self.assertTrue(res_ws["is_correct"])
+
+        # Pesan bantuan IndentationError
+        code_indent_err = "for i in range(3):\nprint(i)"
+        res_indent = execute_python_code(code_indent_err)
+        self.assertFalse(res_indent["success"])
+        self.assertIn("IndentationError", res_indent["error"])
+        self.assertIn("Kesalahan indentasi", res_indent["error"])
+
 if __name__ == "__main__":
     unittest.main()

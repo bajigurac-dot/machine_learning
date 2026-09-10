@@ -194,6 +194,8 @@ def train_single_model(model_id, params, data_bundle):
             "sample_predictions": sample_preds
         }
         
+    rapor_smk = generate_smk_model_report(task_type, metrics, model.__class__.__name__, feature_importance)
+
     return {
         "model": model,
         "model_id": model_id,
@@ -201,7 +203,91 @@ def train_single_model(model_id, params, data_bundle):
         "metrics": metrics,
         "training_duration": training_duration,
         "feature_importance": feature_importance,
-        "params": params
+        "params": params,
+        "rapor_smk": rapor_smk
+    }
+
+def generate_smk_model_report(task_type, metrics, model_name, feature_importance):
+    """
+    Menghasilkan narasi Rapor Pemahaman Model dalam bahasa Indonesia santun dan mudah
+    dipahami siswa SMK (menggunakan analogi sekolah, ujian, dan rapor belajar).
+    """
+    top_feature = feature_importance[0]["feature"] if feature_importance else "Fitur Data Utama"
+    top_score_pct = round(feature_importance[0]["score"] * 100, 1) if feature_importance else 0
+
+    if task_type == "classification":
+        acc = metrics.get("accuracy", 0)
+        prec = metrics.get("precision", 0)
+        rec = metrics.get("recall", 0)
+
+        if acc >= 85.0:
+            grade = "Predikat A (Sangat Mahir & Juara)"
+            grade_badge = "grade-badge-a"
+            evaluasi = f"Hebat sekali! Model {model_name} berhasil memahami pola data dengan sangat tajam dan konsisten."
+            tips = "Model ini siap dipakai untuk menebak data baru di Live Sandbox atau dipraktikkan langsung di VS Code!"
+        elif acc >= 70.0:
+            grade = "Predikat B (Lulus & Cukup Pintar)"
+            grade_badge = "grade-badge-b"
+            evaluasi = f"Bagus! Model {model_name} berhasil lulus ujian dasar dan dapat menebak sebagian besar data dengan tepat."
+            tips = "Coba gunakan algoritma Random Forest atau sesuaikan jumlah pohon jika ingin mendongkrak nilainya ke Grade A."
+        else:
+            grade = "Predikat C (Perlu Remedial / Belajar Lagi)"
+            grade_badge = "grade-badge-c"
+            evaluasi = f"Model {model_name} masih sering keliru menebak. Pola data mungkin masih belum bersih atau ada data yang hilang."
+            tips = "Gunakan fitur pembersihan data (Imputasi Median) di tab Kelola Data, lalu latih ulang dengan model ensemble."
+
+        analogi_ujian = (
+            f"Jika diibaratkan ulangan dengan 100 butir soal, model ini berhasil menjawab "
+            f"{round(acc)} soal dengan benar dan salah di {100 - round(acc)} soal."
+        )
+        penjelasan_metrik = [
+            {"nama": "Akurasi (Nilai Ulangan)", "nilai": f"{acc}%", "arti": "Tingkat ketepatan tebakan secara keseluruhan dari seluruh data uji."},
+            {"nama": "Presisi (Ketepatan Alarm)", "nilai": f"{prec}%", "arti": "Saat komputer menebak suatu kelas, seberapa besar tebakan itu benar-benar tepat."},
+            {"nama": "Sensitivitas / Recall (Ketelitian)", "nilai": f"{rec}%", "arti": "Kemampuan komputer mendeteksi semua target tanpa ada yang lolos."}
+        ]
+        faktor_kunci = f"Ciri-ciri (fitur) yang paling menentukan keputusan tebakan komputer adalah {top_feature} (pengaruh sebesar {top_score_pct}%)."
+
+    else:  # regression
+        r2 = metrics.get("r2_score", 0)
+        r2_pct = metrics.get("r2_percent", 0)
+        mae = metrics.get("mae", 0)
+        rmse = metrics.get("rmse", 0)
+
+        if r2 >= 0.75:
+            grade = "Predikat A (Sangat Akurat)"
+            grade_badge = "grade-badge-a"
+            evaluasi = f"Sangat mantap! Model {model_name} mampu membaca tren naik-turun angka dengan deviasi sangat minim."
+            tips = "Model ini sangat handal untuk menaksir angka masa depan seperti harga, gaji, atau nilai."
+        elif r2 >= 0.50:
+            grade = "Predikat B (Cukup Akurat)"
+            grade_badge = "grade-badge-b"
+            evaluasi = f"Cukup baik! Model {model_name} sudah menangkap garis tren umum, walau ada sedikit tebakan yang meleset."
+            tips = "Coba gunakan Random Forest Regressor atau buang data pencilan (outlier) untuk memperkecil selisih error."
+        else:
+            grade = "Predikat C (Tebakan Masih Kasar)"
+            grade_badge = "grade-badge-c"
+            evaluasi = f"Model {model_name} masih kesulitan menarik garis tren yang pas. Selisih tebakannya terhadap kenyataan masih cukup lebar."
+            tips = "Periksa kembali fitur data Anda atau coba algoritma Gradient Boosting Regressor."
+
+        analogi_ujian = (
+            f"Model ini mampu menjelaskan sekitar {round(r2_pct)}% pola perubahan angka, "
+            f"dengan rata-rata melesetnya tebakan (MAE) hanya sekitar ±{mae} dari angka asli."
+        )
+        penjelasan_metrik = [
+            {"nama": "R² Score (Kesesuaian Pola)", "nilai": f"{r2}", "arti": f"Tingkat kecocokan tren angka ({round(r2_pct)}% pola berhasil dipahami komputer)."},
+            {"nama": "Rata-rata Meleset (MAE)", "nilai": f"±{mae}", "arti": "Rata-rata selisih angka tebakan komputer dibanding angka aslinya."},
+            {"nama": "Akar Rata-rata Error (RMSE)", "nilai": f"{rmse}", "arti": "Ukuran hukuman untuk tebakan komputer yang melenceng terlalu jauh."}
+        ]
+        faktor_kunci = f"Faktor data yang paling menentukan besaran angka yang ditebak adalah {top_feature} (pengaruh sebesar {top_score_pct}%)."
+
+    return {
+        "grade": grade,
+        "grade_badge": grade_badge,
+        "evaluasi": evaluasi,
+        "analogi_ujian": analogi_ujian,
+        "faktor_kunci": faktor_kunci,
+        "penjelasan_metrik": penjelasan_metrik,
+        "tips": tips
     }
 
 def run_automl_benchmark(data_bundle):
@@ -233,7 +319,8 @@ def run_automl_benchmark(data_bundle):
                 "metric_name": metric_name,
                 "duration": res["training_duration"],
                 "metrics": res["metrics"],
-                "feature_importance": res["feature_importance"]
+                "feature_importance": res["feature_importance"],
+                "rapor_smk": res.get("rapor_smk")
             })
         except Exception as e:
             print(f"Gagal melatih model {mid} di AutoML: {e}")

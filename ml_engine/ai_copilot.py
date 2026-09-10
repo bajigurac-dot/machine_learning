@@ -237,7 +237,7 @@ def handle_ai_chat(message, conversation_history=None, current_context=None, api
                     "Anda adalah Thoriq Azis, Guru & Mentor Pemrograman Python dan Machine Learning yang ramah, komunikatif, dan sangat peduli "
                     "pada pemahaman siswa SMK (Sekolah Menengah Kejuruan jurusan RPL / TKJ / SIJA / Rekayasa Perangkat Lunak). "
                     "Tujuan utama Anda adalah membimbing siswa belajar coding Python dan AI secara mandiri dan langsung mempraktikkannya di VS Code (Visual Studio Code).\\n\\n"
-                    "Setiap kali siswa bertanya (misal tentang Looping/Perulangan, Percabangan If-Else, Fungsi/Def, List/Dict, Pandas, atau Machine Learning):\\n"
+                    "Setiap kali siswa bertanya (misal tentang Looping/Perulangan, Percabangan If-Else, Fungsi/Def, List/Dict, Basis Data & Query SQL SQLite, Pandas, atau Machine Learning):\\n"
                     "1. Berikan PENJELASAN KONSEP DENGAN ANALOGI MUDAH yang dekat dengan kehidupan sehari-hari anak muda.\\n"
                     "2. Berikan SKRIP KODE PYTHON LENGKAP & BERSIH yang diberi komentar penjelasan di setiap baris penting.\\n"
                     "3. Berikan PANDUAN LANGKAH DEMI LANGKAH MENJALANKANNYA DI VS CODE:\\n"
@@ -285,8 +285,105 @@ def handle_ai_chat(message, conversation_history=None, current_context=None, api
     import re
     clean_msg = msg_lower.strip()
     
+    has_specific_subtopic = any(
+        sub in clean_msg for sub in [
+            "loop", "ulang", "while", "for ", "percabangan", "kondisi", "if", "else", 
+            "input", "keyboard", "print", "cetak", "variabel", "variable", "tipe data",
+            "list", "dict", "array", "fungsi", "def", "error", "try", "except", 
+            "machine learning", "ml", "database", "sql", "sqlite", "mysql", "query", "tabel",
+            "table", "rdbms", "select", "insert", "update", "delete", "crud", "join",
+            "prd", "jobsheet", "latihan 1", "latihan 2", "latihan 3", "latihan 4", "latihan 5",
+            "latihan 6", "latihan 7", "latihan 8", "latihan 9", "latihan 10", "latihan 11",
+            "titanic", "iris", "salary", "gaji", "churn", "diabetes", "housing", "rumah", "dataset", "data contoh"
+        ]
+    )
+
+    # 0. Topik 0: Pengenalan Bahasa Pemrograman Python (Umum)
+    if not has_specific_subtopic and (
+        clean_msg in ["python", "apa itu python", "belajar python", "pengenalan python", "tentang python", "kenapa python", "materi python", "sejarah python", "halo python"]
+        or bool(re.search(r"^(apa\s*itu\s*python|belajar\s*python|pengenalan\s*python|tentang\s*python|kenapa\s*python|mengapa\s*python|keunggulan\s*python|pengantar\s*python|halo\s*python)$", clean_msg))
+        or ("python" in clean_msg and any(w in clean_msg for w in ["apa itu", "pengenalan", "kenapa", "mengapa", "sejarah", "keunggulan", "belajar", "kegunaan", "mulai"]))
+    ):
+        result_text = """### 🐍 Pengenalan Bahasa Pemrograman Python untuk Siswa SMK
+
+Halo sobat siswa SMK! Bersama mentor **Thoriq Azis, S.Kom**, selamat datang di dunia pemrograman modern bersama **Python**!
+*Analogi: Jika bahasa mesin kuno seperti instruksi teknis rumit yang sulit dipahami manusia, Python diciptakan seperti bahasa percakapan sehari-hari yang sangat ringkas, intuitif, dan mudah dipelajari.*
+
+#### 💡 Mengapa Siswa SMK Wajib Menguasai Python?
+1. **Sintaks Paling Bersih & Elegan**: Tidak membutuhkan titik koma (`;`) di setiap akhir baris atau kurung kurawal (`{}`) berbelit-belit. Python menggunakan indentasi (spasi/Tab) yang melatih siswa menulis kode rapi.
+2. **Bahasa Pemrograman #1 di Dunia**: Menurut indeks TIOBE & GitHub, Python adalah bahasa terpopuler di dunia kerja untuk:
+   - **Artificial Intelligence & Machine Learning**: Scikit-Learn, PyTorch, TensorFlow.
+   - **Data Science & Analisis Basis Data**: Pandas, NumPy, Matplotlib, SQLite, MySQL.
+   - **Backend Web Development**: Flask, Django, FastAPI.
+   - **Otomatisasi Sistem & Jaringan Komputer (TKJ/SIJA)**: Scripting administrasi server, bot, API.
+3. **Ekosistem & Komunitas Terbesar**: Jutaan modul pustaka (*libraries*) siap pakai secara gratis.
+
+---
+
+#### 🐍 Skrip Perdana Python Anda (`halo_python.py`)
+```python
+# ==========================================================
+# Pengenalan Bahasa Python Siswa SMK Cahaya Pertiwi
+# Instruktur: Thoriq Azis | File: halo_python.py
+# ==========================================================
+
+nama_siswa = "Sobat Siswa SMK"
+jurusan = "Rekayasa Perangkat Lunak (RPL)"
+sekolah = "SMK Cahaya Pertiwi"
+
+print("=" * 55)
+print(f"🎉 SELAMAT DATANG DI DUNIA CODING PYTHON, {nama_siswa.upper()}!")
+print(f"Sekolah : {sekolah}")
+print(f"Jurusan : {jurusan}")
+print("=" * 55)
+
+# Contoh kemampuan Python: Perhitungan & Looping singkat
+print("\\n5 Keunggulan Utama Python:")
+keunggulan = [
+    "1. Mudah dipelajari pemula & sintaks mirip bahasa manusia",
+    "2. Bahasa utama Artificial Intelligence & Machine Learning",
+    "3. Dukungan basis data (SQLite, MySQL, PostgreSQL) sangat kuat",
+    "4. Kompatibel di semua OS (Windows, Linux, macOS)",
+    "5. Komunitas developer terbesar dan teraktif di dunia"
+]
+
+for item in keunggulan:
+    print(f"  ✓ {item}")
+
+print("\\n>>> Semangat belajar! Anda siap menjadi Programmer & AI Engineer masa depan.")
+```
+
+---
+
+#### 💻 Panduan Menjalankannya di VS Code:
+1. Buka **VS Code** di komputer Anda.
+2. Buat file baru bernama **`halo_python.py`** (**File -> New File** lalu simpan dengan **Ctrl + S**).
+3. Salin kode di atas lalu simpan.
+4. Buka Terminal terintegrasi VS Code (**Ctrl + `**).
+5. Jalankan perintah:
+   ```bash
+   python halo_python.py
+   ```
+
+---
+
+#### 🗺️ Peta Kurikulum Belajar Python & Database di AI Tutor SMK:
+Ketik angka materi untuk langsung mempelajari modul yang diinginkan:
+- 📢 **Ketik "1"**: Cetak Teks (`print()`)
+- 🏷️ **Ketik "2"**: Variabel & Tipe Data
+- ⌨️ **Ketik "3"**: Input Keyboard & Aritmatika
+- 🔀 **Ketik "4"**: Percabangan `if - else`
+- 🔄 **Ketik "5"**: Perulangan `for` & `while`
+- 📑 **Ketik "6"**: List & Dictionary
+- 📦 **Ketik "7"**: Fungsi Modular `def`
+- 🛡️ **Ketik "8"**: Penanganan Error `try - except`
+- 🤖 **Ketik "9"**: Praktikum Machine Learning
+- 📄 **Ketik "10"**: Jobsheet PRD Praktikum
+- 🗄️ **Ketik "11"**: Basis Data & Query SQL (SQLite & MySQL)
+"""
+
     # 1. Topik 1: Cetak Teks (print) & Format Output
-    if (bool(re.search(r"\bprint\b|\bcetak\b|hello\s*world|materi\s*1|dasar\s*1", msg_lower)) and "sprint" not in msg_lower) or clean_msg in ["1", "materi 1", "modul 1"]:
+    elif (bool(re.search(r"\bprint\b|\bcetak\b|hello\s*world|materi\s*1|dasar\s*1", msg_lower)) and "sprint" not in msg_lower) or clean_msg in ["1", "materi 1", "modul 1"]:
         result_text = """### 📢 Materi Dasar 1: Cetak Teks ke Layar (`print`) di Python
 
 Halo sobat siswa SMK! Bersama mentor **Thoriq Azis**, mari kita mulai langkah pertama pemrograman dari hal paling fundamental: **Mencetak Teks ke Layar**.
@@ -753,20 +850,43 @@ python latihan_8_error.py
 *Cobalah sengaja mengetik huruf seperti "abc" saat diminta angka, dan lihat bagaimana program menangkap error secara anggun tanpa crash!*
 """
 
-    # 9. Topik 9: Machine Learning Pertama di VS Code
-    elif any(k in msg_lower for k in ["machine learning", "ml", "model", "prediksi", "klasifikasi", "materi 9", "dasar 9"]) or clean_msg in ["9", "materi 9", "modul 9"]:
-        result_text = f"""### 🤖 Materi 9: Praktikum Machine Learning Pertama di VS Code untuk Siswa SMK
+    # 9. Topik 9: Machine Learning Pertama di VS Code (Mudah Dipahami Siswa SMK)
+    elif any(k in msg_lower for k in [
+        "machine learning", "ml", "ai", "model", "prediksi", "klasifikasi", "regresi",
+        "overfitting", "akurasi", "confusion matrix", "feature importance",
+        "materi 9", "dasar 9", "apa itu ml", "kenapa ml susah"
+    ]) or clean_msg in ["9", "materi 9", "modul 9", "ml", "machine learning"]:
+        result_text = f"""### 🤖 Materi 9: Machine Learning Sederhana & Ramah untuk Siswa SMK
 
-Selamat datang di dunia AI, sobat SMK! Proyek aktif kita menggunakan dataset **`{dataset_name}`** dengan target **`{target_col}`**.
-Model terbaik yang ditemukan oleh AutoML Studio adalah **{best_model}** dengan performa **{best_score}**.
+Halo sobat SMK! Jangan khawatir, **Machine Learning (ML)** sebenarnya **tidak seseram rumus matematika yang rumit**. 
+Bersama mentor **Thoriq Azis, S.Kom**, mari kita pahami logika dasarnya dengan perumpamaan dunia nyata!
 
 ---
 
-#### 🐍 Skrip Python Siap Jalankan di VS Code (`proyek_ml_smk.py`)
+#### 💡 Apa Sih Bedanya Coding Biasa dengan Machine Learning?
+- **Coding Biasa (Traditional Programming)**: Kita sebagai programmer harus mengetik aturan logika satu per satu (`if umur < 18 and tiket == 1: selamat = True`). Kalau datanya ada ribuan jenis, kita pasti pusing menulis ribuan `if-else`.
+- **Machine Learning**: Kita cukup memberikan **ribuan data masa lalu lengkap dengan kunci jawabannya** ke komputer. Komputer akan membaca dan **menemukan polanya sendiri secara otomatis**!
+
+---
+
+#### 🎒 Kamus Gaul 6 Istilah Penting Machine Learning:
+1. **Dataset**: Buku kumpulan soal latihan masa lalu (misal: data 891 penumpang Titanic).
+2. **Fitur (Feature / X)**: Petunjuk atau ciri-ciri soal (misal: Umur, Jenis Kelamin, Harga Tiket, Kelas Kabin).
+3. **Target (Label / y)**: Kunci jawaban yang ingin ditebak komputer (misal: Selamat / Tidak Selamat).
+4. **Data Latih (Train 80%)**: Masa belajar komputer dengan kunci jawaban terbuka untuk mengenali pola.
+5. **Data Uji (Test 20%)**: Ujian tertutup! Komputer diuji menebak 20% data yang belum pernah dilihat tanpa boleh mencontek.
+6. **Akurasi (Nilai Ulangan)**: Berapa persen tebakan komputer yang tepat sasaran saat ujian.
+7. **Overfitting ("Hafal Mati")**: Penyakit model yang cuma menghafal kunci jawaban latihan, tapi begitu diberi soal ujian baru nilainya langsung remedial!
+
+---
+
+#### 🐍 Skrip Python Praktik Mandiri di VS Code (`proyek_ml_smk.py`)
+Berikut adalah skrip Machine Learning perdana Anda menggunakan dataset aktif **`{dataset_name}`** dengan target **`{target_col}`**:
+
 ```python
 # ==========================================================
-# Proyek Machine Learning Siswa SMK
-# Dataset: {dataset_name} | Model: {best_model}
+# Praktikum Machine Learning Siswa SMK Cahaya Pertiwi
+# Instruktur: Thoriq Azis | File: proyek_ml_smk.py
 # ==========================================================
 
 import pandas as pd
@@ -774,45 +894,296 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
-print("1. Memuat dataset...")
+print("=== 1. MEMBUKA BUKU SOAL (DATASET) ===")
+# Memuat data
 df = pd.read_csv("{dataset_name}.csv")
-
 target = "{target_col}"
+
+# Memilih fitur angka (X) dan kunci jawaban (y)
 X = df.drop(columns=[target]).select_dtypes(include=['number']).fillna(0)
 y = df[target]
+print(f"Total Soal Latihan: {{len(df)}} baris data.")
 
-print("2. Membagi data menjadi Train (80%) dan Test (20%)...")
+print("\\n=== 2. MEMBAGI MASA BELAJAR (80%) & UJIAN (20%) ===")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print(f"Data Belajar (Train): {{len(X_train)}} siswa")
+print(f"Data Ujian   (Test) : {{len(X_test)}} siswa")
 
-print("3. Melatih model Machine Learning...")
+print("\\n=== 3. KOMPUTER MULAI BELAJAR POLA (TRAINING) ===")
+# Menggunakan Random Forest (Musyawarah 100 Siswa Pintar)
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
+print("✓ Komputer selesai mempelajari pola data!")
 
-print("4. Menguji akurasi model...")
-prediksi = model.predict(X_test)
-skor = accuracy_score(y_test, prediksi)
-print(f"\\n🎯 HASIL AKURASI MODEL: {{skor * 100:.2f}}%")
-print("Selamat! Model Machine Learning Anda berhasil bekerja di VS Code!")
+print("\\n=== 4. UJIAN TERTUTUP & MENGHITUNG NILAI RAPOR (TESTING) ===")
+tebakan = model.predict(X_test)
+nilai_rapor = accuracy_score(y_test, tebakan) * 100
+
+print("=" * 55)
+print(f"🎯 NILAI RAPOR KELULUSAN MODEL: {{nilai_rapor:.2f}} / 100")
+if nilai_rapor >= 80:
+    print("🏆 Predikat: Sangat Cerdas (Grade A) - Siap Dipakai!")
+else:
+    print("👍 Predikat: Lulus Ujian Dasar (Grade B) - Cukup Bagus!")
+print("=" * 55)
 ```
 
 ---
 
-#### 💻 Langkah Menjalankan di VS Code:
-1. Pastikan library sudah terinstal di terminal VS Code:
+#### 💻 Cara Menjalankannya di VS Code:
+1. Pastikan pustaka AI terinstal di terminal VS Code (**Ctrl + `**):
    ```bash
    pip install pandas scikit-learn
    ```
-2. Jalankan program:
+2. Jalankan skrip:
    ```bash
    python proyek_ml_smk.py
    ```
+
+---
+
+#### 🎯 Tantangan Praktik Mandiri:
+1. Coba ubah `n_estimators=100` menjadi `200` atau `50` pada baris 33, lalu amati apakah nilai akurasi ujiannya berubah naik atau turun!
+2. Buka tab **"Coba Langsung (AutoML)"** di studio ini untuk melihat komputer menguji 5 algoritma AI sekaligus secara otomatis!
 """
+
+    elif any(k in msg_lower for k in [
+        "titanic", "iris", "bedah dataset", "dataset contoh", "dataset standar",
+        "pilihan dataset", "kenapa dataset", "mengapa dataset", "alasan dataset",
+        "kenapa harus titanic", "kenapa data", "6 dataset"
+    ]) or "titanic" in msg_lower or "iris" in msg_lower or (
+        "dataset" in msg_lower and any(w in msg_lower for w in ["kenapa", "mengapa", "alasan", "apa", "pilih", "contoh", "bedah", "6", "enam"])
+    ) or clean_msg in ["dataset", "datasets", "titanic", "kenapa titanic", "kenapa harus titanic"]:
+        result_text = """### 📊 Bedah 6 Dataset Standar Dunia: Mengapa Harus Titanic, Iris, & Gaji?
+
+Halo sobat siswa SMK! Bersama mentor **Thoriq Azis, S.Kom**, mari kita bedah alasan ilmiah mengapa 6 dataset ini menjadi **standar emas internasional** dalam kurikulum Machine Learning dunia:
+
+---
+
+#### 🚢 1. Titanic Survival (Klasifikasi Biner)
+- **Kisah Nyata 1912**: Tragedi tenggelamnya kapal Titanic dengan jumlah sekoci penyelamat terbatas.
+- **Mengapa Harus Dipelajari Siswa?**:
+  1. **Logika Manusiawi**: Aturan evakuasi memprioritaskan wanita & anak-anak (*"women and children first"*), serta penumpang kelas kabin 1 (orang kaya). Siswa dapat membuktikan apakah AI mampu mendeteksi pola penyelamatan ini!
+  2. **Tantangan Data Riil (*Data Cleaning*)**: Di dunia nyata, data tidak pernah sempurna. Titanic melatih siswa mengisi data umur yang hilang (*missing values*) dan mengubah data teks (Pria/Wanita) menjadi angka (*encoding*).
+  3. **Target Prediksi**: Biner (Selamat = 1, Meninggal = 0).
+
+---
+
+#### 🌸 2. Iris Flower (Klasifikasi Multi-Kelas Tertua Dunia)
+- **Sejarah 1936**: Dibuat oleh Ronald Fisher tahun 1936, ini adalah *dataset tertua dan paling dihormati* di dunia Machine Learning!
+- **Mengapa Harus Dipelajari Siswa?**:
+  1. **Tebak 3 Spesies Bunga**: Melatih AI membedakan 3 spesies bunga iris (*Setosa*, *Versicolor*, dan *Virginica*).
+  2. **Data Sangat Bersih**: Tepat 150 baris data tanpa ada nilai kosong, sangat cocok sebagai langkah awal sebelum data yang rumit.
+  3. **Fitur Fisik**: Menggunakan panjang & lebar mahkota serta kelopak daun.
+
+---
+
+#### 💼 3. Prediksi Gaji & Pengalaman Kerja (Regresi Linier)
+- **Relevan dengan Siswa SMK**: Menaksir perkiraan gaji bulanan berdasarkan lama tahun pengalaman kerja di industri.
+- **Mengapa Harus Dipelajari Siswa?**:
+  1. **Memahami Regresi**: Yang ditebak komputer bukan label kategori kata, melainkan **angka nominal uang rupiah nyata**.
+  2. **Pola Hubungan Lurus (*Linear Relationship*)**: Sangat intuitif bagi pemula—semakin bertambah pengalaman, semakin tinggi ekspektasi gajinya.
+
+---
+
+#### 👥 4. Customer Churn (Kasus Bisnis Nyata & Industri)
+- **Dunia Telekomunikasi & Layanan**: Mengetahui apakah pelanggan Telkomsel / Netflix berniat berhenti berlangganan (*churn*).
+- **Mengapa Harus Dipelajari Siswa?**:
+  1. **Nilai Bisnis Tinggi**: Perusahaan rela berinvestasi AI demi mendeteksi pelanggan yang kecewa sebelum mereka pindah ke kompetitor.
+  2. **Fitur Kompleks**: Melibatkan jenis kontrak (bulanan/tahunan), tagihan, dan riwayat komplain.
+
+---
+
+#### 🏡 5. Prediksi Harga Rumah (Regresi Multi-Variabel)
+- **Dunia Properti**: Menaksir harga jual pasar wajar suatu properti/rumah.
+- **Mengapa Harus Dipelajari Siswa?**:
+  1. **Banyak Faktor Penentu**: Harga properti ditentukan kombinasi luas tanah, jumlah kamar tidur, dan lokasi.
+  2. **Feature Importance**: Siswa belajar melihat fitur mana yang paling mendongkrak harga rumah secara signifikan.
+
+---
+
+#### 🩺 6. Skrining Diabetes (Healthcare AI & Medis)
+- **Pemanfaatan AI untuk Kemanusiaan**: Membantu rumah sakit mendeteksi dini apakah seorang pasien berisiko tinggi mengidap diabetes.
+- **Mengapa Harus Dipelajari Siswa?**:
+  1. **Data Medis Klinis**: Melibatkan kadar glukosa darah, tekanan darah, indeks massa tubuh (BMI), dan usia pasien.
+  2. **Pentingnya Akurasi**: Di bidang kesehatan, salah prediksi (*False Negative*) sangat berbahaya bagi pasien.
+
+---
+
+#### 🗺️ Urutan Belajar yang Disarankan (Roadmap):
+1. **Langkah 1**: 🚢 *Titanic* (Logika 2 pilihan & pembersihan data).
+2. **Langkah 2**: 💼 *Prediksi Gaji* (Menebak nominal angka uang / Regresi).
+3. **Langkah 3**: 🌸 *Iris Flower* (Klasifikasi 3 jenis kelompok bunga).
+4. **Langkah 4**: 👥 *Customer Churn* & 🩺 *Diabetes* (Studi kasus nyata industri & kesehatan).
+
+---
+
+💡 **Kabar Baik!** Materi penjelasan lengkap ini beserta **tombol ⚡ Uji Coba Langsung di Studio ML** untuk masing-masing dataset sudah disematkan langsung di dalam **Menu E-Learning & Ujian** (pada bagian *Materi Pembelajaran: Mengapa Harus Data Titanic, Iris, & Gaji?*). Anda bisa langsung mencoba datasetnya dalam 1 klik!"""
 
     # 10. Topik 10: PRD / Jobsheet Praktikum Siswa SMK
     elif any(k in msg_lower for k in ["prd", "jobsheet", "lembar kerja", "materi 10", "dasar 10"]) or clean_msg in ["10", "materi 10", "modul 10"]:
         result_text = generate_local_prd(f"Praktikum Python & ML: Prediksi {target_col}", dataset_name, task_type, target_col)
 
-    # 11. Topik Spesifikasi Teknis / Sprint Task
+    # 11. Topik 11: Basis Data & Query SQL (Database Relasional SQLite di Python)
+    elif any(k in msg_lower for k in [
+        "database", "basis data", "basis_data", "sql", "sqlite", "mysql", "mariadb", 
+        "postgresql", "postgres", "query", "tabel", "table", "rdbms", "select", 
+        "insert", "update", "delete", "crud", "join", "where", "primary key", 
+        "foreign key", "materi 11", "dasar 11", "materi database", "materi sql"
+    ]) or clean_msg in ["11", "materi 11", "modul 11", "database", "sql", "mysql", "sqlite", "query"]:
+        result_text = """### 🗄️ Materi 11: Basis Data & Query SQL (Database Relasional SQLite & MySQL di Python)
+
+Halo sobat siswa SMK! Dalam dunia industri teknologi modern, web backend, dan Machine Learning, program komputer membutuhkan tempat penyimpanan data yang permanen, terstruktur, dan aman. Inilah peran utama **Basis Data Relasional (Database SQL)**.
+*Analogi: Bayangkan lemari arsip digital di SMK Cahaya Pertiwi. Lemari itu adalah **Database**, setiap laci adalah **Tabel** (misal tabel `siswa` dan tabel `nilai_mapel`), setiap map dokumen di dalam laci adalah **Baris Data (Record)**, dan kolom formulirnya adalah **Field/Kolom (NISN, Nama, Jurusan)**.*
+
+---
+
+#### 💡 Konsep Penting Database & SQL:
+1. **RDBMS (*Relational Database Management System*)**: Sistem manajemen data berbasis tabel-tabel yang saling terhubung (berelasi).
+2. **SQLite vs MySQL di Dunia Nyata:**
+   - **SQLite**: Database file lokal tanpa server (*serverless*). Sangat istimewa karena **sudah terpasang bawaan di Python (`import sqlite3`)** tanpa perlu instalasi aplikasi server seperti XAMPP atau MySQL Server!
+   - **MySQL / MariaDB**: Database berbasis client-server yang biasa digunakan untuk aplikasi web skala besar. Di Python dihubungkan menggunakan library `mysql-connector-python` atau `pymysql`.
+   - **Kunci Utama**: Sintaks query SQL dasar (`SELECT`, `INSERT`, `UPDATE`, `DELETE`, `WHERE`, `ORDER BY`, `INNER JOIN`) adalah **99% IDENTIK** pada MySQL dan SQLite karena keduanya mematuhi standar internasional ANSI SQL! Apa yang Anda pelajari di sini langsung bisa Anda pakai di MySQL!
+3. **Operasi Inti CRUD & SQL Fundamental:**
+   - `CREATE TABLE`: Menyiapkan struktur tabel, nama kolom, dan tipe data (`INTEGER`, `TEXT`, `REAL`).
+   - `PRIMARY KEY`: Kolom identitas unik untuk setiap baris data (contoh: ID atau NISN).
+   - `INSERT INTO`: Menambahkan data rekaman baru ke tabel.
+   - `SELECT ... WHERE ... ORDER BY`: Mengambil data, menyaring kriteria tertentu, dan mengurutkan.
+   - `INNER JOIN`: Menghubungkan data dari dua tabel berbeda berdasarkan kunci relasi (*Foreign Key*).
+   - `UPDATE ... SET`: Memperbarui data yang sudah tersimpan.
+   - `DELETE FROM`: Menghapus baris data.
+
+---
+
+#### 🐍 Skrip Kode Python Lengkap (`latihan_11_database_sqlite.py`)
+Salin kode praktikum database relasional di bawah ini:
+
+```python
+# ==========================================================
+# Materi 11: Basis Data & Query SQL Menggunakan SQLite di Python
+# Instruktur: Thoriq Azis | File: latihan_11_database_sqlite.py
+# ==========================================================
+
+import sqlite3
+
+print(">>> [Langkah 1] Menghubungkan ke database SQLite (sekolah_smk.db)...")
+# File database otomatis dibuat jika belum ada di folder proyek
+conn = sqlite3.connect("sekolah_smk.db")
+cursor = conn.cursor()
+
+print(">>> [Langkah 2] Membuat tabel 'siswa' dan 'nilai_mapel'...")
+# 1. Tabel Siswa
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS siswa (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nisn TEXT UNIQUE NOT NULL,
+    nama TEXT NOT NULL,
+    kelas TEXT NOT NULL,
+    jurusan TEXT NOT NULL
+);
+''')
+
+# 2. Tabel Nilai Mapel (Berelasi dengan tabel siswa melalui siswa_id)
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS nilai_mapel (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    siswa_id INTEGER,
+    mapel TEXT NOT NULL,
+    nilai REAL NOT NULL,
+    FOREIGN KEY (siswa_id) REFERENCES siswa (id)
+);
+''')
+
+print(">>> [Langkah 3] Menyisipkan data sampel siswa SMK...")
+# Bersihkan data lama untuk latihan
+cursor.execute("DELETE FROM nilai_mapel;")
+cursor.execute("DELETE FROM siswa;")
+
+# Menambahkan data siswa
+data_siswa = [
+    ("001", "Ahmad Rizki", "XII RPL 1", "RPL"),
+    ("002", "Budi Santoso", "XII RPL 1", "RPL"),
+    ("003", "Citra Dewi", "XII TKJ 2", "TKJ"),
+    ("004", "Thoriq Azis", "XII RPL 1", "RPL")
+]
+cursor.executemany("INSERT INTO siswa (nisn, nama, kelas, jurusan) VALUES (?, ?, ?, ?);", data_siswa)
+
+# Menambahkan data nilai kejuruan
+data_nilai = [
+    (1, "Python Programming", 92.5),
+    (1, "Machine Learning", 88.0),
+    (2, "Python Programming", 74.0),
+    (3, "Jaringan Komputer", 85.0),
+    (4, "Python Programming", 98.0),
+    (4, "Machine Learning", 96.5)
+]
+cursor.executemany("INSERT INTO nilai_mapel (siswa_id, mapel, nilai) VALUES (?, ?, ?);", data_nilai)
+conn.commit()
+print("    ✓ Data berhasil disimpan ke database!")
+
+print("\\n" + "=" * 55)
+print(">>> [Langkah 4] Query SELECT Sederhana & Filter WHERE:")
+print("    Menampilkan siswa dari jurusan 'RPL':")
+print("=" * 55)
+cursor.execute("SELECT id, nisn, nama, kelas FROM siswa WHERE jurusan = 'RPL' ORDER BY id ASC;")
+rows = cursor.fetchall()
+for r in rows:
+    print(f"ID: {r[0]} | NISN: {r[1]} | Nama: {r[2]} | Kelas: {r[3]}")
+
+print("\\n" + "=" * 55)
+print(">>> [Langkah 5] Query Relasi Tabel Menggunakan INNER JOIN:")
+print("    Menghubungkan data siswa dengan nilai mata pelajaran:")
+print("=" * 55)
+query_join = '''
+SELECT s.nama, s.jurusan, n.mapel, n.nilai
+FROM siswa s
+INNER JOIN nilai_mapel n ON s.id = n.siswa_id
+WHERE n.nilai >= 85.0
+ORDER BY n.nilai DESC;
+'''
+cursor.execute(query_join)
+hasil_join = cursor.fetchall()
+
+print(f"{'Nama Siswa':<15} | {'Jurusan':<8} | {'Mata Pelajaran':<20} | {'Nilai':<6}")
+print("-" * 55)
+for row in hasil_join:
+    print(f"{row[0]:<15} | {row[1]:<8} | {row[2]:<20} | {row[3]:<6.1f}")
+
+print("\\n" + "=" * 55)
+print(">>> [Langkah 6] Query Agregasi: Menghitung Rata-rata Nilai:")
+print("=" * 55)
+cursor.execute("SELECT mapel, COUNT(*), AVG(nilai) FROM nilai_mapel GROUP BY mapel;")
+for stat in cursor.fetchall():
+    print(f"Mapel: {stat[0]:<20} | Jumlah Peserta: {stat[1]} | Rata-rata: {stat[2]:.2f}")
+
+# Menutup koneksi database
+conn.close()
+print("\\n>>> Praktikum Database SQLite Berhasil Diselesaikan!")
+```
+
+---
+
+#### 💻 Panduan Langkah demi Langkah Menjalankan di VS Code:
+1. **Buka Visual Studio Code (VS Code)** di komputer Anda.
+2. Buat file baru bernama **`latihan_11_database_sqlite.py`** (**File -> New File** lalu simpan dengan **Ctrl + S**).
+3. Salin (*copy*) seluruh skrip di atas dan tempel (*paste*) ke dalam editor.
+4. Buka Terminal terintegrasi di VS Code (**`Ctrl + \``**).
+5. Jalankan perintah:
+   ```bash
+   python latihan_11_database_sqlite.py
+   ```
+6. **Periksa File Database**: Di panel Explorer sebelah kiri VS Code, Anda akan melihat file database baru bernama **`sekolah_smk.db`** telah terbuat secara otomatis!
+   *(Tips: Anda bisa menginstal ekstensi VS Code bernama "SQLite Viewer" untuk melihat isi tabel database secara visual).*
+
+---
+
+#### 🎯 Tantangan Praktik Mandiri Siswa (Hands-on Challenge):
+1. **Tambah Siswa Baru**: Tambahkan 1 siswa baru dengan data Anda sendiri (Nama, NISN, Kelas, Jurusan).
+2. **Kueri Nilai Tertinggi**: Buat query `SELECT` untuk mencari siswa yang memperoleh nilai tertinggi pada mapel `"Python Programming"`.
+3. **Uji Perintah UPDATE**: Buat perintah `UPDATE nilai_mapel SET nilai = 85.0 WHERE siswa_id = 2;` untuk memberikan nilai remedial siswa, lalu cetak hasilnya kembali!
+"""
+
+    # 12. Topik Spesifikasi Teknis / Sprint Task
     elif "task" in msg_lower or "sprint" in msg_lower or "spec" in msg_lower:
         result_text = generate_local_feature_spec(
             feature_name="Praktikum Mandiri Python di VS Code",
@@ -824,11 +1195,11 @@ print("Selamat! Model Machine Learning Anda berhasil bekerja di VS Code!")
 
     # Default: Menu Bantuan Kurikulum Berurutan
     else:
-        result_text = f"""### 🎓 Halo Sobat SMK! AI Mentor Python Siap Membantu
+        result_text = f"""### 🎓 Halo Sobat SMK! AI Mentor Python & Database Siap Membantu
 
-Saya adalah asisten AI yang siap memandu Anda belajar pemrograman Python secara terstruktur dari dasar hingga mahir untuk langsung dipraktikkan di **Visual Studio Code (VS Code)**!
+Saya adalah asisten AI yang siap memandu Anda belajar pemrograman Python dan Basis Data (SQL) secara terstruktur dari dasar hingga mahir untuk langsung dipraktikkan di **Visual Studio Code (VS Code)**!
 
-Berikut urutan materi praktik dasar Python yang bisa Anda pilih:
+Berikut urutan materi praktik dasar yang bisa Anda pilih:
 - 📢 **Ketik "1" atau "Cetak Teks"**: Fungsi `print()`, escape sequence, dan f-string.
 - 🏷️ **Ketik "2" atau "Variabel"**: Tipe data `str`, `int`, `float`, `bool`, dan type casting.
 - ⌨️ **Ketik "3" atau "Input"**: Menerima input keyboard dengan `input()` dan operasi aritmatika.
@@ -838,7 +1209,9 @@ Berikut urutan materi praktik dasar Python yang bisa Anda pilih:
 - 📦 **Ketik "7" atau "Fungsi"**: Membuat fungsi `def` modular dengan parameter & return.
 - 🛡️ **Ketik "8" atau "Try Except"**: Menangani error agar program tidak crash saat salah input.
 - 🤖 **Ketik "9" atau "Machine Learning"**: Skrip Machine Learning perdana di VS Code.
+- 📊 **Ketik "Dataset" atau "Titanic"**: Alasan ilmiah pemilihan 6 dataset standar dunia (Titanic, Iris, Gaji, Churn, Rumah, Diabetes).
 - 📄 **Ketik "10" atau "Jobsheet PRD"**: Menghasilkan Lembar Kerja Praktikum Siswa siap cetak!
+- 🗄️ **Ketik "11" atau "Database"**: Basis data relasional SQLite di Python, tabel, CRUD, dan query JOIN.
 
 *💡 Anda juga bisa langsung mengklik salah satu tombol pintasan materi di atas bar chat!*
 """

@@ -72,7 +72,7 @@ const AICopilot = {
 
 Saya adalah asisten AI yang siap memandu Anda belajar pemrograman Python secara terstruktur dari nol hingga mahir membuat Machine Learning mandiri dan mempraktikkannya langsung di **Visual Studio Code (VS Code)**!
 
-**📚 Kurikulum Praktik Dasar Python Sesuai Urutan:**
+**📚 Kurikulum Praktik Dasar Python & Database Sesuai Urutan:**
 1. 📢 **Materi 1**: Cetak Teks ke Layar (\`print\`) & Format Teks
 2. 🏷️ **Materi 2**: Variabel & Tipe Data Dasar (\`str\`, \`int\`, \`float\`, \`bool\`)
 3. ⌨️ **Materi 3**: Menerima Input Pengguna (\`input()\`) & Operasi Aritmatika
@@ -83,8 +83,9 @@ Saya adalah asisten AI yang siap memandu Anda belajar pemrograman Python secara 
 8. 🛡️ **Materi 8**: Penanganan Error / Exception (\`try - except\`)
 9. 🤖 **Materi 9**: Praktikum Machine Learning Pertama di VS Code
 10. 📄 **Materi 10**: Pembuatan Lembar Kerja Praktikum Siswa (Jobsheet PRD)
+11. 🗄️ **Materi 11**: Basis Data & Query SQL (Database Relasional SQLite di Python)
 
-*💡 Tips: Anda bisa mengklik tombol pintasan materi di atas, mengetik nomor materinya (contoh: ketik "1" atau "materi 1"), atau menanyakan kendala koding apa pun!*`);
+*💡 Tips: Anda bisa mengklik tombol pintasan materi di atas, mengetik nomor materinya (contoh: ketik "11" atau "database"), atau menanyakan kendala koding apa pun!*`);
   },
 
   async sendMessage() {

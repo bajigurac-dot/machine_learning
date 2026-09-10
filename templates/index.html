@@ -164,6 +164,61 @@
             </div>
           </div>
 
+          <!-- Pojok Belajar Siswa SMK: 5 Langkah Mudah Machine Learning -->
+          <div class="smk-ml-guide-box" style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="const el = document.getElementById('smk-steps-details'); el.classList.toggle('hidden');">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.6rem;">💡</span>
+                <div>
+                  <div style="font-weight: 800; font-size: 1.05rem; color: #065f46;">
+                    Pojok Belajar Siswa SMK: Bagaimana Komputer Belajar Sendiri?
+                  </div>
+                  <div style="font-size: 0.8rem; color: #047857;">
+                    Klik di sini untuk melihat 5 langkah mudah Machine Learning dengan analogi anak sekolah!
+                  </div>
+                </div>
+              </div>
+              <span class="badge" style="background: #a7f3d0; color: #065f46; font-weight: 700;">📖 Buka / Tutup Panduan</span>
+            </div>
+
+            <div id="smk-steps-details" style="margin-top: 18px; border-top: 1px dashed rgba(16, 185, 129, 0.25); padding-top: 16px;">
+              <div class="grid-5-smk">
+                <div class="smk-step-card">
+                  <div class="smk-step-num">1</div>
+                  <div class="smk-step-title">📚 Kumpulkan Soal (Data)</div>
+                  <div class="smk-step-desc">Komputer disodori ribuan data masa lalu lengkap dengan kunci jawabannya (contoh: data penumpang Titanic yang selamat/tewas).</div>
+                </div>
+                <div class="smk-step-card">
+                  <div class="smk-step-num">2</div>
+                  <div class="smk-step-title">🧹 Rapikan Meja (Cleaning)</div>
+                  <div class="smk-step-desc">Nilai kosong diisi dengan angka rata-rata/median, data ganda dibuang agar komputer tidak bingung saat belajar.</div>
+                </div>
+                <div class="smk-step-card">
+                  <div class="smk-step-num">3</div>
+                  <div class="smk-step-title">🧠 Belajar Pola (Training 80%)</div>
+                  <div class="smk-step-desc">80% data dipakai komputer untuk mengenali ciri-ciri (misal: penumpang wanita kelas 1 hampir selalu selamat).</div>
+                </div>
+                <div class="smk-step-card">
+                  <div class="smk-step-num">4</div>
+                  <div class="smk-step-title">📝 Ujian Tertutup (Testing 20%)</div>
+                  <div class="smk-step-desc">20% data diuji ke komputer tanpa boleh mencontek. Di sinilah dihitung nilai Akurasi (skor rapor ujian 0-100%).</div>
+                </div>
+                <div class="smk-step-card">
+                  <div class="smk-step-num">5</div>
+                  <div class="smk-step-title">🔮 Tebak Data Baru (Predict)</div>
+                  <div class="smk-step-desc">Setelah model lulus ujian, ia siap menebak orang baru yang belum diketahui nasibnya di Live Sandbox!</div>
+                </div>
+              </div>
+
+              <div class="smk-glossary-bar">
+                <div class="glossary-item">🏷️ <b>Fitur (X)</b>: Ciri-ciri soal (Umur, Tiket, Kelas)</div>
+                <div class="glossary-item">🎯 <b>Target (y)</b>: Kunci jawaban yang ingin ditebak</div>
+                <div class="glossary-item">📊 <b>Akurasi</b>: Skor ujian komputer (0 - 100%)</div>
+                <div class="glossary-item">⚠️ <b>Overfitting</b>: Siswa yang cuma hafal mati kunci soal latihan</div>
+              </div>
+            </div>
+          </div>
+
           <!-- AI Recommendation Box -->
           <div class="glass-panel" id="recom-explanation-box" style="margin-bottom: 24px;"></div>
 
@@ -328,7 +383,10 @@
           <div class="models-split-layout">
             <!-- Model Cards Grid -->
             <div class="models-cards-col">
-              <div class="panel-title" style="margin-bottom: 16px;">🃏 Kartu Model Tersedia</div>
+              <div class="panel-title" style="margin-bottom: 4px;">🃏 Kartu Model & Analogi Siswa SMK</div>
+              <div class="panel-subtitle" style="margin-bottom: 14px; font-size: 0.8rem; color: var(--text-muted);">
+                Setiap algoritma dilengkapi <b>Analogi Siswa SMK</b> agar Anda memahami cara berpikir komputer tanpa rumus rumit!
+              </div>
               <div class="model-cards-grid" id="models-cards-container"></div>
             </div>
 
@@ -369,6 +427,45 @@
                   88.5%
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- Rapor Pemahaman Model Siswa SMK -->
+          <div class="smk-report-card" id="smk-report-card-container" style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+                  🎓
+                </div>
+                <div>
+                  <div style="font-weight: 800; font-size: 1.05rem; color: #065f46;">
+                    Rapor Pemahaman Model untuk Siswa SMK
+                  </div>
+                  <div style="font-size: 0.78rem; color: #047857;">
+                    Terjemahan bahasa manusia & evaluasi kualitas model layaknya nilai ulangan sekolah
+                  </div>
+                </div>
+              </div>
+              <div id="smk-report-grade-badge" class="grade-badge grade-badge-a">
+                🏆 Predikat A (Sangat Mahir)
+              </div>
+            </div>
+
+            <div style="background: white; border-radius: 10px; padding: 14px 18px; border: 1px solid #d1fae5; margin-bottom: 12px;">
+              <p id="smk-report-evaluasi" style="font-size: 0.88rem; font-weight: 600; color: #0f172a; margin-bottom: 8px;">
+                Model berhasil memahami pola data dengan sangat baik!
+              </p>
+              <div id="smk-report-analogi" style="font-size: 0.82rem; color: #047857; margin-bottom: 8px; line-height: 1.5;">
+                🎯 <b>Analogi Ujian:</b> Jika diibaratkan ulangan dengan 100 butir soal, model menjawab 88 soal dengan tepat.
+              </div>
+              <div id="smk-report-faktor" style="font-size: 0.8rem; color: #475569; display: flex; align-items: center; gap: 6px;">
+                <span>🔑</span> <span id="smk-report-faktor-text">Faktor penentu utama: Fitur Utama</span>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #065f46; flex-wrap: wrap; gap: 8px;">
+              <div id="smk-report-tips">💡 <b>Tips Belajar:</b> Model siap dipakai untuk memprediksi data baru di Live Sandbox!</div>
+              <a href="#tab-ai" onclick="App.switchTab('tab-ai')" style="font-weight: 700; color: #059669; text-decoration: underline;">Tanya AI Tutor tentang Model Ini →</a>
             </div>
           </div>
 
@@ -519,8 +616,14 @@
                 <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Ajari saya materi dasar 9: Membuat program Machine Learning pertama di Python menggunakan VS Code dari dataset hingga evaluasi akurasi">
                   🤖 9. Machine Learning Dasar
                 </button>
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Jelaskan alasan kenapa harus data Titanic, Iris, dan Gaji untuk belajar Machine Learning siswa SMK">
+                  📊 Bedah 6 Dataset
+                </button>
                 <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Buatkan Lembar Kerja Praktikum Siswa (Jobsheet PRD) Python untuk latihan mandiri di VS Code">
                   📄 10. Buat Jobsheet PRD
+                </button>
+                <button class="btn btn-secondary btn-sm btn-quick-prompt" data-prompt="Ajari saya materi dasar 11: Basis data relasional dan query SQL di Python menggunakan SQLite, mulai dari konsep tabel, CREATE TABLE, INSERT, SELECT WHERE, UPDATE, hingga JOIN dan cara run di VS Code">
+                  🗄️ 11. Database & SQL
                 </button>
               </div>
 
@@ -529,7 +632,7 @@
 
               <!-- Chat Input Bar -->
               <div class="chat-input-bar">
-                <input type="text" class="chat-input-field" id="chat-input-text" placeholder="Tanya materi Python (contoh: cara looping for/while, if-else, fungsi def, atau buat model ML di VS Code)..." />
+                <input type="text" class="chat-input-field" id="chat-input-text" placeholder="Tanya materi Python & Database (contoh: query SQL SELECT/WHERE/JOIN, looping, if-else, fungsi, atau model ML di VS Code)..." />
                 <button class="btn btn-primary" id="btn-send-chat">
                   Kirim 🚀
                 </button>
@@ -631,7 +734,7 @@
                 <span class="nav-tag rose" style="font-weight: 700; font-size: 0.72rem;">🔒 Status: Belum Login</span>
               </div>
 
-              <div class="grid-3" style="align-items: flex-end;">
+              <div class="grid-3" style="align-items: flex-start;">
                 <div>
                   <label class="form-label-sm" style="font-weight: 700; color: #0f172a;">NISN Resmi Siswa: <span style="color: #ef4444;">*</span></label>
                   <input type="text" class="app-input" id="student-login-nisn" placeholder="Ketik NISN (Contoh: 006 atau 001)" style="width: 100%; border-color: #cbd5e1;" autocomplete="off" />
@@ -709,6 +812,169 @@
                 Memuat daftar paket ujian...
               </div>
             </div>
+
+            <!-- 3. MODUL PEMBELAJARAN: BEDAH 6 DATASET CONTOH STANDAR DUNIA -->
+            <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #a7f3d0; background: linear-gradient(135deg, rgba(236,253,245,0.7), #ffffff);">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-dataset-guide-content'); c.classList.toggle('hidden');">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.25);">
+                    📚
+                  </div>
+                  <div>
+                    <div class="panel-title" style="color: #065f46; font-size: 1.12rem; font-weight: 800;">
+                      Materi Pembelajaran: Mengapa Harus Data Titanic, Iris, & Gaji?
+                    </div>
+                    <div class="panel-subtitle" style="color: #047857;">
+                      Pelajari alasan ilmiah, cerita sejarah, dan jenis masalah AI yang diajarkan dari 6 dataset standar emas dunia
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" type="button" style="border-color: #10b981; color: #065f46; font-weight: 700;">
+                  📖 Buka / Tutup Materi
+                </button>
+              </div>
+
+              <div id="elearning-dataset-guide-content" style="margin-top: 20px; border-top: 1px dashed rgba(16, 185, 129, 0.3); padding-top: 18px;">
+                
+                <div class="grid-3" style="gap: 16px; margin-bottom: 20px;">
+                  
+                  <!-- Card 1: Titanic -->
+                  <div class="smk-dataset-card">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title">🚢 Titanic Survival</div>
+                      <span class="smk-dataset-tag">Klasifikasi Biner (2 Pilihan)</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <b>Kisah Nyata 1912:</b> Kapal pesiar mewah Titanic tenggelam dengan sekoci terbatas. Siapa yang berhasil diselamatkan?
+                    </div>
+                    <div class="smk-dataset-concept">
+                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
+                      • <b>Logika Manusiawi:</b> Aturan darurat memprioritaskan wanita & anak-anak, serta penumpang kelas kabin 1.<br>
+                      • <b>Belajar Cleaning:</b> Melatih siswa mengisi data umur yang hilang & mengubah teks (Pria/Wanita) jadi angka numerik.<br>
+                      • <b>Target (y):</b> Selamat (1) atau Tewas (0).
+                    </div>
+                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('titanic')">
+                      ⚡ Uji Coba Titanic di Studio ML →
+                    </button>
+                  </div>
+
+                  <!-- Card 2: Iris Flower -->
+                  <div class="smk-dataset-card">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title">🌸 Iris Flower</div>
+                      <span class="smk-dataset-tag">Klasifikasi Multi-Kelas</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <b>Dataset Tertua di Dunia (1936):</b> Dibuat oleh Ronald Fisher, menjadi standar awal uji coba algoritma machine learning global.
+                    </div>
+                    <div class="smk-dataset-concept">
+                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
+                      • <b>Tebak 3 Spesies:</b> Komputer belajar membedakan bunga <i>Setosa</i>, <i>Versicolor</i>, atau <i>Virginica</i>.<br>
+                      • <b>Data Bersih:</b> Hanya 150 baris data tanpa ada nilai yang bolong.<br>
+                      • <b>Fitur Fisik:</b> Mengukur panjang & lebar daun kelopak (*petal*) dan mahkota (*sepal*).
+                    </div>
+                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('iris')">
+                      ⚡ Uji Coba Iris di Studio ML →
+                    </button>
+                  </div>
+
+                  <!-- Card 3: Prediksi Gaji -->
+                  <div class="smk-dataset-card">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title">💼 Prediksi Gaji & Pengalaman</div>
+                      <span class="smk-dataset-tag">Regresi Linier (Nominal Uang)</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <b>Cita-cita Siswa SMK:</b> Menaksir perkiraan besaran gaji bulanan berdasarkan lama tahun pengalaman kerja di industri.
+                    </div>
+                    <div class="smk-dataset-concept">
+                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
+                      • <b>Belajar Regresi:</b> Yang ditebak bukan label kata, melainkan <b>angka nominal uang nyata</b>.<br>
+                      • <b>Garis Tren Lurus:</b> Logika sebab-akibat yang sangat intuitif: makin lama pengalaman, makin tinggi gaji.<br>
+                      • <b>Target (y):</b> Besaran Gaji (Salary).
+                    </div>
+                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('salary')">
+                      ⚡ Uji Coba Gaji di Studio ML →
+                    </button>
+                  </div>
+
+                  <!-- Card 4: Customer Churn -->
+                  <div class="smk-dataset-card">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title">👥 Customer Churn</div>
+                      <span class="smk-dataset-tag">Kasus Industri & Bisnis</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <b>Kasus Bisnis Nyata:</b> Perusahaan telekomunikasi/aplikasi (Telkomsel, Netflix) mendeteksi pelanggan yang berniat berhenti langganan.
+                    </div>
+                    <div class="smk-dataset-concept">
+                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
+                      • <b>Nilai Komersial AI:</b> Menyelamatkan miliaran rupiah dengan memberi promo sebelum pelanggan kabur.<br>
+                      • <b>Fitur Kompleks:</b> Durasi kontrak, tagihan bulanan, jenis layanan internet, dan keluhan pelanggan.<br>
+                      • <b>Target (y):</b> Berhenti Langganan (Ya/Tidak).
+                    </div>
+                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('customer_churn')">
+                      ⚡ Uji Coba Churn di Studio ML →
+                    </button>
+                  </div>
+
+                  <!-- Card 5: Harga Rumah -->
+                  <div class="smk-dataset-card">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title">🏡 Prediksi Harga Rumah</div>
+                      <span class="smk-dataset-tag">Regresi Multi-Variabel</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <b>Dunia Properti:</b> Menaksir harga jual wajar suatu rumah berdasarkan spesifikasi bangunannya.
+                    </div>
+                    <div class="smk-dataset-concept">
+                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
+                      • <b>Banyak Faktor Sekaligus:</b> Harga rumah tidak cuma ditentukan oleh 1 variabel, tapi luas tanah, jumlah kamar, dan lokasi.<br>
+                      • <b>Belajar Bobot Fitur:</b> Mempelajari mana yang paling bikin rumah mahal.<br>
+                      • <b>Target (y):</b> Nominal Harga Rumah (Price).
+                    </div>
+                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('housing')">
+                      ⚡ Uji Coba Rumah di Studio ML →
+                    </button>
+                  </div>
+
+                  <!-- Card 6: Skrining Diabetes -->
+                  <div class="smk-dataset-card">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title">🩺 Skrining Diabetes</div>
+                      <span class="smk-dataset-tag">AI Medis & Kesehatan</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <b>AI Penyelamat Jiwa:</b> Membantu tenaga medis rumah sakit mendeteksi dini risiko penyakit diabetes pada pasien.
+                    </div>
+                    <div class="smk-dataset-concept">
+                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
+                      • <b>Peran Mulia AI:</b> Membuktikan AI berguna bagi kemanusiaan dan diagnosis kesehatan.<br>
+                      • <b>Data Klinis Nyata:</b> Kadar glukosa darah, tekanan darah, insulin, dan indeks massa tubuh (BMI).<br>
+                      • <b>Target (y):</b> Positif atau Negatif Diabetes.
+                    </div>
+                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('diabetes')">
+                      ⚡ Uji Coba Diabetes di Studio ML →
+                    </button>
+                  </div>
+
+                </div>
+
+                <!-- Roadmap Banner -->
+                <div style="background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.08)); border: 1px solid #6ee7b7; border-radius: 10px; padding: 14px 18px;">
+                  <div style="font-weight: 800; font-size: 0.88rem; color: #065f46; margin-bottom: 6px;">
+                    🗺️ Rekomendasi Urutan Belajar Siswa SMK (Dari Dasar ke Mahir):
+                  </div>
+                  <div style="font-size: 0.8rem; color: #047857; line-height: 1.6;">
+                    <b>Langkah 1: Titanic</b> (Belajar logika tebak 2 pilihan & merapikan data kotor) ➔ 
+                    <b>Langkah 2: Prediksi Gaji</b> (Belajar menebak angka nominal uang / Regresi) ➔ 
+                    <b>Langkah 3: Iris Flower</b> (Belajar klasifikasi 3 jenis kelompok) ➔ 
+                    <b>Langkah 4: Customer Churn & Diabetes</b> (Penerapan AI untuk industri bisnis & dunia kesehatan nyata)!
+                  </div>
+                </div>
+
+              </div>
+            </div>
           </div>
 
           <!-- 2. RUANG UJIAN AKTIF (EXAM ROOM) -->
@@ -765,31 +1031,128 @@
 
                   <!-- Container 2: Praktik Coding (Python / SQL) -->
                   <div id="exam-code-container" class="hidden">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                      <span style="font-size: 0.78rem; font-weight: 700; color: #059669;" id="exam-code-lang-label">
-                        🐍 Editor Python Interaktif
-                      </span>
-                      <button class="btn btn-secondary btn-sm" id="btn-reset-code" type="button" style="font-size: 0.72rem; padding: 3px 8px;">
-                        🔄 Reset Kode Awal
-                      </button>
+                    <!-- Editor Studio Container -->
+                    <div class="code-editor-studio">
+                      <!-- Toolbar Header -->
+                      <div class="code-studio-toolbar">
+                        <div class="toolbar-left">
+                          <span class="code-lang-pill" id="exam-code-lang-label">
+                            🐍 Editor Python Interaktif
+                          </span>
+                          <span class="toolbar-shortcut-hint">
+                            ⌨️ <kbd>Ctrl</kbd> + <kbd>Enter</kbd> untuk Cek Solusi
+                          </span>
+                        </div>
+                        <div class="toolbar-right">
+                          <button class="btn-studio-action" id="btn-toggle-sql-schema" type="button" style="display: none;" title="Buka Skema Tabel & Data Sampel Database">
+                            🗄️ Skema Database & Sampel
+                          </button>
+                          <div class="font-zoom-group">
+                            <button class="btn-studio-action" id="btn-font-dec" type="button" title="Perkecil Ukuran Font">A-</button>
+                            <button class="btn-studio-action" id="btn-font-inc" type="button" title="Perbesar Ukuran Font">A+</button>
+                          </div>
+                          <button class="btn-studio-action" id="btn-reset-code" type="button" title="Reset ke Template Awal">
+                            🔄 Reset Kode
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- SQL Database Schema & Sample Drawer (Collapsible) -->
+                      <div id="sql-schema-drawer" class="sql-schema-drawer hidden">
+                        <div class="schema-drawer-header">
+                          <div style="font-weight: 700; font-size: 0.82rem; color: #059669; display: flex; align-items: center; gap: 6px;">
+                            <span>🗄️ Referensi Skema Database In-Memory (SQLite)</span>
+                          </div>
+                          <span style="font-size: 0.72rem; color: #64748b;">Struktur tabel & data sampel untuk panduan query siswa</span>
+                        </div>
+                        <div id="sql-schema-content" class="schema-drawer-content">
+                          <div style="font-size: 0.78rem; color: #64748b; padding: 10px;">Memuat data skema...</div>
+                        </div>
+                      </div>
+
+                      <!-- SQL Quick Snippets Bar (Visible for SQL) -->
+                      <div id="sql-snippets-bar" class="sql-snippets-bar hidden">
+                        <span class="snippet-title">⚡ Snippet Cepat:</span>
+                        <div class="snippet-chips-container">
+                          <button type="button" class="snippet-chip" data-sql="SELECT * FROM siswa LIMIT 5;">SELECT *</button>
+                          <button type="button" class="snippet-chip" data-sql="SELECT nama, nilai_kejuruan FROM siswa">SELECT nama, nilai</button>
+                          <button type="button" class="snippet-chip" data-sql="WHERE nilai_kejuruan >= 80.0">WHERE >= 80</button>
+                          <button type="button" class="snippet-chip" data-sql="ORDER BY nilai_kejuruan DESC">ORDER BY DESC</button>
+                          <button type="button" class="snippet-chip" data-sql="JOIN nilai_mapel ON siswa.id = nilai_mapel.siswa_id">INNER JOIN</button>
+                        </div>
+                      </div>
+
+                      <!-- Editor Box with Synchronized Line Numbers -->
+                      <div class="editor-viewport">
+                        <div class="editor-line-numbers" id="editor-line-numbers">1</div>
+                        <textarea class="exam-code-editor" id="exam-code-editor" spellcheck="false" rows="10" placeholder="Tuliskan kode program atau query SQL Anda di sini..."></textarea>
+                      </div>
+
+                      <!-- Bottom Run Bar -->
+                      <div class="code-bottom-bar">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <button class="btn btn-primary btn-sm" id="btn-run-student-code" type="button">
+                            ▶️ Jalankan & Cek Solusi
+                          </button>
+                          <span id="exam-code-run-status" style="font-size: 0.8rem; font-weight: 600;"></span>
+                        </div>
+                        <div id="exam-code-status-pill" class="status-pill status-untested">
+                          <span class="status-indicator-dot"></span> <span id="exam-code-status-text">Belum Diuji Coba</span>
+                        </div>
+                      </div>
                     </div>
 
-                    <textarea class="exam-code-editor" id="exam-code-editor" spellcheck="false" rows="9"></textarea>
-
-                    <div class="code-actions-bar">
-                      <button class="btn btn-primary btn-sm" id="btn-run-student-code" type="button">
-                        ▶️ Jalankan & Cek Solusi
-                      </button>
-                      <span id="exam-code-run-status" style="font-size: 0.8rem; font-weight: 600;"></span>
-                    </div>
-
-                    <!-- Feedback Box (✅ Ceklis Hijau atau ❌ Silang Merah) -->
+                    <!-- Feedback & Comparison Box -->
                     <div id="exam-code-feedback" class="exam-feedback-card hidden">
                       <div class="feedback-badge" id="exam-feedback-badge">
-                        <!-- Icon and status will be injected -->
+                        <!-- Icon and status injected dynamically -->
                       </div>
-                      <div style="font-size: 0.76rem; color: #94a3b8; margin: 6px 0 4px;">Output Terminal:</div>
-                      <pre class="exam-terminal-box" id="exam-terminal-output"></pre>
+
+                      <!-- SQL Interactive Table View -->
+                      <div id="sql-feedback-view" class="hidden" style="margin-top: 10px;">
+                        <div class="results-sub-header">
+                          <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 0.78rem; font-weight: 700; color: #1e293b;">📊 Hasil Data Query:</span>
+                            <span id="sql-rows-badge" class="nav-tag purple" style="font-size: 0.7rem; padding: 2px 6px;">0 Baris</span>
+                            <span id="sql-time-badge" style="font-size: 0.7rem; color: #64748b;"></span>
+                          </div>
+                        </div>
+                        <div class="sql-table-responsive" id="sql-table-wrap">
+                          <table class="exam-table-view" id="exam-sql-output-table">
+                            <thead id="exam-sql-output-thead"></thead>
+                            <tbody id="exam-sql-output-tbody"></tbody>
+                          </table>
+                        </div>
+                        <div id="sql-target-info-wrap" class="hidden" style="margin-top: 8px;">
+                          <div style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">Target Output yang Diharapkan:</div>
+                          <pre class="exam-terminal-box" id="sql-target-terminal"></pre>
+                        </div>
+                      </div>
+
+                      <!-- Python Output Comparison Grid -->
+                      <div id="python-feedback-view" class="hidden" style="margin-top: 10px;">
+                        <div class="py-comparison-grid">
+                          <div class="py-col">
+                            <div class="py-col-header">
+                              <span>💻 Output Program Anda:</span>
+                              <span id="py-time-badge" style="font-size: 0.7rem; color: #64748b;"></span>
+                            </div>
+                            <pre class="exam-terminal-box" id="exam-py-actual-output"></pre>
+                          </div>
+                          <div class="py-col">
+                            <div class="py-col-header">
+                              <span>🎯 Target Output yang Diharapkan:</span>
+                            </div>
+                            <pre class="exam-terminal-box target-box" id="exam-py-expected-output"></pre>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Raw Terminal Log / Error Box (Fallback) -->
+                      <div id="terminal-raw-wrap" class="hidden" style="margin-top: 10px;">
+                        <div style="font-size: 0.74rem; font-weight: 700; color: #e11d48; margin-bottom: 4px;">Pesan Error / Traceback:</div>
+                        <pre class="exam-terminal-box error-box" id="exam-terminal-output"></pre>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -816,6 +1179,7 @@
                 <div class="exam-palette-grid" id="exam-palette-container"></div>
 
                 <div class="palette-legend">
+                  <div class="legend-item"><span class="legend-dot verified"></span> Teruji Valid (✅)</div>
                   <div class="legend-item"><span class="legend-dot answered"></span> Sudah Dijawab</div>
                   <div class="legend-item"><span class="legend-dot active"></span> Sedang Dibuka</div>
                   <div class="legend-item"><span class="legend-dot empty"></span> Belum Dijawab</div>
@@ -1006,7 +1370,7 @@
                     <div class="panel-subtitle">Hanya siswa yang terdaftar yang dapat login dan mengerjakan soal ujian CBT</div>
                   </div>
                 </div>
-                <div class="grid-3" style="align-items: flex-end;">
+                <div class="grid-3" style="align-items: flex-start;">
                   <div>
                     <label class="form-label-sm" style="font-weight: 700;">NISN Siswa:</label>
                     <input type="text" class="app-input" id="admin-new-student-nisn" placeholder="Contoh: 011" style="width: 100%;" />

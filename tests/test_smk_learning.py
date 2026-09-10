@@ -66,16 +66,50 @@ class TestSMKLearningEngine(unittest.TestCase):
         self.assertIn("RandomForestClassifier", reply)
         self.assertIn("VS Code", reply)
 
-    def test_api_ai_chat_endpoint(self):
-        """Uji endpoint REST API /api/ai/chat mengembalikan format JSON yang valid."""
+    def test_database_sql_smk_guide(self):
+        """Uji materi database relasional SQLite & SQL mencakup konsep, skrip Python, dan panduan VS Code."""
+        reply = handle_ai_chat("ajarkan saya tentang database dan query sql di python", [], {})
+        self.assertIn("latihan_11_database_sqlite.py", reply)
+        self.assertIn("sqlite3", reply)
+        self.assertIn("CREATE TABLE", reply)
+        self.assertIn("INNER JOIN", reply)
+        self.assertIn("VS Code", reply)
+        self.assertIn("sekolah_smk.db", reply)
+        self.assertIn("Tantangan Praktik Mandiri", reply)
+
+        # Uji pemanggilan via nomor materi '11'
+        reply_num = handle_ai_chat("11", [], {})
+        self.assertIn("latihan_11_database_sqlite.py", reply_num)
+
+        # Uji via REST API endpoint
         res = self.client.post("/api/ai/chat", json={
-            "message": "saya ingin belajar perulangan while di python",
+            "message": "saya ingin belajar database sql",
+            "provider": "local"
+        })
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("latihan_11_database_sqlite.py", res.get_json()["reply"])
+
+    def test_ai_dataset_explanation(self):
+        """Uji penjelasan kurikulum kenapa 6 dataset (Titanic, Iris, Gaji, dll) dipilih dan petunjuk menu E-Learning."""
+        reply = handle_ai_chat("kenapa harus titanic", [], {})
+        self.assertIn("Titanic Survival", reply)
+        self.assertIn("Iris Flower", reply)
+        self.assertIn("Prediksi Gaji", reply)
+        self.assertIn("Customer Churn", reply)
+        self.assertIn("Harga Rumah", reply)
+        self.assertIn("Skrining Diabetes", reply)
+        self.assertIn("Menu E-Learning", reply)
+
+        # Uji via REST API
+        res = self.client.post("/api/ai/chat", json={
+            "message": "jelaskan alasan kenapa harus data titanic",
             "provider": "local"
         })
         self.assertEqual(res.status_code, 200)
         data = res.get_json()
         self.assertTrue(data["success"])
-        self.assertIn("latihan_looping.py", data["reply"])
+        self.assertIn("Titanic Survival", data["reply"])
+        self.assertIn("Menu E-Learning", data["reply"])
 
 if __name__ == "__main__":
     unittest.main()

@@ -13,6 +13,9 @@ const ELearning = {
   studentAttemptedExamIds: [],
   studentAttemptsMap: {},
   adminToken: localStorage.getItem('elearning_admin_token') || null,
+  verifiedQuestions: {},
+  sqlSchemaData: null,
+  editorFontSize: 13.5,
 
   init() {
     this.loadStudentSession();
@@ -321,19 +324,227 @@ const ELearning = {
       });
     }
 
-    // Support Tab key in code editor
+    // Code Editor Controls & Keybindings
     const codeEditor = document.getElementById('exam-code-editor');
     if (codeEditor) {
+      codeEditor.addEventListener('input', () => {
+        this.updateLineNumbers();
+        this.saveCurrentAnswer();
+      });
+
+      codeEditor.addEventListener('scroll', () => {
+        this.syncEditorScroll();
+      });
+
       codeEditor.addEventListener('keydown', (e) => {
+        // 1. Shortcut Ctrl+Enter atau Cmd+Enter: Jalankan Kode Langsung
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          this.runStudentCode();
+          return;
+        }
+
+        // 2. Tab & Shift+Tab Indentasi (4 spasi) tanpa melompat fokus
         if (e.key === 'Tab') {
           e.preventDefault();
           const start = codeEditor.selectionStart;
           const end = codeEditor.selectionEnd;
-          codeEditor.value = codeEditor.value.substring(0, start) + "    " + codeEditor.value.substring(end);
-          codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
+
+          if (e.shiftKey) {
+            // Unindent 4 spasi pada baris aktif
+            const val = codeEditor.value;
+            const lineStart = val.lastIndexOf('\n', start - 1) + 1;
+            if (val.substring(lineStart, lineStart + 4) === '    ') {
+              codeEditor.setRangeText('', lineStart, lineStart + 4, 'end');
+              codeEditor.selectionStart = Math.max(lineStart, start - 4);
+              codeEditor.selectionEnd = Math.max(lineStart, end - 4);
+            }
+          } else {
+            // Insert 4 spasi mempertahankan history Undo/Redo
+            codeEditor.setRangeText('    ', start, end, 'end');
+          }
+          this.updateLineNumbers();
+          this.saveCurrentAnswer();
+          return;
+        }
+
+        // 3. Enter Auto-indent (melanjutkan indentasi baris sebelumnya)
+        if (e.key === 'Enter') {
+          const start = codeEditor.selectionStart;
+          const val = codeEditor.value;
+          const lineStart = val.lastIndexOf('\n', start - 1) + 1;
+          const currentLine = val.substring(lineStart, start);
+          const matchIndent = currentLine.match(/^\s*/);
+          let indent = matchIndent ? matchIndent[0] : '';
+          
+          // Jika baris berakhir dengan tanda titik dua ':' (blok Python), tambah indentasi 4 spasi
+          if (currentLine.trim().endsWith(':')) {
+            indent += '    ';
+          }
+
+          if (indent.length > 0) {
+            e.preventDefault();
+            codeEditor.setRangeText('\n' + indent, start, start, 'end');
+            this.updateLineNumbers();
+            this.saveCurrentAnswer();
+          }
         }
       });
     }
+
+    // Font Size Controls (A- / A+)
+    const btnFontDec = document.getElementById('btn-font-dec');
+    if (btnFontDec) {
+      btnFontDec.addEventListener('click', () => {
+        this.editorFontSize = Math.max(11, this.editorFontSize - 1);
+        this.applyEditorFontSize();
+      });
+    }
+
+    const btnFontInc = document.getElementById('btn-font-inc');
+    if (btnFontInc) {
+      btnFontInc.addEventListener('click', () => {
+        this.editorFontSize = Math.min(18, this.editorFontSize + 1);
+        this.applyEditorFontSize();
+      });
+    }
+
+    // Toggle SQL Database Schema Drawer
+    const btnToggleSql = document.getElementById('btn-toggle-sql-schema');
+    if (btnToggleSql) {
+      btnToggleSql.addEventListener('click', () => this.toggleSqlSchemaDrawer());
+    }
+
+    // SQL Snippet Chips
+    document.querySelectorAll('.snippet-chip').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        const sql = e.currentTarget.getAttribute('data-sql');
+        if (sql) this.insertTextToEditor(sql);
+      });
+    });
+  },
+
+  // ==================== CODE EDITOR HELPERS ====================
+  applyEditorFontSize() {
+    const editor = document.getElementById('exam-code-editor');
+    const lines = document.getElementById('editor-line-numbers');
+    if (editor) editor.style.fontSize = `${this.editorFontSize}px`;
+    if (lines) lines.style.fontSize = `${this.editorFontSize}px`;
+  },
+
+  updateLineNumbers() {
+    const editor = document.getElementById('exam-code-editor');
+    const lineNumbers = document.getElementById('editor-line-numbers');
+    if (!editor || !lineNumbers) return;
+    const count = (editor.value || '').split('\n').length;
+    let nums = '';
+    for (let i = 1; i <= count; i++) {
+      nums += i + '\n';
+    }
+    lineNumbers.textContent = nums;
+  },
+
+  syncEditorScroll() {
+    const editor = document.getElementById('exam-code-editor');
+    const lineNumbers = document.getElementById('editor-line-numbers');
+    if (editor && lineNumbers) {
+      lineNumbers.scrollTop = editor.scrollTop;
+    }
+  },
+
+  insertTextToEditor(text) {
+    const editor = document.getElementById('exam-code-editor');
+    if (!editor) return;
+    editor.focus();
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const val = editor.value;
+    const prefix = (start > 0 && val[start - 1] !== '\n' && val[start - 1] !== ' ') ? ' ' : '';
+    editor.setRangeText(prefix + text, start, end, 'end');
+    this.updateLineNumbers();
+    this.saveCurrentAnswer();
+    App.showToast(`Snippet '${text.split(' ')[0]}' disisipkan ke editor!`, "info");
+  },
+
+  async toggleSqlSchemaDrawer() {
+    const drawer = document.getElementById('sql-schema-drawer');
+    const btn = document.getElementById('btn-toggle-sql-schema');
+    if (!drawer) return;
+
+    const isHidden = drawer.classList.contains('hidden');
+    if (isHidden) {
+      drawer.classList.remove('hidden');
+      if (btn) btn.innerHTML = '✕ Tutup Skema';
+      if (!this.sqlSchemaData) {
+        await this.loadSqlSchema();
+      }
+    } else {
+      drawer.classList.add('hidden');
+      if (btn) btn.innerHTML = '🗄️ Skema Database & Sampel';
+    }
+  },
+
+  async loadSqlSchema() {
+    const container = document.getElementById('sql-schema-content');
+    if (!container) return;
+    try {
+      container.innerHTML = `<div style="font-size: 0.78rem; color: #64748b; padding: 8px;"><span class="pulse-loader"></span> Memuat struktur database SQLite lab SMK...</div>`;
+      const res = await API.getSqlSchema();
+      if (res.success && res.tables) {
+        this.sqlSchemaData = res.tables;
+        this.renderSqlSchema(res.tables);
+      } else {
+        container.innerHTML = `<div style="font-size: 0.78rem; color: #e11d48; padding: 8px;">Gagal memuat skema: ${res.error || 'Terjadi kesalahan'}</div>`;
+      }
+    } catch (e) {
+      container.innerHTML = `<div style="font-size: 0.78rem; color: #e11d48; padding: 8px;">Error: ${e.message}</div>`;
+    }
+  },
+
+  renderSqlSchema(tables) {
+    const container = document.getElementById('sql-schema-content');
+    if (!container) return;
+
+    container.innerHTML = tables.map(t => {
+      const colPills = t.columns.map(c => `
+        <span class="schema-col-badge" onclick="ELearning.insertTextToEditor('${c.name}')" title="Klik untuk menyalin kolom '${c.name}' ke editor">
+          ${c.is_pk ? '🔑 ' : ''}<b>${c.name}</b><span class="schema-col-type">${c.type}</span>
+        </span>
+      `).join('');
+
+      let sampleHtml = '';
+      if (t.sample_rows && t.sample_rows.length > 0) {
+        const colNames = t.columns.map(c => c.name);
+        sampleHtml = `
+          <div style="font-size: 0.72rem; color: #64748b; margin: 6px 0 3px; font-weight: 600;">Data Sampel Tabel '${t.table_name}':</div>
+          <div style="overflow-x: auto; max-height: 120px; border: 1px solid #e2e8f0; border-radius: 4px;">
+            <table class="exam-table-view" style="font-size: 0.72rem;">
+              <thead>
+                <tr>${colNames.map(cn => `<th>${cn}</th>`).join('')}</tr>
+              </thead>
+              <tbody>
+                ${t.sample_rows.map(r => `
+                  <tr>${colNames.map(cn => `<td>${r[cn] !== undefined && r[cn] !== null ? r[cn] : '-'}</td>`).join('')}</tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="schema-table-card">
+          <div class="schema-table-title">
+            <span>📋 Tabel <code>${t.table_name}</code></span>
+            <button type="button" class="btn-studio-action" style="font-size: 0.68rem; padding: 2px 6px; margin-left: auto;" onclick="ELearning.insertTextToEditor('SELECT * FROM ${t.table_name};')">
+              Query Tabel Ini
+            </button>
+          </div>
+          <div class="schema-cols-wrap">${colPills}</div>
+          ${sampleHtml}
+        </div>
+      `;
+    }).join('');
   },
 
   // ==================== VIEW SWITCHER ====================
@@ -637,6 +848,7 @@ const ELearning = {
       this.currentExam = res.exam;
       this.currentQuestionIdx = 0;
       this.answers = {};
+      this.verifiedQuestions = {};
 
       if (!this.currentExam.questions || this.currentExam.questions.length === 0) {
         App.showToast("Paket ujian ini belum memiliki butir soal.", "error");
@@ -720,13 +932,15 @@ const ELearning = {
     container.innerHTML = this.currentExam.questions.map((q, idx) => {
       const isAnswered = this.answers[q.id] && String(this.answers[q.id]).trim() !== '';
       const isActive = idx === this.currentQuestionIdx;
+      const isVerified = this.verifiedQuestions && this.verifiedQuestions[q.id] === true;
 
       let statusClass = '';
       if (isActive) statusClass = 'active';
+      else if (isVerified) statusClass = 'verified-pass';
       else if (isAnswered) statusClass = 'answered';
 
       return `
-        <button class="palette-num-btn ${statusClass}" onclick="ELearning.renderQuestion(${idx})">
+        <button class="palette-num-btn ${statusClass}" onclick="ELearning.renderQuestion(${idx})" title="Soal Nomor ${idx + 1}${isVerified ? ' (Teruji Benar ✓)' : (isAnswered ? ' (Sudah Dijawab)' : '')}">
           ${idx + 1}
         </button>
       `;
@@ -788,15 +1002,43 @@ const ELearning = {
       mcqBox.classList.add('hidden');
       codeBox.classList.remove('hidden');
 
+      const isSql = q.question_type === 'code_sql';
       const langLabel = document.getElementById('exam-code-lang-label');
-      if (q.question_type === 'code_sql') {
-        langLabel.innerText = '🗄️ Editor SQL Interaktif (SQLite DB: tabel siswa)';
+      const btnToggleSql = document.getElementById('btn-toggle-sql-schema');
+      const sqlSnippetsBar = document.getElementById('sql-snippets-bar');
+      const sqlDrawer = document.getElementById('sql-schema-drawer');
+
+      if (isSql) {
+        langLabel.innerHTML = '🗄️ Editor SQL Interaktif (SQLite DB: tabel siswa)';
+        if (btnToggleSql) btnToggleSql.style.display = 'flex';
+        if (sqlSnippetsBar) sqlSnippetsBar.classList.remove('hidden');
       } else {
-        langLabel.innerText = '🐍 Editor Python Interaktif';
+        langLabel.innerHTML = '🐍 Editor Python Interaktif';
+        if (btnToggleSql) btnToggleSql.style.display = 'none';
+        if (sqlSnippetsBar) sqlSnippetsBar.classList.add('hidden');
+        if (sqlDrawer) sqlDrawer.classList.add('hidden');
       }
 
       const editor = document.getElementById('exam-code-editor');
       editor.value = this.answers[q.id] !== undefined ? this.answers[q.id] : (q.starter_code || '');
+      this.applyEditorFontSize();
+      this.updateLineNumbers();
+
+      // Status pill update
+      const statusPill = document.getElementById('exam-code-status-pill');
+      const statusText = document.getElementById('exam-code-status-text');
+      if (statusPill && statusText) {
+        if (this.verifiedQuestions[q.id] === true) {
+          statusPill.className = 'status-pill status-verified';
+          statusText.innerText = '✅ Teruji & Lolos Uji Coba';
+        } else if (this.verifiedQuestions[q.id] === false) {
+          statusPill.className = 'status-pill status-failed';
+          statusText.innerText = '❌ Perlu Diperbaiki';
+        } else {
+          statusPill.className = 'status-pill status-untested';
+          statusText.innerText = 'Belum Diuji Coba';
+        }
+      }
 
       // Hide feedback box until run
       document.getElementById('exam-code-feedback').classList.add('hidden');
@@ -846,8 +1088,19 @@ const ELearning = {
     if (editor && q.starter_code) {
       editor.value = q.starter_code;
       this.answers[q.id] = q.starter_code;
+      this.verifiedQuestions[q.id] = null;
+      this.updateLineNumbers();
+
+      const statusPill = document.getElementById('exam-code-status-pill');
+      const statusText = document.getElementById('exam-code-status-text');
+      if (statusPill && statusText) {
+        statusPill.className = 'status-pill status-untested';
+        statusText.innerText = 'Belum Diuji Coba';
+      }
+
       document.getElementById('exam-code-feedback').classList.add('hidden');
       document.getElementById('exam-code-run-status').innerText = '';
+      this.renderPalette();
       App.showToast("Kode dikembalikan ke template awal.", "info");
     }
   },
@@ -862,9 +1115,15 @@ const ELearning = {
     const statusEl = document.getElementById('exam-code-run-status');
     const feedbackBox = document.getElementById('exam-code-feedback');
     const feedbackBadge = document.getElementById('exam-feedback-badge');
+    const statusPill = document.getElementById('exam-code-status-pill');
+    const statusText = document.getElementById('exam-code-status-text');
+
+    const sqlFeedbackView = document.getElementById('sql-feedback-view');
+    const pyFeedbackView = document.getElementById('python-feedback-view');
+    const terminalRawWrap = document.getElementById('terminal-raw-wrap');
     const terminalOutput = document.getElementById('exam-terminal-output');
 
-    statusEl.innerHTML = `<span class="pulse-loader"></span> Menjalankan kode...`;
+    statusEl.innerHTML = `<span class="pulse-loader"></span> Menjalankan...`;
     feedbackBox.classList.remove('hidden');
 
     const language = q.question_type === 'code_sql' ? 'sql' : 'python';
@@ -873,43 +1132,112 @@ const ELearning = {
       const res = await API.runCode(language, code, q.expected_output);
       statusEl.innerText = '';
 
+      this.verifiedQuestions[q.id] = Boolean(res.is_correct);
+
+      if (statusPill && statusText) {
+        if (res.is_correct) {
+          statusPill.className = 'status-pill status-verified';
+          statusText.innerText = '✅ Teruji & Lolos Uji Coba';
+        } else {
+          statusPill.className = 'status-pill status-failed';
+          statusText.innerText = '❌ Perlu Diperbaiki';
+        }
+      }
+
       if (res.is_correct) {
         // ✅ Ceklis Hijau
         feedbackBadge.className = 'feedback-badge feedback-success';
         feedbackBadge.innerHTML = `
-          <span style="font-size: 1.2rem;">✅</span>
+          <span style="font-size: 1.35rem;">✅</span>
           <div>
             <b>Jawaban Tepat! (Output Sesuai Uji Coba)</b>
-            <div style="font-size: 0.74rem; font-weight: normal; opacity: 0.9;">Logika dan hasil eksekusi program Anda berhasil lulus verifikasi otomatis.</div>
+            <div style="font-size: 0.74rem; font-weight: normal; opacity: 0.95;">
+              ${res.feedback_detail || 'Logika dan hasil eksekusi program Anda berhasil lolos verifikasi otomatis.'}
+            </div>
           </div>
         `;
       } else {
         // ❌ Silang Merah
         feedbackBadge.className = 'feedback-badge feedback-error';
         feedbackBadge.innerHTML = `
-          <span style="font-size: 1.2rem;">❌</span>
+          <span style="font-size: 1.35rem;">❌</span>
           <div>
             <b>Jawaban Belum Sesuai (Perlu Diperbaiki)</b>
-            <div style="font-size: 0.74rem; font-weight: normal; opacity: 0.9;">${res.error || 'Output program berbeda dari target yang ditentukan soal.'}</div>
+            <div style="font-size: 0.74rem; font-weight: normal; opacity: 0.95;">
+              ${res.error || res.feedback_detail || 'Output program berbeda dari target yang ditentukan soal.'}
+            </div>
           </div>
         `;
       }
 
-      if (res.is_correct) {
-        terminalOutput.innerText = res.actual_output || '(Tidak ada output yang dihasilkan)';
-      } else {
-        let compText = `[Output Program Anda]:\n${res.actual_output || res.error || '(Kosong)'}`;
-        if (q.expected_output) {
-          compText += `\n\n[Target Output yang Diharapkan]:\n${q.expected_output}`;
+      if (language === 'sql') {
+        sqlFeedbackView.classList.remove('hidden');
+        pyFeedbackView.classList.add('hidden');
+
+        // Update SQL stats
+        const rowCount = res.row_count !== undefined ? res.row_count : (res.rows ? res.rows.length : 0);
+        document.getElementById('sql-rows-badge').innerText = `${rowCount} Baris Data`;
+        document.getElementById('sql-time-badge').innerText = res.execution_time_ms !== undefined ? `⏱️ ${res.execution_time_ms} ms` : '';
+
+        // Render Table View
+        const thead = document.getElementById('exam-sql-output-thead');
+        const tbody = document.getElementById('exam-sql-output-tbody');
+
+        if (res.columns && res.columns.length > 0) {
+          thead.innerHTML = `<tr>${res.columns.map(c => `<th>${c}</th>`).join('')}</tr>`;
+          if (res.rows && res.rows.length > 0) {
+            tbody.innerHTML = res.rows.map(r => `
+              <tr>${r.map(val => `<td>${val !== null && val !== undefined ? val : '<em>NULL</em>'}</td>`).join('')}</tr>
+            `).join('');
+          } else {
+            tbody.innerHTML = `<tr><td colspan="${res.columns.length}" style="text-align: center; color: #64748b; padding: 14px;">(0 baris data dikembalikan)</td></tr>`;
+          }
+        } else {
+          thead.innerHTML = '';
+          tbody.innerHTML = `<tr><td style="text-align: center; color: #64748b; padding: 14px;">(Tidak ada kolom data yang dikembalikan)</td></tr>`;
         }
-        terminalOutput.innerText = compText;
+
+        // Expected output target display
+        const targetWrap = document.getElementById('sql-target-info-wrap');
+        const targetTerminal = document.getElementById('sql-target-terminal');
+        if (q.expected_output && !res.is_correct) {
+          targetWrap.classList.remove('hidden');
+          targetTerminal.innerText = q.expected_output;
+        } else {
+          targetWrap.classList.add('hidden');
+        }
+
+      } else {
+        // Python
+        sqlFeedbackView.classList.add('hidden');
+        pyFeedbackView.classList.remove('hidden');
+
+        document.getElementById('py-time-badge').innerText = res.execution_time_ms !== undefined ? `⏱️ ${res.execution_time_ms} ms` : '';
+        document.getElementById('exam-py-actual-output').innerText = res.actual_output || '(Tidak ada teks yang dicetak oleh program)';
+        document.getElementById('exam-py-expected-output').innerText = q.expected_output || '(Target output tidak ditentukan)';
       }
+
+      // Show terminal log if error occurred
+      if (res.error) {
+        terminalRawWrap.classList.remove('hidden');
+        terminalOutput.innerText = res.error;
+      } else {
+        terminalRawWrap.classList.add('hidden');
+      }
+
       this.renderPalette();
     } catch (e) {
       statusEl.innerText = '';
+      this.verifiedQuestions[q.id] = false;
+      if (statusPill && statusText) {
+        statusPill.className = 'status-pill status-failed';
+        statusText.innerText = '❌ Error Eksekusi';
+      }
       feedbackBadge.className = 'feedback-badge feedback-error';
       feedbackBadge.innerHTML = `<span>❌</span> <b>Gagal Mengeksekusi: ${e.message}</b>`;
+      terminalRawWrap.classList.remove('hidden');
       terminalOutput.innerText = e.message;
+      this.renderPalette();
     }
   },
 

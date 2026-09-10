@@ -225,9 +225,21 @@ def execute_python_code(code_str, expected_output=None):
         actual_output = output_buffer.getvalue().strip()
     except Exception as e:
         actual_output = output_buffer.getvalue().strip()
-        error_message = f"{type(e).__name__}: {str(e)}"
+        err_type = type(e).__name__
+        err_str = str(e)
+        # Berikan pesan bantuan bahasa Indonesia yang mudah dipahami siswa SMK
+        if err_type == "IndentationError":
+            error_message = f"IndentationError: Kesalahan indentasi/spasi ({err_str}). Periksa kembali spasi atau Tab pada baris perulangan/fungsi."
+        elif err_type == "SyntaxError":
+            error_message = f"SyntaxError: Kesalahan sintaksis ({err_str}). Periksa kembali tanda kurung (), titik dua (:), atau kutip string."
+        elif err_type == "NameError":
+            error_message = f"NameError: Variabel/fungsi belum didefinisikan ({err_str}). Pastikan nama variabel ditulis dengan benar."
+        else:
+            error_message = f"{err_type}: {err_str}"
     finally:
         sys.settrace(None)
+
+    execution_time_ms = round((time.time() - start_time) * 1000, 2)
 
     if expected_output is not None:
         clean_expected = str(expected_output).strip()
@@ -235,9 +247,13 @@ def execute_python_code(code_str, expected_output=None):
         clean_actual = actual_output.replace("\r\n", "\n").strip()
         clean_expected = clean_expected.replace("\r\n", "\n").strip()
         
-        if error_message is None and clean_actual == clean_expected:
+        # Normalisasi spasi di ujung setiap baris (trailing whitespace)
+        norm_actual = "\n".join(line.rstrip() for line in clean_actual.splitlines()).strip()
+        norm_expected = "\n".join(line.rstrip() for line in clean_expected.splitlines()).strip()
+        
+        if error_message is None and (clean_actual == clean_expected or norm_actual == norm_expected):
             is_correct = True
-        elif error_message is None and clean_expected in clean_actual:
+        elif error_message is None and (clean_expected in clean_actual or norm_expected in norm_actual):
             # Toleransi jika expected output merupakan substring dari output program
             is_correct = True
         else:
@@ -245,12 +261,18 @@ def execute_python_code(code_str, expected_output=None):
     else:
         is_correct = error_message is None
 
+    feedback_detail = "Semua baris output program cocok dengan target pengujian!" if is_correct else (
+        "Output program belum sesuai dengan target yang ditentukan pada soal." if error_message is None else "Terjadi kesalahan saat program dijalankan."
+    )
+
     return {
         "success": error_message is None,
         "is_correct": is_correct,
         "actual_output": actual_output,
         "expected_output": expected_output,
-        "error": error_message
+        "execution_time_ms": execution_time_ms,
+        "error": error_message,
+        "feedback_detail": feedback_detail
     }
 
 def setup_mock_sql_db():
@@ -294,14 +316,37 @@ def setup_mock_sql_db():
     conn.commit()
     return conn
 
+def get_sql_mock_schema():
+    """Mengambil skema struktur tabel dan data sampel database in-memory lab SMK."""
+    conn = setup_mock_sql_db()
+    cursor = conn.cursor()
+    tables = []
+    t_rows = cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name ASC;").fetchall()
+    for tr in t_rows:
+        tname = tr[0]
+        cols_info = cursor.execute(f"PRAGMA table_info({tname});").fetchall()
+        columns = [{"name": c[1], "type": c[2], "is_pk": bool(c[5])} for c in cols_info]
+        sample_data = cursor.execute(f"SELECT * FROM {tname} LIMIT 6;").fetchall()
+        col_names = [c["name"] for c in columns]
+        sample_rows = [dict(zip(col_names, list(r))) for r in sample_data]
+        tables.append({
+            "table_name": tname,
+            "columns": columns,
+            "sample_rows": sample_rows
+        })
+    return tables
+
 def execute_sql_query(query_str, expected_output=None):
     """
     Mengeksekusi query SQL siswa pada in-memory database dan memverifikasi hasilnya.
+    Mendukung pengujian cerdas baik jika expected_output berupa query SELECT acuan atau format teks tabel.
     """
     error_message = None
     actual_rows = []
+    cols = []
     formatted_output = ""
     is_correct = False
+    start_time = time.time()
 
     try:
         conn = setup_mock_sql_db()
@@ -327,26 +372,80 @@ def execute_sql_query(query_str, expected_output=None):
         error_message = f"SQL Error: {str(e)}"
         formatted_output = error_message
 
+    execution_time_ms = round((time.time() - start_time) * 1000, 2)
+
     if expected_output is not None and error_message is None:
         clean_expected = str(expected_output).replace("\r\n", "\n").strip()
         clean_actual = formatted_output.replace("\r\n", "\n").strip()
         
-        # Bandingkan apakah baris data cocok
-        if clean_actual == clean_expected:
+        # 1. Jika expected_output adalah query SELECT acuan
+        if clean_expected.upper().startswith("SELECT"):
+            try:
+                ref_conn = setup_mock_sql_db()
+                ref_cur = ref_conn.cursor()
+                ref_cur.execute(clean_expected)
+                ref_cols = [desc[0] for desc in ref_cur.description] if ref_cur.description else []
+                ref_rows = [list(r) for r in ref_cur.fetchall()]
+                
+                # Bandingkan jumlah baris dan isi tiap baris
+                if len(actual_rows) == len(ref_rows) and len(cols) == len(ref_cols):
+                    # Bandingkan nilai data (toleransi float vs int / string case-insensitive)
+                    matches = True
+                    for a_row, r_row in zip(actual_rows, ref_rows):
+                        for a_val, r_val in zip(a_row, r_row):
+                            if str(a_val).strip().lower() != str(r_val).strip().lower():
+                                matches = False
+                                break
+                        if not matches:
+                            break
+                    if matches:
+                        is_correct = True
+            except Exception:
+                pass
+
+        # 2. Bandingkan string langsung (persis sama)
+        if not is_correct and clean_actual == clean_expected:
             is_correct = True
-        else:
-            # Periksa juga jika data baris utama cocok tanpa memedulikan spasi header
-            is_correct = clean_expected in clean_actual
+            
+        # 3. Bandingkan jika expected merupakan substring
+        if not is_correct and clean_expected in clean_actual:
+            is_correct = True
+
+        # 4. Parsing baris data dari expected_output teks tabel
+        if not is_correct:
+            exp_lines = [l.strip() for l in clean_expected.splitlines() if l.strip() and not set(l.strip()).issubset({'-', '|', ' '})]
+            # Jika ada baris data di expected
+            if len(exp_lines) > 1:
+                # Baris pertama biasanya header, sisanya baris data
+                exp_data_lines = exp_lines[1:] if " | " in exp_lines[0] else exp_lines
+                exp_parsed_rows = [[c.strip().lower() for c in l.split("|")] for l in exp_data_lines]
+                actual_parsed_rows = [[str(c).strip().lower() for c in r] for r in actual_rows]
+                
+                if actual_parsed_rows == exp_parsed_rows:
+                    is_correct = True
+                elif len(actual_parsed_rows) == len(exp_parsed_rows):
+                    # Cek jika semua data baris cocok
+                    all_match = all(a == e for a, e in zip(actual_parsed_rows, exp_parsed_rows))
+                    if all_match:
+                        is_correct = True
     else:
         is_correct = error_message is None
+
+    feedback_detail = f"Query berhasil dieksekusi ({len(actual_rows)} baris data ditemukan). Output sesuai target!" if is_correct else (
+        f"Hasil query ({len(actual_rows)} baris) belum sesuai target yang diharapkan." if error_message is None else error_message
+    )
 
     return {
         "success": error_message is None,
         "is_correct": is_correct,
         "actual_output": formatted_output,
         "expected_output": expected_output,
+        "columns": cols,
         "rows": actual_rows,
-        "error": error_message
+        "row_count": len(actual_rows),
+        "execution_time_ms": execution_time_ms,
+        "error": error_message,
+        "feedback_detail": feedback_detail
     }
 
 # ==================== EXAM & QUESTION MANAGEMENT ====================

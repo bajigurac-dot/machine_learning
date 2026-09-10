@@ -58,6 +58,8 @@ class TestStudioMLEngine(unittest.TestCase):
         recom_clf = recommend_models("classification", 200, 5)
         self.assertIn("primary_recommendation", recom_clf)
         self.assertIn("all_models", recom_clf)
+        models = recom_clf["all_models"]
+        self.assertTrue(any("analogi_smk" in m for m in models))
         
         recom_reg = recommend_models("regression", 200, 5)
         self.assertIn("primary_recommendation", recom_reg)
@@ -72,12 +74,16 @@ class TestStudioMLEngine(unittest.TestCase):
         self.assertEqual(result["model_id"], "random_forest")
         self.assertGreater(result["metrics"]["accuracy"], 80)
         self.assertIn("confusion_matrix", result["metrics"])
+        self.assertIn("rapor_smk", result)
+        self.assertIn("grade", result["rapor_smk"])
+        self.assertIn("analogi_ujian", result["rapor_smk"])
         
         # Test AutoML runner
         automl_res = run_automl_benchmark(bundle)
         self.assertGreaterEqual(len(automl_res["leaderboard"]), 4)
         self.assertIsNotNone(automl_res["winner"])
         self.assertTrue(automl_res["winner"]["is_winner"])
+        self.assertIn("rapor_smk", automl_res["winner"])
 
     def test_05_code_generator(self):
         script = generate_python_script(
@@ -123,6 +129,10 @@ class TestStudioMLEngine(unittest.TestCase):
         
         reply_task = handle_ai_chat("Breakdown task sprint", [], {"dataset_name": "titanic", "target_column": "Survived"})
         self.assertIn("Sprint", reply_task)
+
+        reply_ml = handle_ai_chat("apa itu machine learning dan overfitting?", [], {"dataset_name": "titanic", "target_column": "Survived"})
+        self.assertIn("Materi 9", reply_ml)
+        self.assertIn("Overfitting", reply_ml)
 
     def test_08_flask_api_endpoints(self):
         # GET datasets

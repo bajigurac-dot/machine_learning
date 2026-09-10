@@ -189,6 +189,11 @@ const API = {
     return await res.json();
   },
 
+  async getSqlSchema() {
+    const res = await fetch('/api/elearning/sql/schema');
+    return await res.json();
+  },
+
   async submitExam(examId, studentInfo, answers, durationSeconds) {
     const res = await fetch('/api/elearning/submissions/submit', {
       method: 'POST',

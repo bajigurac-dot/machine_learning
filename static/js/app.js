@@ -369,6 +369,13 @@ const App = {
           </div>
           <div class="model-card-title">${m.name}</div>
           <div class="model-card-desc">${m.description}</div>
+          ${m.analogi_smk ? `
+            <div class="model-analogy-box">
+              <div style="font-weight: 700; margin-bottom: 2px;">💡 Analogi Siswa SMK:</div>
+              <div>${m.analogi_smk}</div>
+              ${m.tips_pemula ? `<div class="model-tips-box">Tips: ${m.tips_pemula}</div>` : ''}
+            </div>
+          ` : ''}
           <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between;">
             <span style="font-size: 0.72rem; color: var(--text-dim);">Tipe: ${this.state.taskType}</span>
             <button class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-secondary'} btn-select-model" data-id="${m.id}">
@@ -432,6 +439,7 @@ const App = {
               <span id="val-${key}" style="font-family: var(--font-mono); color: var(--accent-primary-hover); font-weight: 600;">${schema.default}</span>
             </div>
             <input type="range" class="app-slider hyper-slider" data-key="${key}" min="${schema.min}" max="${schema.max}" step="${schema.step}" value="${schema.default}" oninput="document.getElementById('val-${key}').innerText = this.value" />
+            ${schema.smk_hint ? `<div style="font-size: 0.73rem; color: #047857; margin-top: 4px;">💡 ${schema.smk_hint}</div>` : ''}
           </div>
         `;
       } else if (schema.type === 'choice') {
@@ -501,7 +509,7 @@ const App = {
         // Switch to Evaluation Tab to show deep insights
         setTimeout(() => {
           this.switchTab('tab-eval');
-          this.renderEvaluationResults(res.winner.metrics, res.winner.model_name, res.winner.feature_importance);
+          this.renderEvaluationResults(res.winner.metrics, res.winner.model_name, res.winner.feature_importance, res.winner.rapor_smk);
         }, 1200);
       }
     } catch (e) {
@@ -534,7 +542,7 @@ const App = {
 
         // Switch to evaluation
         this.switchTab('tab-eval');
-        this.renderEvaluationResults(res.result.metrics, res.result.model_name, res.result.feature_importance);
+        this.renderEvaluationResults(res.result.metrics, res.result.model_name, res.result.feature_importance, res.result.rapor_smk);
       }
     } catch (e) {
       btn.disabled = false;
@@ -561,6 +569,11 @@ const App = {
             <div style="font-size: 0.76rem; color: var(--text-dim); margin-top: 2px;">
               Waktu Latih: ${item.duration}s | Metrik: ${item.metric_name}
             </div>
+            ${isWinner && item.rapor_smk ? `
+              <div style="font-size: 0.74rem; color: #047857; margin-top: 4px; font-weight: 600;">
+                🎓 ${item.rapor_smk.grade}: ${item.rapor_smk.evaluasi}
+              </div>
+            ` : ''}
           </div>
           <div class="metric-pill-large">
             ${item.score_display}
@@ -574,7 +587,7 @@ const App = {
     Charts.renderLeaderboardBar('automl-leaderboard-chart', leaderboard);
   },
 
-  renderEvaluationResults(metrics, modelName, featureImportance) {
+  renderEvaluationResults(metrics, modelName, featureImportance, raporSmk) {
     // Model name header
     const nameEl = document.getElementById('eval-active-model-name');
     if (nameEl) nameEl.innerText = modelName;
@@ -585,6 +598,26 @@ const App = {
     if (scoreValEl && scoreNameEl) {
       scoreValEl.innerText = metrics.score_display;
       scoreNameEl.innerText = metrics.primary_metric_name;
+    }
+
+    // Populate Rapor Pemahaman Model Siswa SMK
+    if (raporSmk) {
+      const gradeBadge = document.getElementById('smk-report-grade-badge');
+      if (gradeBadge) {
+        gradeBadge.className = `grade-badge ${raporSmk.grade_badge || 'grade-badge-a'}`;
+        gradeBadge.innerText = `🏆 ${raporSmk.grade}`;
+      }
+      const evalEl = document.getElementById('smk-report-evaluasi');
+      if (evalEl) evalEl.innerText = raporSmk.evaluasi;
+
+      const analogiEl = document.getElementById('smk-report-analogi');
+      if (analogiEl) analogiEl.innerHTML = `🎯 <b>Analogi Ujian:</b> ${raporSmk.analogi_ujian}`;
+
+      const faktorText = document.getElementById('smk-report-faktor-text');
+      if (faktorText) faktorText.innerText = raporSmk.faktor_kunci;
+
+      const tipsEl = document.getElementById('smk-report-tips');
+      if (tipsEl) tipsEl.innerHTML = `💡 <b>Tips Belajar:</b> ${raporSmk.tips}`;
     }
 
     // Specific metrics for Classification vs Regression
@@ -954,6 +987,19 @@ const App = {
   }
 };
 
+// Global helper to load dataset from E-Learning section directly into studio
+window.loadDatasetInStudio = function(datasetId) {
+  if (typeof App !== 'undefined') {
+    App.switchTab('tab-automl');
+    const sel = document.getElementById('quick-dataset-select');
+    if (sel) {
+      sel.value = datasetId;
+    }
+    App.loadDataset(datasetId);
+    App.showToast(`Memuat data contoh: ${datasetId.toUpperCase()} di Studio ML!`, 'success');
+  }
+};
+
 // Start app on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
@@ -961,3 +1007,4 @@ document.addEventListener('DOMContentLoaded', () => {
     ELearning.init();
   }
 });
+
