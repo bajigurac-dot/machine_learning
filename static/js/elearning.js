@@ -193,6 +193,32 @@ const ELearning = {
       });
     }
 
+    // Filter Master Data Siswa (Kelas & Nama/NISN)
+    const filterStudentClass = document.getElementById('filter-student-class');
+    if (filterStudentClass) {
+      filterStudentClass.addEventListener('change', () => this.loadAdminStudents());
+    }
+
+    const filterStudentName = document.getElementById('filter-student-name');
+    let studentSearchDebounce = null;
+    if (filterStudentName) {
+      filterStudentName.addEventListener('input', () => {
+        clearTimeout(studentSearchDebounce);
+        studentSearchDebounce = setTimeout(() => {
+          this.loadAdminStudents();
+        }, 200);
+      });
+    }
+
+    const btnResetStudentFilter = document.getElementById('btn-reset-student-filter');
+    if (btnResetStudentFilter) {
+      btnResetStudentFilter.addEventListener('click', () => {
+        if (filterStudentClass) filterStudentClass.value = '';
+        if (filterStudentName) filterStudentName.value = '';
+        this.loadAdminStudents();
+      });
+    }
+
     // Unduh Rekap Nilai PDF (ReportLab)
     const btnExportPdf = document.getElementById('btn-export-scores-pdf');
     if (btnExportPdf) {
@@ -288,6 +314,26 @@ const ELearning = {
     const btnSaveNewQ = document.getElementById('btn-save-new-question');
     if (btnSaveNewQ) {
       btnSaveNewQ.addEventListener('click', () => this.handleSaveQuestion());
+    }
+
+    // Modal Edit Exam & Soal (Admin)
+    const btnSaveEditExam = document.getElementById('btn-save-edit-exam');
+    if (btnSaveEditExam) {
+      btnSaveEditExam.addEventListener('click', () => this.handleSaveEditExam());
+    }
+
+    const editQTypeSelect = document.getElementById('edit-q-type');
+    if (editQTypeSelect) {
+      editQTypeSelect.addEventListener('change', (e) => {
+        const isMcq = e.target.value === 'mcq';
+        document.getElementById('edit-q-mcq-fields').classList.toggle('hidden', !isMcq);
+        document.getElementById('edit-q-code-fields').classList.toggle('hidden', isMcq);
+      });
+    }
+
+    const btnSaveEditQ = document.getElementById('btn-save-edit-question');
+    if (btnSaveEditQ) {
+      btnSaveEditQ.addEventListener('click', () => this.handleSaveEditQuestion());
     }
 
     // Exam Navigation Buttons
@@ -761,6 +807,14 @@ const ELearning = {
           let actionBtn = '';
           let statusBadge = '';
 
+          let classBadge = '';
+          const titleDesc = ((exam.title || '') + ' ' + (exam.description || '')).toLowerCase();
+          if (titleDesc.includes('xi') || titleDesc.includes('xii')) {
+            classBadge = `<span class="nav-tag amber" style="font-weight: 700; font-size: 0.72rem; padding: 2px 8px;">Kelas XI & XII</span>`;
+          } else if (titleDesc.includes('kelas x') || titleDesc.includes('kelas 10')) {
+            classBadge = `<span class="nav-tag purple" style="font-weight: 700; font-size: 0.72rem; padding: 2px 8px;">Kelas X</span>`;
+          }
+
           if (!isLoggedIn) {
             statusBadge = `<span class="nav-tag rose" style="font-weight: 700;">🔒 Terkunci (Perlu Login)</span>`;
             actionBtn = `<button class="btn btn-secondary btn-sm" onclick="ELearning.promptStudentLogin(${exam.id})" style="border-color: #fca5a5; color: #be123c; font-weight: 600;">
@@ -783,8 +837,11 @@ const ELearning = {
           return `
           <div class="glass-panel exam-card" style="display: flex; flex-direction: column; justify-content: space-between; ${!isLoggedIn ? 'border-color: rgba(239,68,68,0.25); background: rgba(255,255,255,0.7);' : ''}">
             <div>
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                <span class="nav-tag purple">${exam.subject}</span>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                  <span class="nav-tag purple">${exam.subject}</span>
+                  ${classBadge}
+                </div>
                 <div style="display: flex; gap: 6px; align-items: center;">
                   ${statusBadge}
                   <span class="exam-duration-pill">⏱️ ${exam.duration_minutes} Menit</span>
@@ -966,10 +1023,10 @@ const ELearning = {
       typeBadge.innerText = 'Pilihan Ganda';
       typeBadge.className = 'nav-tag purple';
     } else if (q.question_type === 'code_sql') {
-      typeBadge.innerText = 'Praktik Query SQL';
+      typeBadge.innerText = 'Esai Coding MySQL';
       typeBadge.className = 'nav-tag green';
     } else {
-      typeBadge.innerText = 'Praktik Python';
+      typeBadge.innerText = 'Esai Coding Python';
       typeBadge.className = 'nav-tag green';
     }
 
@@ -1367,25 +1424,38 @@ const ELearning = {
     try {
       const res = await API.getExams();
       if (res.success && res.exams.length > 0) {
-        tbody.innerHTML = res.exams.map(exam => `
+        tbody.innerHTML = res.exams.map(exam => {
+          let classBadge = '';
+          const titleDesc = ((exam.title || '') + ' ' + (exam.description || '')).toLowerCase();
+          if (titleDesc.includes('xi') || titleDesc.includes('xii')) {
+            classBadge = ` <span class="nav-tag amber" style="font-size: 0.68rem; font-weight: 700; padding: 1px 6px;">Kelas XI & XII</span>`;
+          } else if (titleDesc.includes('kelas x') || titleDesc.includes('kelas 10')) {
+            classBadge = ` <span class="nav-tag purple" style="font-size: 0.68rem; font-weight: 700; padding: 1px 6px;">Kelas X</span>`;
+          }
+
+          return `
           <tr>
             <td>#${exam.id}</td>
             <td><b>${exam.title}</b></td>
-            <td><span class="nav-tag purple">${exam.subject}</span></td>
+            <td><span class="nav-tag purple">${exam.subject}</span>${classBadge}</td>
             <td><b>⏱️ ${exam.duration_minutes} Menit</b></td>
             <td>${exam.question_count || 0} Soal (${exam.total_points || 0} Poin)</td>
             <td>
               <div style="display: flex; gap: 6px;">
-                <button class="btn btn-secondary btn-sm" onclick="ELearning.openAddQuestionModal(${exam.id})">
+                <button class="btn btn-secondary btn-sm" onclick="ELearning.openEditExamModal(${exam.id})" title="Edit Paket Kuis & Kelola Soal">
+                  ✏️ Edit
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="ELearning.openAddQuestionModal(${exam.id})" title="Tambah Butir Soal">
                   ➕ Soal
                 </button>
-                <button class="btn btn-secondary btn-sm" style="color: var(--accent-rose);" onclick="ELearning.handleDeleteExam(${exam.id})">
+                <button class="btn btn-secondary btn-sm" style="color: var(--accent-rose);" onclick="ELearning.handleDeleteExam(${exam.id})" title="Hapus Paket Ujian">
                   🗑️
                 </button>
               </div>
             </td>
           </tr>
-        `).join('');
+        `;
+        }).join('');
       } else {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Belum ada paket ujian. Klik "Buat Paket Ujian Baru".</td></tr>`;
       }
@@ -1514,6 +1584,9 @@ const ELearning = {
       if (res.success) {
         document.getElementById('modal-add-question').classList.remove('open');
         this.loadAdminExamsTable();
+        if (this.currentAdminExam && this.currentAdminExam.id === examId) {
+          this.openEditExamModal(examId);
+        }
         App.showToast("Butir soal berhasil ditambahkan!", "success");
       } else {
         App.showToast(res.error, "error");
@@ -1537,14 +1610,310 @@ const ELearning = {
     }
   },
 
+  // ==================== ADMIN EDIT EXAM & KELOLA SOAL ====================
+  currentAdminExam: null,
+
+  async openEditExamModal(examId) {
+    try {
+      const res = await API.getAdminExam(examId);
+      if (!res.success || !res.exam) {
+        App.showToast("Gagal memuat data paket kuis: " + (res.error || 'Ujian tidak ditemukan'), "error");
+        return;
+      }
+
+      const exam = res.exam;
+      this.currentAdminExam = exam;
+
+      document.getElementById('edit-exam-id').value = exam.id;
+      document.getElementById('edit-exam-title').value = exam.title || '';
+      document.getElementById('edit-exam-subject').value = exam.subject || '';
+      document.getElementById('edit-exam-duration').value = exam.duration_minutes || 30;
+      document.getElementById('edit-exam-desc').value = exam.description || '';
+
+      const addBtn = document.getElementById('btn-edit-exam-add-q');
+      if (addBtn) {
+        addBtn.onclick = () => {
+          this.openAddQuestionModal(exam.id);
+        };
+      }
+
+      this.renderAdminExamQuestions(exam);
+
+      const modal = document.getElementById('modal-edit-exam');
+      if (modal) modal.classList.add('open');
+    } catch (e) {
+      App.showToast(`Error: ${e.message}`, "error");
+    }
+  },
+
+  closeEditExamModal() {
+    const modal = document.getElementById('modal-edit-exam');
+    if (modal) modal.classList.remove('open');
+  },
+
+  async handleSaveEditExam() {
+    const examId = parseInt(document.getElementById('edit-exam-id').value);
+    const title = document.getElementById('edit-exam-title').value.trim();
+    const subject = document.getElementById('edit-exam-subject').value.trim();
+    const duration = parseInt(document.getElementById('edit-exam-duration').value) || 30;
+    const desc = document.getElementById('edit-exam-desc').value.trim();
+
+    if (!title || !subject) {
+      App.showToast("Judul kuis dan mata pelajaran wajib diisi!", "error");
+      return;
+    }
+
+    try {
+      const res = await API.updateExam(examId, {
+        title: title,
+        subject: subject,
+        duration_minutes: duration,
+        description: desc,
+        is_active: 1
+      });
+
+      if (res.success) {
+        App.showToast("Informasi paket kuis berhasil diperbarui! 🎉", "success");
+        this.loadAdminExamsTable();
+        if (this.currentAdminExam && this.currentAdminExam.id === examId) {
+          this.currentAdminExam.title = title;
+          this.currentAdminExam.subject = subject;
+          this.currentAdminExam.duration_minutes = duration;
+          this.currentAdminExam.description = desc;
+        }
+      } else {
+        App.showToast(res.error || "Gagal memperbarui paket kuis.", "error");
+      }
+    } catch (e) {
+      App.showToast(`Error: ${e.message}`, "error");
+    }
+  },
+
+  renderAdminExamQuestions(exam) {
+    const container = document.getElementById('edit-exam-questions-list');
+    const badge = document.getElementById('edit-exam-q-count-badge');
+    if (!container) return;
+
+    const questions = exam.questions || [];
+    const totalPoints = questions.reduce((acc, q) => acc + (q.points || 0), 0);
+
+    if (badge) {
+      badge.innerText = `${questions.length} Butir Soal (${totalPoints} Poin)`;
+    }
+
+    if (questions.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; color: var(--text-dim); padding: 24px; border: 1px dashed var(--border-subtle); border-radius: 8px;">
+          Belum ada butir soal di paket kuis ini. Klik tombol <b>"➕ Tambah Butir Soal Baru"</b> di atas.
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = questions.map((q, idx) => {
+      let typeLabel = 'Pilihan Ganda';
+      let typeClass = 'purple';
+      let typeIcon = '🔘';
+
+      if (q.question_type === 'code_python') {
+        typeLabel = 'Coding Python';
+        typeClass = 'green';
+        typeIcon = '🐍';
+      } else if (q.question_type === 'code_sql') {
+        typeLabel = 'Coding SQL';
+        typeClass = 'cyan';
+        typeIcon = '🗄️';
+      }
+
+      let answerSnippet = '';
+      if (q.question_type === 'mcq') {
+        const correct = q.correct_answer || '-';
+        answerSnippet = `<span style="font-size: 0.75rem; color: #059669; font-weight: 600;">Kunci: <b>${correct}</b></span>`;
+      } else {
+        const exp = (q.expected_output || '').trim();
+        const shortExp = exp.length > 40 ? exp.slice(0, 37) + '...' : exp;
+        answerSnippet = `<span style="font-size: 0.72rem; color: #4b5563; font-family: var(--font-mono);">Output: <code>${shortExp || '-'}</code></span>`;
+      }
+
+      return `
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <b style="font-size: 0.85rem; color: var(--text-main);">No. ${idx + 1}</b>
+              <span class="nav-tag ${typeClass}" style="font-size: 0.7rem; padding: 2px 7px;">${typeIcon} ${typeLabel}</span>
+              <span style="font-size: 0.74rem; font-weight: 700; color: #2563eb; background: rgba(37, 99, 235, 0.08); padding: 2px 8px; border-radius: 9999px;">
+                ${q.points} Poin
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <button class="btn btn-secondary btn-sm" onclick="ELearning.openEditQuestionModal(${q.id})" style="padding: 3px 8px; font-size: 0.75rem;" title="Edit isi butir soal">
+                ✏️ Edit
+              </button>
+              <button class="btn btn-secondary btn-sm" style="padding: 3px 8px; font-size: 0.75rem; color: var(--accent-rose);" onclick="ELearning.handleDeleteQuestionFromExam(${q.id}, ${exam.id})" title="Hapus butir soal">
+                🗑️
+              </button>
+            </div>
+          </div>
+          <div style="font-size: 0.82rem; color: var(--text-main); font-weight: 500; line-height: 1.4;">
+            ${q.question_text}
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+            ${answerSnippet}
+            <span style="font-size: 0.68rem; color: var(--text-dim);">ID #${q.id}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  async openEditQuestionModal(questionId) {
+    let q = null;
+    if (this.currentAdminExam && this.currentAdminExam.questions) {
+      q = this.currentAdminExam.questions.find(item => item.id === questionId);
+    }
+    if (!q) {
+      try {
+        const res = await API.getQuestion(questionId);
+        if (res.success && res.question) q = res.question;
+      } catch (e) {
+        console.warn("Could not fetch question via API:", e);
+      }
+    }
+
+    if (!q) {
+      App.showToast("Butir soal tidak ditemukan.", "error");
+      return;
+    }
+
+    document.getElementById('edit-q-id').value = q.id;
+    document.getElementById('edit-q-exam-id').value = q.exam_id;
+    document.getElementById('edit-q-type').value = q.question_type || 'mcq';
+    document.getElementById('edit-q-points').value = q.points || 20;
+    document.getElementById('edit-q-text').value = q.question_text || '';
+
+    const isMcq = (q.question_type === 'mcq');
+    document.getElementById('edit-q-mcq-fields').classList.toggle('hidden', !isMcq);
+    document.getElementById('edit-q-code-fields').classList.toggle('hidden', isMcq);
+
+    if (isMcq) {
+      const opts = q.options || [];
+      const stripPrefix = (str, prefix) => {
+        if (!str) return '';
+        if (str.startsWith(prefix + '. ') || str.startsWith(prefix + ') ') || str.startsWith(prefix + ' : ')) {
+          return str.slice(3).trim();
+        }
+        return str;
+      };
+
+      document.getElementById('edit-q-opt-a').value = stripPrefix(opts[0] || '', 'A');
+      document.getElementById('edit-q-opt-b').value = stripPrefix(opts[1] || '', 'B');
+      document.getElementById('edit-q-opt-c').value = stripPrefix(opts[2] || '', 'C');
+      document.getElementById('edit-q-opt-d').value = stripPrefix(opts[3] || '', 'D');
+      document.getElementById('edit-q-correct-ans').value = (q.correct_answer || 'A').toUpperCase().trim();
+    } else {
+      document.getElementById('edit-q-starter-code').value = q.starter_code || '';
+      document.getElementById('edit-q-expected-output').value = q.expected_output || '';
+    }
+
+    const modal = document.getElementById('modal-edit-question');
+    if (modal) modal.classList.add('open');
+  },
+
+  closeEditQuestionModal() {
+    const modal = document.getElementById('modal-edit-question');
+    if (modal) modal.classList.remove('open');
+  },
+
+  async handleSaveEditQuestion() {
+    const qId = parseInt(document.getElementById('edit-q-id').value);
+    const examId = parseInt(document.getElementById('edit-q-exam-id').value);
+    const qType = document.getElementById('edit-q-type').value;
+    const qText = document.getElementById('edit-q-text').value.trim();
+    const points = parseInt(document.getElementById('edit-q-points').value) || 20;
+
+    if (!qText) {
+      App.showToast("Teks pertanyaan tidak boleh kosong!", "error");
+      return;
+    }
+
+    let options = null;
+    let correctAnswer = null;
+    let starterCode = null;
+    let expectedOutput = null;
+
+    if (qType === 'mcq') {
+      const optA = document.getElementById('edit-q-opt-a').value.trim() || 'Pilihan A';
+      const optB = document.getElementById('edit-q-opt-b').value.trim() || 'Pilihan B';
+      const optC = document.getElementById('edit-q-opt-c').value.trim() || 'Pilihan C';
+      const optD = document.getElementById('edit-q-opt-d').value.trim() || 'Pilihan D';
+      options = [`A. ${optA}`, `B. ${optB}`, `C. ${optC}`, `D. ${optD}`];
+      correctAnswer = document.getElementById('edit-q-correct-ans').value;
+    } else {
+      starterCode = document.getElementById('edit-q-starter-code').value;
+      expectedOutput = document.getElementById('edit-q-expected-output').value;
+    }
+
+    try {
+      const res = await API.updateQuestion(qId, {
+        question_type: qType,
+        question_text: qText,
+        options: options,
+        correct_answer: correctAnswer,
+        starter_code: starterCode,
+        expected_output: expectedOutput,
+        points: points
+      });
+
+      if (res.success) {
+        this.closeEditQuestionModal();
+        App.showToast("Butir soal berhasil diperbarui! 🎉", "success");
+        if (examId) {
+          await this.openEditExamModal(examId);
+        }
+        this.loadAdminExamsTable();
+      } else {
+        App.showToast(res.error || "Gagal memperbarui soal.", "error");
+      }
+    } catch (e) {
+      App.showToast(`Error: ${e.message}`, "error");
+    }
+  },
+
+  async handleDeleteQuestionFromExam(questionId, examId) {
+    if (confirm(`Yakin ingin menghapus butir soal #${questionId} ini?`)) {
+      try {
+        const res = await API.deleteQuestion(questionId);
+        if (res.success) {
+          App.showToast("Butir soal berhasil dihapus.", "success");
+          if (examId) {
+            await this.openEditExamModal(examId);
+          }
+          this.loadAdminExamsTable();
+        } else {
+          App.showToast(res.error || "Gagal menghapus butir soal.", "error");
+        }
+      } catch (e) {
+        App.showToast(`Error: ${e.message}`, "error");
+      }
+    }
+  },
+
   // ==================== ADMIN MASTER DATA SISWA ====================
   async loadAdminStudents() {
     const tbody = document.getElementById('admin-students-table-body');
     if (!tbody) return;
 
+    const classEl = document.getElementById('filter-student-class');
+    const nameEl = document.getElementById('filter-student-name');
+    const countBadge = document.getElementById('admin-students-count-badge');
+
+    const className = classEl ? classEl.value.trim() : '';
+    const studentName = nameEl ? nameEl.value.trim() : '';
+
     try {
-      const res = await API.getAdminStudents();
+      const res = await API.getAdminStudents(className, studentName);
       if (res.success && res.students && res.students.length > 0) {
+        if (countBadge) countBadge.innerText = `${res.students.length} Siswa`;
         tbody.innerHTML = res.students.map(st => `
           <tr>
             <td>#${st.id}</td>
@@ -1560,9 +1929,11 @@ const ELearning = {
           </tr>
         `).join('');
       } else {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-dim); padding: 24px;">Belum ada data siswa terdaftar. Daftarkan siswa baru di atas.</td></tr>`;
+        if (countBadge) countBadge.innerText = `0 Siswa`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-dim); padding: 24px;">Tidak ada siswa yang sesuai dengan filter kelas atau kata kunci pencarian.</td></tr>`;
       }
     } catch (e) {
+      if (countBadge) countBadge.innerText = `Error`;
       tbody.innerHTML = `<tr><td colspan="6" style="color: var(--accent-rose);">Error: ${e.message}</td></tr>`;
     }
   },

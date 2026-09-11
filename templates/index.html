@@ -737,7 +737,7 @@
               <div class="grid-3" style="align-items: flex-start;">
                 <div>
                   <label class="form-label-sm" style="font-weight: 700; color: #0f172a;">NISN Resmi Siswa: <span style="color: #ef4444;">*</span></label>
-                  <input type="text" class="app-input" id="student-login-nisn" placeholder="Ketik NISN (Contoh: 006 atau 001)" style="width: 100%; border-color: #cbd5e1;" autocomplete="off" />
+                  <input type="text" class="app-input" id="student-login-nisn" placeholder="Ketik NISN (Contoh: 0108492001 atau 001)" style="width: 100%; border-color: #cbd5e1;" autocomplete="off" />
                   <div id="student-login-status" style="font-size: 0.74rem; margin-top: 4px; display: none;"></div>
                 </div>
                 <div>
@@ -752,7 +752,7 @@
 
               <div style="margin-top: 14px; padding: 8px 12px; background: rgba(16,185,129,0.08); border-radius: 8px; font-size: 0.76rem; color: #047857; display: flex; align-items: center; gap: 8px;">
                 <span>💡</span>
-                <span><b>Contoh NISN Terdaftar:</b> <code>006</code> (Thoriq Azis), <code>001</code> (Ahmad Rizki), <code>002</code> (Budi Santoso), <code>003</code> (Citra Dewi), <code>004</code> (Deni Pratama). Ketik NISN untuk mendeteksi identitas otomatis!</span>
+                <span><b>Contoh NISN Terdaftar:</b> <code>0108492001</code> / <code>001</code> (Alexa Angel), <code>0098492020</code> / <code>020</code> (Abdi Rohim), <code>0088492029</code> / <code>029</code> (Amar Hadi). Ketik NISN lengkap atau 3 digit nomor urut untuk deteksi identitas otomatis!</span>
               </div>
 
               <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(16,185,129,0.15); padding-top: 14px; flex-wrap: wrap; gap: 12px;">
@@ -779,12 +779,12 @@
                   </div>
                   <div>
                     <div style="display: flex; align-items: center; gap: 10px;">
-                      <h4 id="active-student-name" style="font-size: 1.12rem; font-weight: 800; color: #065f46; margin: 0;">Thoriq Azis</h4>
+                      <h4 id="active-student-name" style="font-size: 1.12rem; font-weight: 800; color: #065f46; margin: 0;">Siswa Aktif</h4>
                       <span class="nav-tag green" style="font-weight: 700;">✅ Terverifikasi Masuk</span>
                     </div>
                     <div style="font-size: 0.82rem; color: #047857; margin-top: 4px;">
-                      NISN: <b id="active-student-nisn" style="font-family: var(--font-mono); color: #065f46;">0058192841</b> • 
-                      Kelas: <b id="active-student-class" style="color: #065f46;">XII - SMK Cahaya Pertiwi</b>
+                      NISN: <b id="active-student-nisn" style="font-family: var(--font-mono); color: #065f46;">-</b> • 
+                      Kelas: <b id="active-student-class" style="color: #065f46;">SMK Cahaya Pertiwi</b>
                     </div>
                   </div>
                 </div>
@@ -813,23 +813,1147 @@
               </div>
             </div>
 
+            <!-- 2.5 MODUL PEMBELAJARAN: PENGANTAR INFORMATIKA & DASAR-DASARNYA (SMK KELAS X) -->
+            <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #93c5fd; background: linear-gradient(135deg, rgba(239,246,255,0.8), #ffffff);">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-informatika-guide-content'); const b = document.getElementById('btn-toggle-informatika-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
+                <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+                  <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(37,99,235,0.25); flex-shrink: 0;">
+                    💻
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div class="panel-title" style="color: #1e3a8a; font-size: 1.08rem; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span>Materi Pembelajaran: Apa Itu INFORMATIKA & Dasar-Dasarnya?</span>
+                      <span class="nav-tag purple" style="font-size: 0.7rem; padding: 2px 8px; margin: 0; font-weight: 700;">SMK Kelas X • Kurikulum Merdeka</span>
+                    </div>
+                    <div class="panel-subtitle" style="color: #1d4ed8;">
+                      Pelajari 8 Pilar Fondasi Informatika, Berpikir Komputasional, Perangkat Komputer, Logika Pemrograman Python & Keamanan Digital
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="btn-toggle-informatika-guide" type="button" style="border-color: #3b82f6; color: #1e40af; font-weight: 700; white-space: nowrap; flex-shrink: 0;">
+                  📖 Buka Materi
+                </button>
+              </div>
+
+              <div id="elearning-informatika-guide-content" class="hidden" style="margin-top: 20px; border-top: 1px dashed rgba(59, 130, 246, 0.3); padding-top: 18px;">
+                
+                <!-- Hero Konsep: Definisi Informatika & Siklus IPOS -->
+                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(37,99,235,0.06);">
+                  <div style="display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                    <div style="flex: 2; min-width: 280px;">
+                      <div style="color: #1e3a8a; font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        <span>💡 Apa Sebenarnya Ilmu INFORMATIKA Itu?</span>
+                      </div>
+                      <p style="font-size: 0.84rem; color: #334155; line-height: 1.6; margin-bottom: 8px;">
+                        <b>Informatika</b> adalah disiplin ilmu mengenai studi, perancangan, dan pembuatan sistem komputasi, serta prinsip-prinsip yang menjadi dasar perancangan tersebut. Informatika mempelajari bagaimana <b>data mentah</b> dikumpulkan, diproses melalui algoritma logika, disimpan dengan aman, dan disajikan menjadi <b>informasi yang bermanfaat</b> bagi manusia.
+                      </p>
+                      <p style="font-size: 0.82rem; color: #475569; line-height: 1.55;">
+                        Di <b>SMK Kelas X (Fase E)</b>, Informatika menjadi mata pelajaran fondasi kejuruan terpenting untuk membangun <i>digital mindset</i>, kemampuan <i>problem solving</i> tingkat tinggi, dan bekal menyongsong era Revolusi Industri 4.0 serta Artificial Intelligence (AI).
+                      </p>
+                    </div>
+
+                    <!-- Diagram IPOS (Input - Process - Output - Storage) -->
+                    <div style="flex: 1.4; min-width: 260px; background: #f0f7ff; border: 1px solid #93c5fd; border-radius: 8px; padding: 14px 16px;">
+                      <div style="font-size: 0.78rem; font-weight: 800; color: #1e40af; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px;">
+                        <span>⚙️ Siklus Kerja Komputasi (IPOS):</span>
+                      </div>
+                      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 0.76rem;">
+                        <div style="background: #ffffff; padding: 8px 10px; border-radius: 6px; border: 1px solid #bfdbfe;">
+                          <b style="color: #2563eb;">1. INPUT ⌨️</b><br>
+                          <span style="color: #64748b;">Memasukkan data via keyboard, mouse, sensor, kamera, atau file CSV/Excel.</span>
+                        </div>
+                        <div style="background: #ffffff; padding: 8px 10px; border-radius: 6px; border: 1px solid #bfdbfe;">
+                          <b style="color: #2563eb;">2. PROCESS 🧠</b><br>
+                          <span style="color: #64748b;">CPU/GPU mengolah data dengan instruksi logika matematika & algoritma.</span>
+                        </div>
+                        <div style="background: #ffffff; padding: 8px 10px; border-radius: 6px; border: 1px solid #bfdbfe;">
+                          <b style="color: #2563eb;">3. OUTPUT 🖥️</b><br>
+                          <span style="color: #64748b;">Menampilkan hasil ke layar, printer, speaker, atau dashboard visualisasi.</span>
+                        </div>
+                        <div style="background: #ffffff; padding: 8px 10px; border-radius: 6px; border: 1px solid #bfdbfe;">
+                          <b style="color: #2563eb;">4. STORAGE 💾</b><br>
+                          <span style="color: #64748b;">Menyimpan data permanen di SSD, harddisk, cloud server, atau database SQLite.</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 8 Pilar Utama Informatika Kurikulum Merdeka -->
+                <div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                  <div style="font-weight: 800; font-size: 0.96rem; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
+                    <span>🏛️ 8 Pilar Fondasi Informatika SMK Kelas X (Kurikulum Merdeka):</span>
+                  </div>
+                  <span style="font-size: 0.76rem; color: #2563eb; font-weight: 700; background: rgba(37,99,235,0.1); padding: 3px 10px; border-radius: 999px;">
+                    Capaian Pembelajaran Fase E
+                  </span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 22px;">
+                  
+                  <!-- Pilar 1: BK -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">🧠 1. Berpikir Komputasional (BK)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Inti Logika</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Metode bernalar dan memecahkan masalah kompleks secara terstruktur dan efisien agar dapat diselesaikan oleh manusia atau komputer.
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>4 Pilar Utama CT:</b><br>
+                      • <b>Dekomposisi:</b> Memecah masalah besar menjadi komponen kecil.<br>
+                      • <b>Pengenalan Pola:</b> Mencari pola kesamaan data.<br>
+                      • <b>Abstraksi:</b> Mengambil informasi penting & mengabaikan detail tak relevan.<br>
+                      • <b>Perancangan Algoritma:</b> Menyusun langkah penyelesaian berurutan.
+                    </div>
+                  </div>
+
+                  <!-- Pilar 2: TIK -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">📱 2. Teknologi Info & Komunikasi (TIK)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Produktivitas</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Keterampilan praktis memanfaatkan aplikasi perkantoran, sistem penyimpanan awan, dan manajemen kolaborasi digital di dunia kerja.
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>Keahlian Wajib Siswa:</b><br>
+                      • Integrasi aplikasi perkantoran (Word, Excel, PowerPoint).<br>
+                      • Manajemen berkas & kolaborasi Cloud (Google Drive, Dropbox).<br>
+                      • Kolaborasi dokumen tim secara <i>real-time</i>.<br>
+                      • Teknik pencarian informasi ilmiah berbasis kata kunci spesifik (*Search Engine*).
+                    </div>
+                  </div>
+
+                  <!-- Pilar 3: SK -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">🖥️ 3. Sistem Komputer (SK)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Arsitektur Mesin</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Pemahaman menyeluruh mengenai cara kerja interaksi perangkat keras (Hardware), perangkat lunak (Software), dan pengguna (Brainware).
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>Komponen & Konsep:</b><br>
+                      • <b>Hardware:</b> CPU (ALU & Control Unit), RAM, Motherboard, SSD, GPU.<br>
+                      • <b>Software:</b> Sistem Operasi (Windows, Linux), Driver, Firmware BIOS/UEFI.<br>
+                      • <b>Siklus Eksekusi Mesin:</b> <i>Fetch</i> (ambil instruksi) ➔ <i>Decode</i> (terjemahkan biner) ➔ <i>Execute</i> (jalankan).
+                    </div>
+                  </div>
+
+                  <!-- Pilar 4: JKI -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">🌐 4. Jaringan Komputer & Internet (JKI)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Konektivitas</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Penghubung antar perangkat komputer untuk berbagi data, komunikasi, dan akses sumber daya global melalui protokol standar.
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>Materi Kunci:</b><br>
+                      • <b>Cakupan Jaringan:</b> LAN (Lab Sekolah), MAN (Kota), WAN (Internet).<br>
+                      • <b>Perangkat:</b> Router, Switch, Access Point, Kabel UTP Cat6, RJ45.<br>
+                      • <b>Alamat Jaringan:</b> IP Address IPv4 (misal: 192.168.1.1) & DNS Server.<br>
+                      • <b>Protokol Web:</b> HTTP vs HTTPS (terenkripsi SSL/TLS) & Firewall.
+                    </div>
+                  </div>
+
+                  <!-- Pilar 5: AD -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">📊 5. Analisis Data (AD)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Fondasi AI & ML</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Kecakapan mengumpulkan data mentah, membersihkan data yang kotor, menganalisis statistik, serta membuat visualisasi grafik.
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>Proses Analisis:</b><br>
+                      • Jenis Data: Data Numerik (Angka) & Data Kategorikal (Teks Label).<br>
+                      • <i>Data Cleaning:</i> Menangani nilai kosong (*missing values*) & data pencilan (*outlier*).<br>
+                      • Visualisasi: Diagram Batang, Line Chart, Histogram, & Matriks Korelasi.<br>
+                      • Alat Analisis: Spreadsheet & pustaka Python (Pandas & NumPy).
+                    </div>
+                  </div>
+
+                  <!-- Pilar 6: AP -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">⚙️ 6. Algoritma & Pemrograman (AP)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Koding Python</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Menulis instruksi logika yang dapat dieksekusi oleh komputer secara otomatis menggunakan bahasa pemrograman modern (Python).
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>Sintaks Dasar Python:</b><br>
+                      • <b>Variabel & Tipe:</b> <code>nama = "Budi"</code>, <code>nilai = 85</code>, <code>lulus = True</code>.<br>
+                      • <b>Percabangan:</b> <code>if nilai &gt;= 75: ... else: ...</code><br>
+                      • <b>Perulangan:</b> <code>for i in range(5): ...</code> dan <code>while</code>.<br>
+                      • <b>Koleksi Data:</b> List <code>[10, 20, 30]</code> & Dictionary <code>{"nama": "Siti"}</code>.
+                    </div>
+                  </div>
+
+                  <!-- Pilar 7: DSI -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">⚖️ 7. Dampak Sosial Informatika (DSI)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Etika & Hukum</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Memahami aspek hukum, etika berinternet, keamanan data pribadi, dan tanggung jawab sosial sebagai warga digital yang baik.
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>Kesadaran Keamanan Siber:</b><br>
+                      • <b>Netiket:</b> Tata krama dan sopan santun komunikasi di ruang publik maya.<br>
+                      • <b>Kejahatan Siber:</b> Bahaya link Phishing, penipuan online, malware, & hoaks.<br>
+                      • <b>Hukum Digital:</b> Regulasi UU ITE dan perlindungan data pribadi (PDP).<br>
+                      • <b>Jejak Digital (*Digital Footprint*):</b> Menjaga reputasi online seumur hidup.
+                    </div>
+                  </div>
+
+                  <!-- Pilar 8: PLB -->
+                  <div class="smk-dataset-card" style="border-color: #bfdbfe;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #1e40af;">🚀 8. Praktik Lintas Bidang (PLB)</div>
+                      <span class="smk-dataset-tag" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;">Proyek Kolaboratif</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Proyek kolaboratif terintegrasi yang menggabungkan seluruh pilar informatika untuk memecahkan persoalan riil di lingkungan sekitar.
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(59,130,246,0.06); color: #1e40af;">
+                      💡 <b>Contoh Proyek SMK:</b><br>
+                      • Pembuatan website profil sekolah atau katalog produk UKM.<br>
+                      • Aplikasi kasir digital sederhana menggunakan Python & database SQLite.<br>
+                      • Analisis data survei kepuasan kantin sekolah dan membuat infografis.<br>
+                      • Praktik kerja tim dengan metodologi Agile / Scrum sederhana.
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Modul Pendalaman: 4 Fondasi Berpikir Komputasional dengan Studi Kasus SMK -->
+                <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.04), rgba(59, 130, 246, 0.08)); border: 1.5px solid #93c5fd; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px;">
+                  <div style="font-weight: 800; font-size: 0.94rem; color: #1e3a8a; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                    <span>🔍 Studi Kasus Nyata: Menerapkan 4 Tahapan Berpikir Komputasional di Sekolah</span>
+                  </div>
+                  <div style="font-size: 0.82rem; color: #334155; margin-bottom: 12px; line-height: 1.55;">
+                    <b>Studi Kasus Kasir Kantin SMK:</b> <i>"Kantin SMK Cahaya Pertiwi mengalami antrean panjang saat jam istirahat karena kasir mencatat manual pesanan makanan dan menghitung kembalian uang dengan kalkulator kertas."</i>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+                    <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #bfdbfe; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                      <b style="color: #1e40af; font-size: 0.84rem;">1. Dekomposisi 🧩</b>
+                      <p style="font-size: 0.76rem; color: #475569; margin-top: 5px; line-height: 1.45;">
+                        Memecah masalah menjadi sub-tugas kecil: (a) Menampilkan daftar menu & harga, (b) Memilih item yang dibeli, (c) Menghitung total belanja, (d) Menghitung uang kembalian.
+                      </p>
+                    </div>
+                    <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #bfdbfe; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                      <b style="color: #1e40af; font-size: 0.84rem;">2. Pengenalan Pola 🔎</b>
+                      <p style="font-size: 0.76rem; color: #475569; margin-top: 5px; line-height: 1.45;">
+                        Melihat pola: Setiap transaksi selalu mengalikan <code>jumlah × harga_satuan</code>, lalu menjumlahkan seluruh item. Rumus kembalian selalu <code>uang_bayar - total_belanja</code>.
+                      </p>
+                    </div>
+                    <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #bfdbfe; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                      <b style="color: #1e40af; font-size: 0.84rem;">3. Abstraksi 🎯</b>
+                      <p style="font-size: 0.76rem; color: #475569; margin-top: 5px; line-height: 1.45;">
+                        Fokus pada informasi esensial: Nama makanan, harga, dan jumlah pesanan. Abaikan hal tidak relevan seperti merek piring atau warna seragam siswa yang memesan.
+                      </p>
+                    </div>
+                    <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #bfdbfe; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                      <b style="color: #1e40af; font-size: 0.84rem;">4. Perancangan Algoritma ⚙️</b>
+                      <p style="font-size: 0.76rem; color: #475569; margin-top: 5px; line-height: 1.45;">
+                        Menyusun langkah instruksi logis berurutan: Mulai ➔ Input menu & jumlah ➔ Hitung total ➔ Input bayar ➔ Jika bayar &lt; total tolak, jika cukup hitung kembalian ➔ Cetak struk.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Contoh Kode Python Dasar untuk Siswa SMK Kelas X -->
+                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px;">
+                  <div style="font-weight: 800; font-size: 0.92rem; color: #1e3a8a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                    <span>🐍 Contoh Kode Python Sederhana (Algoritma Penentuan Nilai Kelulusan SMK)</span>
+                  </div>
+                  <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 10px;">
+                    Siswa SMK kelas X dapat langsung mempraktikkan logika percabangan dan perulangan dasar berikut di lab komputer:
+                  </p>
+                  <pre style="background: #0f172a; color: #f1f5f9; padding: 14px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; line-height: 1.5;"><code># Program Penentuan Status Kelulusan Siswa SMK Cahaya Pertiwi
+kkm_standar = 75.0
+nilai_siswa = [85.0, 72.0, 90.0, 68.5, 78.0]
+
+print("=== REKAP KELULUSAN INFORMATIKA KELAS X ===")
+for i, skor in enumerate(nilai_siswa, 1):
+    if skor >= kkm_standar:
+        status = "KOMPETEN (LULUS) ✅"
+    else:
+        status = "REMEDIAL 📝"
+    print(f"Siswa {i}: Nilai = {skor} -> Status: {status}")</code></pre>
+                </div>
+
+                <!-- Roadmap Belajar & Tips Belajar Informatika -->
+                <div style="background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(16,185,129,0.08)); border: 1px solid #93c5fd; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+                  <div style="flex: 1; min-width: 280px;">
+                    <div style="font-weight: 800; font-size: 0.9rem; color: #1e3a8a; margin-bottom: 4px;">
+                      🎓 Kunci Sukses Siswa SMK Kelas X dalam Mata Pelajaran Informatika:
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155; line-height: 1.6;">
+                      1. <b>Koding Sambil Praktik:</b> Jangan hanya membaca teori, ketik kodenya langsung di menu Ujian/Lab.<br>
+                      2. <b>Jangan Takut Pesan Error:</b> Pesan error (SyntaxError, TypeError) adalah teman belajar terbaik programmer.<br>
+                      3. <b>Biasakan Berpikir Sistematis:</b> Uraikan masalah rumit jadi langkah-langkah kecil sebelum menulis kode!
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-sm" onclick="const c = document.getElementById('elearning-informatika-guide-content'); const b = document.getElementById('btn-toggle-informatika-guide'); c.classList.add('hidden'); if(b) b.innerHTML = '📖 Buka Materi';" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); white-space: nowrap; height: 38px;">
+                    📕 Tutup Materi
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- 2.6 MODUL PEMBELAJARAN: DASAR-DASAR PEMROGRAMAN PYTHON (SMK KELAS XI & XII) -->
+            <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #fcd34d; background: linear-gradient(135deg, rgba(254,243,199,0.7), #ffffff);">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-python-guide-content'); const b = document.getElementById('btn-toggle-python-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
+                <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+                  <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(245,158,11,0.25); flex-shrink: 0;">
+                    🐍
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div class="panel-title" style="color: #92400e; font-size: 1.08rem; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span>Materi Pembelajaran: Dasar-Dasar Pemrograman Python</span>
+                      <span class="nav-tag amber" style="font-size: 0.7rem; padding: 2px 8px; margin: 0; font-weight: 700;">SMK Kelas XI & XII</span>
+                    </div>
+                    <div class="panel-subtitle" style="color: #b45309;">
+                      Panduan Praktis Siswa SMK Kelas XI & XII: Cetak Teks, Variabel, Tipe Data, Operator, Percabangan (if-else), Perulangan (loop), List/Dict hingga Fungsi (def)
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="btn-toggle-python-guide" type="button" style="border-color: #f59e0b; color: #92400e; font-weight: 700; white-space: nowrap; flex-shrink: 0;">
+                  📖 Buka Materi
+                </button>
+              </div>
+
+              <div id="elearning-python-guide-content" class="hidden" style="margin-top: 20px; border-top: 1px dashed rgba(245, 158, 11, 0.35); padding-top: 18px;">
+                
+                <!-- Hero Pengenalan Python -->
+                <div style="background: #ffffff; border: 1px solid #fde68a; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(245,158,11,0.06);">
+                  <div style="display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                    <div style="flex: 2; min-width: 280px;">
+                      <div style="color: #92400e; font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span>💡 Mengapa Python Menjadi Bahasa Pemrograman Nomor 1 di Dunia?</span>
+                        <span class="nav-tag amber" style="font-size: 0.7rem; padding: 2px 8px; font-weight: 700;">SMK Kelas XI & XII</span>
+                      </div>
+                      <p style="font-size: 0.84rem; color: #334155; line-height: 1.6; margin-bottom: 8px;">
+                        <b>Python</b> diciptakan oleh Guido van Rossum dan dirilis pertama kali pada tahun 1991 dengan filosofi desain yang menekankan <b>keterbacaan kode (*readability*)</b>. Sintaks Python sangat ringkas dan bersih menyerupai bahasa Inggris sehari-hari, menjadikannya bahasa ideal bagi siswa pemula SMK hingga insinyur profesional Google, NASA, dan Netflix.
+                      </p>
+                      <p style="font-size: 0.82rem; color: #475569; line-height: 1.55;">
+                        Di industri teknologi modern, Python adalah bahasa standar emas untuk <b>Kecerdasan Buatan (AI)</b>, <b>Data Science</b>, <b>Web Development (Backend)</b>, otomatisasi sistem jaringan, serta scripting praktis.
+                      </p>
+                    </div>
+
+                    <div style="flex: 1.2; min-width: 240px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 14px;">
+                      <div style="font-size: 0.78rem; font-weight: 800; color: #92400e; margin-bottom: 6px; text-transform: uppercase;">
+                        ⚡ 4 Keunggulan Utama Python:
+                      </div>
+                      <ul style="font-size: 0.76rem; color: #78350f; line-height: 1.6; padding-left: 16px; margin: 0;">
+                        <li><b>Sintaks Sederhana:</b> Tanpa titik koma (<code>;</code>) wajib di akhir baris.</li>
+                        <li><b>Indentasi Bersih:</b> Struktur blok kode diatur oleh spasi rapi.</li>
+                        <li><b>Ekosistem Kaya:</b> Ribuan pustaka gratis siap pakai.</li>
+                        <li><b>Multiplatform:</b> Berjalan di Windows, Linux, Mac, & Cloud.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Navigasi 8 Bab Modul Python -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 22px;">
+
+                  <!-- Bab 1: Print & Komentar -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">🖨️ Bab 1: Cetak Teks & Komentar</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">Dasar Output</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Fungsi <code>print()</code> digunakan untuk menampilkan teks atau nilai variabel ke konsol layar. Tanda pagar (<code>#</code>) digunakan untuk komentar yang tidak akan dieksekusi.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;"># 1. Menampilkan teks string</span>
+<span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">"Halo, SMK Cahaya Pertiwi!"</span>)
+
+<span style="color: #94a3b8;"># 2. Cetak beberapa nilai sekaligus</span>
+<span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">"Nilai Ujian:"</span>, <span style="color: #fde68a;">90</span>, <span style="color: #a7f3d0;">"Predikat:"</span>, <span style="color: #a7f3d0;">"A"</span>)
+
+<span style="color: #94a3b8;"># 3. F-String (Formatted String modern)</span>
+nama = <span style="color: #a7f3d0;">"Alexa"</span>
+skor = <span style="color: #fde68a;">88.5</span>
+<span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">f"Siswa {nama} memperoleh skor {skor}"</span>)
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Tips Siswa:</b> Selalu gunakan <b>f-string</b> (huruf <code>f</code> sebelum tanda petik) saat menggabungkan teks dengan angka variabel agar tidak terjadi <i>TypeError</i>.
+                    </div>
+                  </div>
+
+                  <!-- Bab 2: Variabel & Aturan Penamaan -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">📦 Bab 2: Variabel & Aturan Penamaan</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">Wadah Memori</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Variabel adalah nama wadah penyimpan nilai data di memori komputer. Nilai variabel dapat diubah sewaktu-waktu (*re-assignment*).
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;"># Deklarasi variabel</span>
+nama_siswa = <span style="color: #a7f3d0;">"Rian Saputra"</span>   <span style="color: #94a3b8;"># snake_case</span>
+umur = <span style="color: #fde68a;">16</span>
+uang_saku = <span style="color: #fde68a;">20000</span>
+
+<span style="color: #94a3b8;"># Mengubah nilai variabel</span>
+uang_saku = uang_saku - <span style="color: #fde68a;">5000</span>   <span style="color: #94a3b8;"># Sekarang 15000</span>
+<span style="color: #38bdf8;">print</span>(uang_saku)
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Aturan Wajib Variabel:</b><br>
+                      • Harus diawali huruf atau underscore (<code>_</code>), <b>TIDAK</b> boleh diawali angka (misal <code>1nilai</code> salah).<br>
+                      • Tidak boleh pakai spasi (gunakan <code>nama_lengkap</code>).<br>
+                      • Peka huruf besar-kecil: <code>kelas</code> beda dengan <code>Kelas</code>!
+                    </div>
+                  </div>
+
+                  <!-- Bab 3: Tipe Data & Type Casting -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">🏷️ Bab 3: Tipe Data & Casting</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">4 Tipe Primitif</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Python secara otomatis mendeteksi tipe data variabel (*Dynamic Typing*). Fungsi <code>type()</code> untuk mengecek, dan fungsi casting untuk mengubah tipe.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+teks = <span style="color: #a7f3d0;">"100"</span>       <span style="color: #94a3b8;"># str (String)</span>
+bulat = <span style="color: #fde68a;">25</span>        <span style="color: #94a3b8;"># int (Integer)</span>
+desimal = <span style="color: #fde68a;">3.75</span>    <span style="color: #94a3b8;"># float (Desimal)</span>
+aktif = <span style="color: #fb923c;">True</span>      <span style="color: #94a3b8;"># bool (Boolean)</span>
+
+<span style="color: #94a3b8;"># Konversi tipe (Type Casting)</span>
+angka = <span style="color: #38bdf8;">int</span>(teks)       <span style="color: #94a3b8;"># Jadi int 100</span>
+total = angka + bulat  <span style="color: #94a3b8;"># 125 (Bisa dihitung!)</span>
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Jebakan Pemula:</b> <code>"10" + "20"</code> menghasilkan teks <code>"1020"</code>. Lakukan <code>int("10") + int("20")</code> untuk mendapatkan angka <code>30</code>!
+                    </div>
+                  </div>
+
+                  <!-- Bab 4: Operator Lengkap -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">➗ Bab 4: Operator Matematika & Logika</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">Kalkulasi & Logika</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Simbol-simbol untuk operasi aritmatika, perbandingan nilai, dan operasi logika gabungan.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;"># Aritmatika: + - * / // % **</span>
+<span style="color: #38bdf8;">print</span>(<span style="color: #fde68a;">7</span> / <span style="color: #fde68a;">2</span>)    <span style="color: #94a3b8;"># 3.5 (Bagi pecahan)</span>
+<span style="color: #38bdf8;">print</span>(<span style="color: #fde68a;">7</span> // <span style="color: #fde68a;">2</span>)   <span style="color: #94a3b8;"># 3 (Bagi bulat)</span>
+<span style="color: #38bdf8;">print</span>(<span style="color: #fde68a;">7</span> % <span style="color: #fde68a;">2</span>)    <span style="color: #94a3b8;"># 1 (Sisa bagi/modulus)</span>
+<span style="color: #38bdf8;">print</span>(<span style="color: #fde68a;">2</span> ** <span style="color: #fde68a;">3</span>)   <span style="color: #94a3b8;"># 8 (Pangkat: 2^3)</span>
+
+<span style="color: #94a3b8;"># Logika: and, or, not</span>
+nilai = <span style="color: #fde68a;">80</span>
+kehadiran = <span style="color: #fde68a;">95</span>
+lulus = (nilai &gt;= <span style="color: #fde68a;">75</span>) <span style="color: #fb923c;">and</span> (kehadiran &gt;= <span style="color: #fde68a;">80</span>)
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Operator Perbandingan:</b> <code>==</code> (sama dengan), <code>!=</code> (tidak sama), <code>&gt;=</code> (lebih besar atau sama). Ingat: <code>=</code> adalah assignment, <code>==</code> adalah pembanding!
+                    </div>
+                  </div>
+
+                  <!-- Bab 5: Percabangan (If - Elif - Else) -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">🔀 Bab 5: Percabangan (If, Elif, Else)</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">Pengambilan Keputusan</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Mengarahkan alur eksekusi program berdasarkan kondisi benar (*True*) atau salah (*False*). Indentasi (spasi menjorok) wajib 4 spasi.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+skor = <span style="color: #fde68a;">82</span>
+
+<span style="color: #fb923c;">if</span> skor &gt;= <span style="color: #fde68a;">90</span>:
+    grade = <span style="color: #a7f3d0;">"A (Sangat Memuaskan) 🏆"</span>
+<span style="color: #fb923c;">elif</span> skor &gt;= <span style="color: #fde68a;">75</span>:
+    grade = <span style="color: #a7f3d0;">"B (Kompeten) ✅"</span>
+<span style="color: #fb923c;">elif</span> skor &gt;= <span style="color: #fde68a;">60</span>:
+    grade = <span style="color: #a7f3d0;">"C (Cukup) ⚠️"</span>
+<span style="color: #fb923c;">else</span>:
+    grade = <span style="color: #a7f3d0;">"D (Remedial Wajib) 📝"</span>
+
+<span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">f"Hasil Ujian: {grade}"</span>)
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Aturan Emas:</b> Jangan lupakan tanda titik dua (<code>:</code>) di akhir baris <code>if</code>, <code>elif</code>, dan <code>else</code>, serta baris bawahnya wajib di-tab/spasi menjorok!
+                    </div>
+                  </div>
+
+                  <!-- Bab 6: Perulangan (For & While Loop) -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">🔁 Bab 6: Perulangan (For & While Loop)</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">Otomatisasi Loop</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Menjalankan sekumpulan perintah berulang kali tanpa harus mengetik kode yang sama berulang kali.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;"># 1. For loop dengan range(start, stop)</span>
+<span style="color: #94a3b8;"># Catatan: range(1, 6) mencetak 1 sampai 5!</span>
+<span style="color: #fb923c;">for</span> i <span style="color: #fb923c;">in</span> <span style="color: #38bdf8;">range</span>(<span style="color: #fde68a;">1</span>, <span style="color: #fde68a;">6</span>):
+    <span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">f"Putaran ke-{i}"</span>)
+
+<span style="color: #94a3b8;"># 2. While loop dengan counter hitungan</span>
+hitung = <span style="color: #fde68a;">3</span>
+<span style="color: #fb923c;">while</span> hitung &gt; <span style="color: #fde68a;">0</span>:
+    <span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">f"Hitung mundur: {hitung}"</span>)
+    hitung -= <span style="color: #fde68a;">1</span>  <span style="color: #94a3b8;"># kurangi 1 agar tidak infinite!</span>
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Keyword Penting:</b> Gunakan <code>break</code> untuk menghentikan loop seketika, dan <code>continue</code> untuk melompati iterasi saat ini ke putaran berikutnya.
+                    </div>
+                  </div>
+
+                  <!-- Bab 7: Struktur Data List & Dictionary -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">📋 Bab 7: List & Dictionary</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">Koleksi Data</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      List <code>[]</code> menyimpan data urut berbasis indeks (mulai dari 0), sedangkan Dictionary <code>{}</code> menyimpan pasangan kunci-nilai (*key-value*).
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;"># List: Daftar Nama Siswa</span>
+siswa = [<span style="color: #a7f3d0;">"Budi"</span>, <span style="color: #a7f3d0;">"Siti"</span>, <span style="color: #a7f3d0;">"Rian"</span>]
+siswa.<span style="color: #38bdf8;">append</span>(<span style="color: #a7f3d0;">"Dewi"</span>)   <span style="color: #94a3b8;"># Tambah elemen</span>
+<span style="color: #38bdf8;">print</span>(siswa[<span style="color: #fde68a;">0</span>])       <span style="color: #94a3b8;"># Indeks 0: 'Budi'</span>
+
+<span style="color: #94a3b8;"># Dictionary: Data Siswa Lengkap</span>
+profil = {
+    <span style="color: #a7f3d0;">"nama"</span>: <span style="color: #a7f3d0;">"Alexa Angel"</span>,
+    <span style="color: #a7f3d0;">"nisn"</span>: <span style="color: #a7f3d0;">"0108492001"</span>,
+    <span style="color: #a7f3d0;">"nilai_kejuruan"</span>: <span style="color: #fde68a;">88.5</span>
+}
+<span style="color: #38bdf8;">print</span>(profil[<span style="color: #a7f3d0;">"nama"</span>]) <span style="color: #94a3b8;"># Output: Alexa Angel</span>
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Fungsi Penting:</b> <code>len(siswa)</code> menghitung jumlah elemen, <code>del siswa[0]</code> menghapus elemen, dan <code>profil.keys()</code> melihat seluruh kunci.
+                    </div>
+                  </div>
+
+                  <!-- Bab 8: Fungsi (def) & Fungsi Bawaan -->
+                  <div class="smk-dataset-card" style="border-color: #fde68a;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #92400e;">⚙️ Bab 8: Fungsi (def) & Return</div>
+                      <span class="smk-dataset-tag" style="background: #fffbeb; border-color: #fde68a; color: #b45309;">Modularitas Kode</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Fungsi adalah blok kode terorganisir yang dapat dipanggil berkali-kali menggunakan kata kunci <code>def</code> dan mengembalikan hasil dengan <code>return</code>.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;"># Mendefinisikan fungsi perhitungan</span>
+<span style="color: #fb923c;">def</span> <span style="color: #60a5fa;">hitung_kkm</span>(nilai_tugas, nilai_uts):
+    rata_rata = (nilai_tugas + nilai_uts) / <span style="color: #fde68a;">2</span>
+    <span style="color: #fb923c;">if</span> rata_rata &gt;= <span style="color: #fde68a;">75.0</span>:
+        <span style="color: #fb923c;">return</span> <span style="color: #a7f3d0;">f"LULUS ({rata_rata})"</span>
+    <span style="color: #fb923c;">return</span> <span style="color: #a7f3d0;">f"REMEDIAL ({rata_rata})"</span>
+
+<span style="color: #94a3b8;"># Memanggil fungsi</span>
+hasil = <span style="color: #60a5fa;">hitung_kkm</span>(<span style="color: #fde68a;">80</span>, <span style="color: #fde68a;">85</span>)
+<span style="color: #38bdf8;">print</span>(hasil)  <span style="color: #94a3b8;"># LULUS (82.5)</span>
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(245,158,11,0.08); color: #92400e;">
+                      💡 <b>Fungsi Bawaan Top Python:</b> <code>len()</code> (panjang), <code>sum()</code> (total), <code>max()</code> (terbesar), <code>min()</code> (terkecil), <code>round()</code> (pembulatan), dan <code>sorted()</code> (pengurutan).
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Modul Pendalaman: Penanganan Error & Kode Praktik Lengkap -->
+                <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.08)); border: 1.5px solid #fcd34d; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px;">
+                  <div style="font-weight: 800; font-size: 0.94rem; color: #92400e; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                    <span>🛡️ Bab 9: Penanganan Kesalahan (Error Handling: Try - Except)</span>
+                  </div>
+                  <div style="font-size: 0.82rem; color: #334155; margin-bottom: 12px; line-height: 1.55;">
+                    Di dunia industri perangkat lunak, program tidak boleh tiba-tiba mati (*crash*) saat pengguna salah memasukkan data. Gunakan blok <code>try ... except</code> untuk menangkap kesalahan secara aman:
+                  </div>
+                  <pre style="background: #0f172a; color: #f1f5f9; padding: 14px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; line-height: 1.5;"><code># Contoh Pencegahan Crash (ZeroDivisionError & ValueError)
+def bagi_angka(pembilang, penyebut):
+    try:
+        hasil = float(pembilang) / float(penyebut)
+        return f"Hasil: {hasil}"
+    except ZeroDivisionError:
+        return "⚠️ Error: Angka penyebut tidak boleh nol (0)!"
+    except ValueError:
+        return "⚠️ Error: Input harus berupa angka valid!"
+
+print(bagi_angka(10, 2))   # Hasil: 5.0
+print(bagi_angka(10, 0))   # Menghasilkan pesan peringatan aman, program tidak crash!</code></pre>
+                </div>
+
+                <!-- Cheat Sheet Rangkuman Cepat -->
+                <div style="background: #ffffff; border: 1px solid #fde68a; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px;">
+                  <div style="font-weight: 800; font-size: 0.92rem; color: #92400e; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <span>📑 Tabel Ringkasan Cepat Sintaks Python (Cheat Sheet SMK)</span>
+                  </div>
+                  <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+                    <table class="data-table" style="font-size: 0.78rem;">
+                      <thead>
+                        <tr>
+                          <th>Konsep</th>
+                          <th>Contoh Sintaks</th>
+                          <th>Keterangan / Hasil</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><b>Output Teks</b></td>
+                          <td><code>print("Halo Dunia")</code></td>
+                          <td>Mencetak string ke terminal</td>
+                        </tr>
+                        <tr>
+                          <td><b>F-String</b></td>
+                          <td><code>print(f"Skor: {nilai}")</code></td>
+                          <td>Format teks dengan variabel langsung</td>
+                        </tr>
+                        <tr>
+                          <td><b>Variabel</b></td>
+                          <td><code>nama_siswa = 'Alexa'</code></td>
+                          <td>Menyimpan data di wadah memori</td>
+                        </tr>
+                        <tr>
+                          <td><b>Casting Tipe</b></td>
+                          <td><code>angka = int("25")</code></td>
+                          <td>Mengubah teks angka menjadi integer</td>
+                        </tr>
+                        <tr>
+                          <td><b>Sisa Bagi (%)</b></td>
+                          <td><code>sisa = 10 % 3</code></td>
+                          <td>Menghasilkan 1 (sisa pembagian)</td>
+                        </tr>
+                        <tr>
+                          <td><b>Percabangan</b></td>
+                          <td><code>if nilai &gt;= 75: ... else: ...</code></td>
+                          <td>Mengeksekusi kode bersyarat</td>
+                        </tr>
+                        <tr>
+                          <td><b>Loop For Range</b></td>
+                          <td><code>for i in range(1, 4):</code></td>
+                          <td>Berulang untuk i = 1, 2, 3</td>
+                        </tr>
+                        <tr>
+                          <td><b>List Append</b></td>
+                          <td><code>siswa.append("Dewi")</code></td>
+                          <td>Menambahkan item di akhir list</td>
+                        </tr>
+                        <tr>
+                          <td><b>Definisi Fungsi</b></td>
+                          <td><code>def sapa(nama): return f"Hai {nama}"</code></td>
+                          <td>Membuat blok fungsi reusable</td>
+                        </tr>
+                        <tr>
+                          <td><b>Fungsi Max / Min</b></td>
+                          <td><code>max([10, 50, 30])</code></td>
+                          <td>Menghasilkan nilai tertinggi (50)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Footer Banner Kuis Latihan -->
+                <div style="background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(16,185,129,0.08)); border: 1px solid #fcd34d; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+                  <div style="flex: 1; min-width: 280px;">
+                    <div style="font-weight: 800; font-size: 0.9rem; color: #92400e; margin-bottom: 4px;">
+                      🎯 Siap Menguji Pemahaman Koding Python?
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155; line-height: 1.55;">
+                      Kerjakan paket ujian <b>"Kuis Dasar Pemrograman Python & MySQL (Kelas XI & XII)"</b> di atas yang terdiri dari 20 soal pilihan ganda dan 5 soal praktik koding langsung di editor CBT!
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-sm" onclick="const c = document.getElementById('elearning-python-guide-content'); const b = document.getElementById('btn-toggle-python-guide'); c.classList.add('hidden'); if(b) b.innerHTML = '📖 Buka Materi';" style="background: linear-gradient(135deg, #f59e0b, #d97706); white-space: nowrap; height: 38px;">
+                    📕 Tutup Materi
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- 2.7 MODUL PEMBELAJARAN: DASAR-DASAR DATABASE & SQL (SMK KELAS XI & XII) -->
+            <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #7dd3fc; background: linear-gradient(135deg, rgba(224,242,254,0.7), #ffffff);">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-database-guide-content'); const b = document.getElementById('btn-toggle-database-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
+                <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+                  <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(2,132,199,0.25); flex-shrink: 0;">
+                    🗄️
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div class="panel-title" style="color: #0369a1; font-size: 1.08rem; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span>Materi Pembelajaran: Dasar-Dasar Database & SQL (MySQL)</span>
+                      <span class="nav-tag amber" style="font-size: 0.7rem; padding: 2px 8px; margin: 0; font-weight: 700;">SMK Kelas XI & XII</span>
+                    </div>
+                    <div class="panel-subtitle" style="color: #0284c7;">
+                      Panduan Praktis Siswa SMK Kelas XI & XII: Konsep RDBMS, Tabel & Kunci (PK/FK), DDL & DML, CRUD (SELECT, INSERT, UPDATE, DELETE), Filter WHERE, Agregasi GROUP BY, hingga Relasi JOIN & Integrasi Python SQLite
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="btn-toggle-database-guide" type="button" style="border-color: #0284c7; color: #0369a1; font-weight: 700; white-space: nowrap; flex-shrink: 0;">
+                  📖 Buka Materi
+                </button>
+              </div>
+
+              <div id="elearning-database-guide-content" class="hidden" style="margin-top: 20px; border-top: 1px dashed rgba(2, 132, 199, 0.35); padding-top: 18px;">
+                
+                <!-- Hero Pengenalan Database & RDBMS -->
+                <div style="background: #ffffff; border: 1px solid #bae6fd; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(2,132,199,0.06);">
+                  <div style="display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                    <div style="flex: 2; min-width: 280px;">
+                      <div style="color: #0369a1; font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span>💡 Mengapa Sistem Informasi Sekolah & Industri Wajib Memakai Database (RDBMS)?</span>
+                        <span class="nav-tag amber" style="font-size: 0.7rem; padding: 2px 8px; font-weight: 700;">SMK Kelas XI & XII</span>
+                      </div>
+                      <p style="font-size: 0.84rem; color: #334155; line-height: 1.6; margin-bottom: 8px;">
+                        <b>Database (Basis Data)</b> adalah kumpulan data terstruktur yang disimpan secara elektronik dalam sistem komputer. Berbeda dengan lembar kerja spreadsheet (seperti Excel) yang mudah rusak saat diakses banyak orang bersamaan, <b>RDBMS (Relational Database Management System)</b> seperti <i>MySQL</i>, <i>PostgreSQL</i>, dan <i>SQLite</i> dirancang untuk mengelola jutaan baris data secara aman, konsisten, dan sangat cepat.
+                      </p>
+                      <p style="font-size: 0.82rem; color: #475569; line-height: 1.55;">
+                        Di industri teknologi dan rekayasa perangkat lunak, database adalah <b>jantung penyimpan data</b> untuk aplikasi web, e-commerce, perbankan, sistem absensi sekolah, serta platform Artificial Intelligence (AI).
+                      </p>
+                    </div>
+
+                    <div style="flex: 1.2; min-width: 240px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px 14px;">
+                      <div style="font-size: 0.78rem; font-weight: 800; color: #0369a1; margin-bottom: 6px; text-transform: uppercase;">
+                        ⚡ 5 Konsep Kunci Database RDBMS:
+                      </div>
+                      <ul style="font-size: 0.76rem; color: #075985; line-height: 1.6; padding-left: 16px; margin: 0;">
+                        <li><b>Tabel (Table):</b> Tempat penyimpanan data dua dimensi (baris & kolom).</li>
+                        <li><b>Kolom (Field/Column):</b> Atribut data tertentu (misal: <code>nisn</code>, <code>nama</code>).</li>
+                        <li><b>Baris (Record/Row):</b> Satu kesatuan data utuh milik seorang siswa.</li>
+                        <li><b>Primary Key (PK):</b> Kunci unik pembeda antar baris (tak boleh duplikat/NULL).</li>
+                        <li><b>Foreign Key (FK):</b> Kunci tamu penghubung relasi ke tabel lain.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Navigasi 10 Bab Modul Database & SQL -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 22px;">
+
+                  <!-- Bab 1: Anatomi Tabel & Kunci (PK & FK) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">🔑 Bab 1: Anatomi Tabel & Kunci Relasi</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Fondasi RDBMS</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Tabel RDBMS terdiri dari kolom (<i>field</i>) dan baris (<i>record</i>). <b>Primary Key (PK)</b> adalah identitas unik tiap baris, sedangkan <b>Foreign Key (FK)</b> menghubungkan tabel anak ke tabel induk tanpa redundansi.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- Tabel 1: Tabel Induk (Parent)</span>
+<span style="color: #38bdf8;">CREATE TABLE</span> kelas (
+    id <span style="color: #fde68a;">INT</span> <span style="color: #38bdf8;">PRIMARY KEY</span>,
+    nama_kelas <span style="color: #fde68a;">VARCHAR(50)</span>
+);
+
+<span style="color: #94a3b8;">-- Tabel 2: Tabel Anak (Child) berelasi FK</span>
+<span style="color: #38bdf8;">CREATE TABLE</span> siswa (
+    id <span style="color: #fde68a;">INT</span> <span style="color: #38bdf8;">PRIMARY KEY</span>,
+    nama <span style="color: #fde68a;">VARCHAR(100)</span>,
+    kelas_id <span style="color: #fde68a;">INT</span>,
+    <span style="color: #38bdf8;">FOREIGN KEY</span> (kelas_id) <span style="color: #38bdf8;">REFERENCES</span> kelas(id)
+);
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> Primary Key dianalogikan seperti <b>NISN</b> atau <b>Nomor KTP</b> yang dijamin unik untuk setiap orang dan tidak pernah bernilai kosong (<i>NOT NULL</i>).
+                    </div>
+                  </div>
+
+                  <!-- Bab 2: Kategori Perintah SQL (DDL, DML, DCL) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">📚 Bab 2: Kategori Perintah SQL</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Standar SQL</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      SQL terbagi menjadi 3 rumpun utama yang selalu menjadi soal inti ujian kejuruan SMK:
+                      <b>DDL</b> (mengatur wadah/struktur tabel), <b>DML</b> (mengolah isi data CRUD), dan <b>DCL</b> (hak akses & keamanan).
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- 1. DDL: Mengubah struktur skema lemari</span>
+<span style="color: #38bdf8;">CREATE</span>, <span style="color: #38bdf8;">ALTER</span>, <span style="color: #38bdf8;">DROP</span>, <span style="color: #38bdf8;">TRUNCATE</span>
+
+<span style="color: #94a3b8;">-- 2. DML: Mengolah data dokumen (CRUD)</span>
+<span style="color: #38bdf8;">SELECT</span> (<span style="color: #a7f3d0;">Read</span>), <span style="color: #38bdf8;">INSERT</span> (<span style="color: #a7f3d0;">Create</span>),
+<span style="color: #38bdf8;">UPDATE</span> (<span style="color: #a7f3d0;">Update</span>), <span style="color: #38bdf8;">DELETE</span> (<span style="color: #a7f3d0;">Delete</span>)
+
+<span style="color: #94a3b8;">-- 3. DCL & TCL: Hak akses & transaksi</span>
+<span style="color: #38bdf8;">GRANT</span>, <span style="color: #38bdf8;">REVOKE</span>, <span style="color: #38bdf8;">COMMIT</span>, <span style="color: #38bdf8;">ROLLBACK</span>
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Jembatan Keledai:</b> <b>DDL</b> mengatur bentuk rak/wadah database, sedangkan <b>DML</b> memanipulasi barang/data yang ditaruh di dalam rak tersebut.
+                    </div>
+                  </div>
+
+                  <!-- Bab 3: DDL - Membuat Database & Tabel -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">🏗️ Bab 3: DDL - CREATE TABLE</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Struktur Tabel</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Perintah <code>CREATE TABLE</code> mendefinisikan skema tabel: nama kolom, tipe data (<code>INT</code>, <code>VARCHAR</code>, <code>DECIMAL</code>, <code>DATE</code>), serta aturan kendala (<i>constraints</i>).
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #38bdf8;">CREATE TABLE</span> siswa_smk (
+    id <span style="color: #fde68a;">INT AUTO_INCREMENT PRIMARY KEY</span>,
+    nisn <span style="color: #fde68a;">VARCHAR(10) UNIQUE NOT NULL</span>,
+    nama <span style="color: #fde68a;">VARCHAR(100) NOT NULL</span>,
+    jurusan <span style="color: #fde68a;">VARCHAR(30) DEFAULT</span> <span style="color: #a7f3d0;">'RPL'</span>,
+    nilai <span style="color: #fde68a;">DECIMAL(5,2) DEFAULT</span> <span style="color: #fde68a;">0.0</span>,
+    tgl_daftar <span style="color: #fde68a;">DATE</span>
+);
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> <code>AUTO_INCREMENT</code> otomatis membuat nomor urut 1, 2, 3... sehingga guru/admin tidak perlu menghitung ID secara manual.
+                    </div>
+                  </div>
+
+                  <!-- Bab 4: DML - Menambah Data (INSERT INTO) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">📥 Bab 4: DML - INSERT INTO</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Input Data (Create)</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Perintah <code>INSERT INTO</code> digunakan untuk memasukkan rekaman data baru ke dalam tabel, baik satu baris tunggal maupun banyak baris sekaligus (<i>multi-row insert</i>).
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- 1. Tambah 1 data siswa</span>
+<span style="color: #38bdf8;">INSERT INTO</span> siswa (nisn, nama, kelas, nilai)
+<span style="color: #38bdf8;">VALUES</span> (<span style="color: #a7f3d0;">'1001'</span>, <span style="color: #a7f3d0;">'Ahmad Fauzi'</span>, <span style="color: #a7f3d0;">'XI RPL 1'</span>, <span style="color: #fde68a;">88.5</span>);
+
+<span style="color: #94a3b8;">-- 2. Multi-insert banyak baris sekaligus</span>
+<span style="color: #38bdf8;">INSERT INTO</span> siswa (nisn, nama, kelas, nilai) <span style="color: #38bdf8;">VALUES</span>
+(<span style="color: #a7f3d0;">'1002'</span>, <span style="color: #a7f3d0;">'Budi Santoso'</span>, <span style="color: #a7f3d0;">'XI RPL 1'</span>, <span style="color: #fde68a;">92.0</span>),
+(<span style="color: #a7f3d0;">'1003'</span>, <span style="color: #a7f3d0;">'Citra Dewi'</span>, <span style="color: #a7f3d0;">'XII RPL 2'</span>, <span style="color: #fde68a;">79.5</span>);
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> Tipe data teks (<code>VARCHAR</code>) dan tanggal (<code>DATE</code>) wajib diapit tanda petik satu (<code>'teks'</code>), sedangkan angka tidak perlu tanda petik.
+                    </div>
+                  </div>
+
+                  <!-- Bab 5: DML - Menampilkan Data (SELECT & ALIAS) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">🔍 Bab 5: DML - SELECT & Kolom</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Query Data (Read)</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Perintah <code>SELECT</code> membaca data dari tabel. Anda bisa menampilkan seluruh kolom dengan tanda <code>*</code>, memilih kolom tertentu, atau memberi nama alias dengan <code>AS</code>.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- 1. Mengambil semua kolom tabel</span>
+<span style="color: #38bdf8;">SELECT</span> * <span style="color: #38bdf8;">FROM</span> siswa;
+
+<span style="color: #94a3b8;">-- 2. Memilih kolom spesifik + Alias (AS)</span>
+<span style="color: #38bdf8;">SELECT</span> 
+    nama <span style="color: #38bdf8;">AS</span> nama_lengkap, 
+    nilai <span style="color: #38bdf8;">AS</span> skor_cbt 
+<span style="color: #38bdf8;">FROM</span> siswa;
+
+<span style="color: #94a3b8;">-- 3. Mengambil daftar kelas unik (tanpa duplikat)</span>
+<span style="color: #38bdf8;">SELECT DISTINCT</span> kelas <span style="color: #38bdf8;">FROM</span> siswa;
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> Memilih nama kolom spesifik (bukan <code>SELECT *</code>) mempercepat kinerja aplikasi secara drastis saat tabel memiliki ribuan baris.
+                    </div>
+                  </div>
+
+                  <!-- Bab 6: Filter Kriteria Data (WHERE & LIKE) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">🎯 Bab 6: Filter Kriteria (WHERE)</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Logika Filter</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Klausa <code>WHERE</code> menyaring baris berdasarkan syarat: operator matematika (<code>=</code>, <code>!=</code>, <code>&gt;=</code>), logika (<code>AND</code>, <code>OR</code>), serta pencarian kata dengan <code>LIKE</code>.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- 1. Filter nilai di atas KKM</span>
+<span style="color: #38bdf8;">SELECT</span> * <span style="color: #38bdf8;">FROM</span> siswa <span style="color: #38bdf8;">WHERE</span> nilai >= <span style="color: #fde68a;">75.0</span>;
+
+<span style="color: #94a3b8;">-- 2. Logika ganda AND (keduanya harus benar)</span>
+<span style="color: #38bdf8;">SELECT</span> * <span style="color: #38bdf8;">FROM</span> siswa 
+<span style="color: #38bdf8;">WHERE</span> kelas = <span style="color: #a7f3d0;">'XI RPL 1'</span> <span style="color: #38bdf8;">AND</span> nilai >= <span style="color: #fde68a;">85.0</span>;
+
+<span style="color: #94a3b8;">-- 3. Pencarian teks diawali huruf 'A'</span>
+<span style="color: #38bdf8;">SELECT</span> * <span style="color: #38bdf8;">FROM</span> siswa <span style="color: #38bdf8;">WHERE</span> nama <span style="color: #38bdf8;">LIKE</span> <span style="color: #a7f3d0;">'A%'</span>;
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> Tanda persen (<code>%</code>) pada <code>LIKE</code> mewakili sembarang karakter berapa pun panjangnya (contoh: <code>%putra%</code>).
+                    </div>
+                  </div>
+
+                  <!-- Bab 7: Mengurutkan (ORDER BY) & Membatasi (LIMIT) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">📊 Bab 7: ORDER BY & LIMIT</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Ranking & Urutan</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <code>ORDER BY</code> mengurutkan baris secara menaik (<code>ASC</code>) atau menurun (<code>DESC</code>). <code>LIMIT</code> membatasi jumlah data yang tampil (sangat ideal untuk fitur Ranking Siswa).
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- 1. Top 5 Siswa dengan Nilai Tertinggi</span>
+<span style="color: #38bdf8;">SELECT</span> nama, kelas, nilai 
+<span style="color: #38bdf8;">FROM</span> siswa 
+<span style="color: #38bdf8;">ORDER BY</span> nilai <span style="color: #38bdf8;">DESC</span> 
+<span style="color: #38bdf8;">LIMIT</span> <span style="color: #fde68a;">5</span>;
+
+<span style="color: #94a3b8;">-- 2. Urutkan nama siswa dari A sampai Z</span>
+<span style="color: #38bdf8;">SELECT</span> nama, kelas <span style="color: #38bdf8;">FROM</span> siswa <span style="color: #38bdf8;">ORDER BY</span> nama <span style="color: #38bdf8;">ASC</span>;
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> Kombinasi <code>ORDER BY nilai DESC LIMIT 1</code> adalah sintaks resmi untuk mencari <b>Juara 1</b> di sekolah!
+                    </div>
+                  </div>
+
+                  <!-- Bab 8: DML - Mengubah (UPDATE) & Menghapus (DELETE) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">✏️ Bab 8: UPDATE & DELETE</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Modifikasi Data</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <code>UPDATE</code> memperbarui data baris yang sudah ada, sedangkan <code>DELETE</code> menghapus baris data. <b>Wajib menggunakan klausa WHERE!</b>
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- 1. Memperbarui nilai siswa tertentu</span>
+<span style="color: #38bdf8;">UPDATE</span> siswa 
+<span style="color: #38bdf8;">SET</span> nilai = <span style="color: #fde68a;">95.0</span> 
+<span style="color: #38bdf8;">WHERE</span> nisn = <span style="color: #a7f3d0;">'1001'</span>;
+
+<span style="color: #94a3b8;">-- 2. Menghapus 1 data siswa berdasarkan ID</span>
+<span style="color: #38bdf8;">DELETE FROM</span> siswa 
+<span style="color: #38bdf8;">WHERE</span> id = <span style="color: #fde68a;">3</span>;
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(239,68,68,0.08); color: #b91c1c;">
+                      ⚠️ <b>PERINGATAN GURU:</b> Jangan pernah menjalankan <code>UPDATE</code> atau <code>DELETE</code> tanpa <code>WHERE</code>, karena akan menghapus atau mengubah <b>SELURUH</b> baris di tabel!
+                    </div>
+                  </div>
+
+                  <!-- Bab 9: Fungsi Agregasi & GROUP BY -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">📈 Bab 9: Fungsi Agregasi & GROUP BY</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Statistik Data</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Fungsi agregat merangkum angka statistik: <code>COUNT()</code> (hitung jumlah data), <code>AVG()</code> (rata-rata), <code>SUM()</code> (total), <code>MAX()</code> (tertinggi), <code>MIN()</code> (terendah).
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- Rangkuman nilai rata-rata & jumlah siswa per kelas</span>
+<span style="color: #38bdf8;">SELECT</span> 
+    kelas,
+    <span style="color: #38bdf8;">COUNT</span>(*) <span style="color: #38bdf8;">AS</span> total_siswa,
+    <span style="color: #38bdf8;">ROUND</span>(<span style="color: #38bdf8;">AVG</span>(nilai), <span style="color: #fde68a;">1</span>) <span style="color: #38bdf8;">AS</span> rata_rata,
+    <span style="color: #38bdf8;">MAX</span>(nilai) <span style="color: #38bdf8;">AS</span> nilai_tertinggi
+<span style="color: #38bdf8;">FROM</span> siswa
+<span style="color: #38bdf8;">GROUP BY</span> kelas;
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> Gunakan <code>HAVING</code> (bukan <code>WHERE</code>) jika ingin memfilter kondisi setelah pengelompokan <code>GROUP BY</code> selesai dihitung.
+                    </div>
+                  </div>
+
+                  <!-- Bab 10: Relasi Antar Tabel (INNER JOIN) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">🔗 Bab 10: Relasi Tabel (INNER JOIN)</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Relasi Antar Tabel</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <code>INNER JOIN</code> menggabungkan data dari dua tabel berbeda yang dihubungkan oleh Foreign Key. Mengeliminasi data duplikat dan menjaga normalisasi basis data.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.76rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #94a3b8;">-- Menggabungkan tabel siswa & tabel kelas</span>
+<span style="color: #38bdf8;">SELECT</span> 
+    siswa.nama,
+    siswa.nilai,
+    kelas.nama_kelas,
+    kelas.wali_kelas
+<span style="color: #38bdf8;">FROM</span> siswa
+<span style="color: #38bdf8;">INNER JOIN</span> kelas <span style="color: #38bdf8;">ON</span> siswa.kelas_id = kelas.id;
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Siswa:</b> <code>INNER JOIN</code> hanya menampilkan baris data jika kedua tabel saling cocok (memiliki ID kelas yang sama).
+                    </div>
+                  </div>
+
+                  <!-- Bab 11: Integrasi Python & Database (sqlite3) -->
+                  <div class="smk-dataset-card" style="border-color: #bae6fd; grid-column: 1 / -1;">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title" style="color: #0369a1;">🐍 Bab 11: Menghubungkan Kode Python ke Database (sqlite3)</div>
+                      <span class="smk-dataset-tag" style="background: #f0f9ff; border-color: #bae6fd; color: #0284c7;">Praktik Koding Industri</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      Di dunia kerja, kode Python menghubungkan aplikasi backend langsung ke database untuk menyimpan dan mengambil data. Modul bawaan Python <code>sqlite3</code> memungkinkan kita mengeksekusi query SQL dengan mudah dan aman.
+                    </div>
+                    <div style="background: #0f172a; border-radius: 6px; padding: 12px 14px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.78rem; color: #f8fafc; overflow-x: auto;">
+<span style="color: #f472b6;">import</span> sqlite3
+
+<span style="color: #94a3b8;"># 1. Buka koneksi ke file database sekolah</span>
+conn = sqlite3.connect(<span style="color: #a7f3d0;">"studio_ml.db"</span>)
+cursor = conn.cursor()
+
+<span style="color: #94a3b8;"># 2. Eksekusi query dengan parameter binding (?) yang aman dari SQL Injection</span>
+cursor.execute(<span style="color: #a7f3d0;">"SELECT nama, kelas, nilai FROM students WHERE class_name = ? ORDER BY nilai DESC"</span>, (<span style="color: #a7f3d0;">"XI RPL"</span>,))
+
+<span style="color: #94a3b8;"># 3. Ambil seluruh baris hasil query</span>
+siswa_lulus = cursor.fetchall()
+<span style="color: #f472b6;">for</span> no, row <span style="color: #f472b6;">in</span> <span style="color: #38bdf8;">enumerate</span>(siswa_lulus, start=<span style="color: #fde68a;">1</span>):
+    <span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">f"#{no} {row[0]} ({row[1]}) -> Skor: {row[2]}"</span>)
+
+<span style="color: #94a3b8;"># 4. Tutup koneksi memori</span>
+conn.close()
+                    </div>
+                    <div class="smk-dataset-concept" style="background: rgba(2,132,199,0.08); color: #0369a1;">
+                      💡 <b>Tips Standar Industri:</b> Jangan pernah memasukkan variabel Python langsung ke string SQL dengan <code>f"SELECT ... WHERE id = {id}"</code> karena dapat dieksploitasi dengan <b>SQL Injection</b>! Selalu gunakan tanda tanya (<code>?</code>) sebagai parameter binding.
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Tabel Cheat Sheet Sintaks SQL Cepat -->
+                <div style="background: #ffffff; border: 1px solid #bae6fd; border-radius: 10px; padding: 18px; margin-bottom: 22px;">
+                  <div style="font-weight: 800; font-size: 0.95rem; color: #0369a1; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <span>⚡ Tabel Ringkasan Cepat: Hafalan Sintaks SQL SMK Kelas XI & XII</span>
+                    <span class="nav-tag amber" style="font-size: 0.68rem; padding: 2px 8px;">Ujian CBT & Sertifikasi</span>
+                  </div>
+                  <div style="overflow-x: auto;">
+                    <table class="data-table" style="font-size: 0.78rem; width: 100%;">
+                      <thead>
+                        <tr style="background: #f0f9ff; color: #0369a1;">
+                          <th>Perintah SQL</th>
+                          <th>Kategori</th>
+                          <th>Contoh Penulisan Sintaks</th>
+                          <th>Tujuan / Kegunaan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><code>CREATE TABLE</code></td>
+                          <td><span class="nav-tag blue" style="font-size: 0.65rem;">DDL</span></td>
+                          <td><code>CREATE TABLE siswa (id INT PRIMARY KEY, nama VARCHAR(50));</code></td>
+                          <td>Membuat tabel baru beserta definisi kolom dan tipe data</td>
+                        </tr>
+                        <tr>
+                          <td><code>INSERT INTO</code></td>
+                          <td><span class="nav-tag green" style="font-size: 0.65rem;">DML</span></td>
+                          <td><code>INSERT INTO siswa (id, nama) VALUES (1, 'Rian');</code></td>
+                          <td>Menambahkan satu atau beberapa baris data baru ke tabel</td>
+                        </tr>
+                        <tr>
+                          <td><code>SELECT</code></td>
+                          <td><span class="nav-tag green" style="font-size: 0.65rem;">DML</span></td>
+                          <td><code>SELECT nama, nilai FROM siswa;</code></td>
+                          <td>Membaca dan mengambil kolom data dari dalam tabel</td>
+                        </tr>
+                        <tr>
+                          <td><code>WHERE</code></td>
+                          <td><span class="nav-tag purple" style="font-size: 0.65rem;">Clause</span></td>
+                          <td><code>SELECT * FROM siswa WHERE nilai >= 75;</code></td>
+                          <td>Menyaring baris data berdasarkan kriteria logika tertentu</td>
+                        </tr>
+                        <tr>
+                          <td><code>ORDER BY</code></td>
+                          <td><span class="nav-tag purple" style="font-size: 0.65rem;">Clause</span></td>
+                          <td><code>SELECT * FROM siswa ORDER BY nilai DESC;</code></td>
+                          <td>Mengurutkan data secara menaik (ASC) atau menurun (DESC)</td>
+                        </tr>
+                        <tr>
+                          <td><code>LIMIT</code></td>
+                          <td><span class="nav-tag purple" style="font-size: 0.65rem;">Clause</span></td>
+                          <td><code>SELECT * FROM siswa LIMIT 5;</code></td>
+                          <td>Membatasi jumlah baris maksimal yang ditampilkan</td>
+                        </tr>
+                        <tr>
+                          <td><code>UPDATE</code></td>
+                          <td><span class="nav-tag green" style="font-size: 0.65rem;">DML</span></td>
+                          <td><code>UPDATE siswa SET nilai = 90 WHERE id = 1;</code></td>
+                          <td>Mengubah nilai kolom pada baris yang sudah ada</td>
+                        </tr>
+                        <tr>
+                          <td><code>DELETE</code></td>
+                          <td><span class="nav-tag rose" style="font-size: 0.65rem;">DML</span></td>
+                          <td><code>DELETE FROM siswa WHERE id = 1;</code></td>
+                          <td>Menghapus baris data dari tabel sesuai syarat WHERE</td>
+                        </tr>
+                        <tr>
+                          <td><code>GROUP BY</code></td>
+                          <td><span class="nav-tag purple" style="font-size: 0.65rem;">Clause</span></td>
+                          <td><code>SELECT kelas, AVG(nilai) FROM siswa GROUP BY kelas;</code></td>
+                          <td>Mengelompokkan data untuk perhitungan fungsi agregat</td>
+                        </tr>
+                        <tr>
+                          <td><code>INNER JOIN</code></td>
+                          <td><span class="nav-tag amber" style="font-size: 0.65rem;">Relasi</span></td>
+                          <td><code>SELECT * FROM siswa INNER JOIN kelas ON siswa.k_id = kelas.id;</code></td>
+                          <td>Menggabungkan 2 tabel berdasarkan kecocokan kunci relasi</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Footer Banner Kuis Latihan Database -->
+                <div style="background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(16,185,129,0.08)); border: 1px solid #7dd3fc; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+                  <div style="flex: 1; min-width: 280px;">
+                    <div style="font-weight: 800; font-size: 0.9rem; color: #0369a1; margin-bottom: 4px;">
+                      🎯 Siap Menguji Pemahaman Database & SQL?
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155; line-height: 1.55;">
+                      Kerjakan paket ujian <b>"Kuis Dasar Pemrograman Python & MySQL (Kelas XI & XII)"</b> di menu atas yang mencakup teori RDBMS, query CRUD, sintaks SQL, hingga integrasi Python Database!
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-sm" onclick="const c = document.getElementById('elearning-database-guide-content'); const b = document.getElementById('btn-toggle-database-guide'); c.classList.add('hidden'); if(b) b.innerHTML = '📖 Buka Materi';" style="background: linear-gradient(135deg, #0284c7, #0369a1); white-space: nowrap; height: 38px;">
+                    📕 Tutup Materi
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
             <!-- 3. MODUL PEMBELAJARAN: BEDAH 6 DATASET CONTOH STANDAR DUNIA -->
             <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #a7f3d0; background: linear-gradient(135deg, rgba(236,253,245,0.7), #ffffff);">
               <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-dataset-guide-content'); const b = document.getElementById('btn-toggle-elearning-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.25);">
+                <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+                  <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.25); flex-shrink: 0;">
                     📚
                   </div>
-                  <div>
-                    <div class="panel-title" style="color: #065f46; font-size: 1.12rem; font-weight: 800;">
-                      Materi Pembelajaran: Mengapa Harus Data Titanic, Iris, & Gaji?
+                  <div style="flex: 1; min-width: 0;">
+                    <div class="panel-title" style="color: #065f46; font-size: 1.08rem; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span>Materi Pembelajaran: Mengapa Harus Data Titanic, Iris, & Gaji?</span>
+                      <span class="nav-tag green" style="font-size: 0.7rem; padding: 2px 8px; margin: 0; font-weight: 700;">Dataset Standar Dunia</span>
                     </div>
                     <div class="panel-subtitle" style="color: #047857;">
                       Pelajari alasan ilmiah, cerita sejarah, dan jenis masalah AI yang diajarkan dari 6 dataset standar emas dunia
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-secondary btn-sm" id="btn-toggle-elearning-guide" type="button" style="border-color: #10b981; color: #065f46; font-weight: 700;">
+                <button class="btn btn-secondary btn-sm" id="btn-toggle-elearning-guide" type="button" style="border-color: #10b981; color: #065f46; font-weight: 700; white-space: nowrap; flex-shrink: 0;">
                   📖 Buka Materi
                 </button>
               </div>
@@ -881,60 +2005,60 @@
                   <!-- Card 3: Prediksi Gaji -->
                   <div class="smk-dataset-card">
                     <div class="smk-dataset-header">
-                      <div class="smk-dataset-title">💼 Prediksi Gaji & Pengalaman</div>
-                      <span class="smk-dataset-tag">Regresi Linier (Nominal Uang)</span>
+                      <div class="smk-dataset-title">💼 Prediksi Gaji Kerja</div>
+                      <span class="smk-dataset-tag">Regresi Linear (Angka)</span>
                     </div>
                     <div class="smk-dataset-desc">
-                      <b>Cita-cita Siswa SMK:</b> Menaksir perkiraan besaran gaji bulanan berdasarkan lama tahun pengalaman kerja di industri.
+                      <b>Dunia Kerja Nyata:</b> Memperkirakan gaji berdasarkan pengalaman kerja (tahun) dan kualifikasi kejuruan.
                     </div>
                     <div class="smk-dataset-concept">
                       💡 <b>Kenapa Wajib untuk Siswa:</b><br>
-                      • <b>Belajar Regresi:</b> Yang ditebak bukan label kata, melainkan <b>angka nominal uang nyata</b>.<br>
-                      • <b>Garis Tren Lurus:</b> Logika sebab-akibat yang sangat intuitif: makin lama pengalaman, makin tinggi gaji.<br>
-                      • <b>Target (y):</b> Besaran Gaji (Salary).
+                      • <b>Target Angka Nyata:</b> Bukan menebak grup A/B, tapi menebak nominal uang (Rupiah/Dollar).<br>
+                      • <b>Pola Garis Lurus:</b> Makin lama pengalaman kerja, umumnya gaji makin meningkat sebanding.<br>
+                      • <b>Target (y):</b> Gaji (*Salary*).
                     </div>
                     <button class="btn-try-dataset" onclick="loadDatasetInStudio('salary')">
                       ⚡ Uji Coba Gaji di Studio ML →
                     </button>
                   </div>
 
-                  <!-- Card 4: Customer Churn -->
+                  <!-- Card 4: Harga Rumah -->
                   <div class="smk-dataset-card">
                     <div class="smk-dataset-header">
-                      <div class="smk-dataset-title">👥 Customer Churn</div>
-                      <span class="smk-dataset-tag">Kasus Industri & Bisnis</span>
+                      <div class="smk-dataset-title">🏡 Estimasi Harga Rumah</div>
+                      <span class="smk-dataset-tag">Regresi Multi-Fitur</span>
                     </div>
                     <div class="smk-dataset-desc">
-                      <b>Kasus Bisnis Nyata:</b> Perusahaan telekomunikasi/aplikasi (Telkomsel, Netflix) mendeteksi pelanggan yang berniat berhenti langganan.
+                      <b>Kompleksitas Industri:</b> Menghitung nilai pasar properti dari luas tanah, jumlah kamar, lokasi, & fasilitas.
                     </div>
                     <div class="smk-dataset-concept">
                       💡 <b>Kenapa Wajib untuk Siswa:</b><br>
-                      • <b>Nilai Komersial AI:</b> Menyelamatkan miliaran rupiah dengan memberi promo sebelum pelanggan kabur.<br>
-                      • <b>Fitur Kompleks:</b> Durasi kontrak, tagihan bulanan, jenis layanan internet, dan keluhan pelanggan.<br>
-                      • <b>Target (y):</b> Berhenti Langganan (Ya/Tidak).
-                    </div>
-                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('customer_churn')">
-                      ⚡ Uji Coba Churn di Studio ML →
-                    </button>
-                  </div>
-
-                  <!-- Card 5: Harga Rumah -->
-                  <div class="smk-dataset-card">
-                    <div class="smk-dataset-header">
-                      <div class="smk-dataset-title">🏡 Prediksi Harga Rumah</div>
-                      <span class="smk-dataset-tag">Regresi Multi-Variabel</span>
-                    </div>
-                    <div class="smk-dataset-desc">
-                      <b>Dunia Properti:</b> Menaksir harga jual wajar suatu rumah berdasarkan spesifikasi bangunannya.
-                    </div>
-                    <div class="smk-dataset-concept">
-                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
-                      • <b>Banyak Faktor Sekaligus:</b> Harga rumah tidak cuma ditentukan oleh 1 variabel, tapi luas tanah, jumlah kamar, dan lokasi.<br>
-                      • <b>Belajar Bobot Fitur:</b> Mempelajari mana yang paling bikin rumah mahal.<br>
-                      • <b>Target (y):</b> Nominal Harga Rumah (Price).
+                      • <b>Banyak Faktor:</b> Melatih algoritma memahami hubungan puluhan faktor sekaligus (*multi-variate*).<br>
+                      • <b>Analisis Bisnis:</b> Sangat mirip tantangan nyata di perbankan & kredit perumahan.<br>
+                      • <b>Target (y):</b> Harga Jual Rumah.
                     </div>
                     <button class="btn-try-dataset" onclick="loadDatasetInStudio('housing')">
                       ⚡ Uji Coba Rumah di Studio ML →
+                    </button>
+                  </div>
+
+                  <!-- Card 5: Customer Churn -->
+                  <div class="smk-dataset-card">
+                    <div class="smk-dataset-header">
+                      <div class="smk-dataset-title">📉 Customer Churn</div>
+                      <span class="smk-dataset-tag">AI Bisnis & Telekomunikasi</span>
+                    </div>
+                    <div class="smk-dataset-desc">
+                      <b>Penyelamat Perusahaan:</b> Mendeteksi pelanggan yang berpotensi pindah ke kompetitor sebelum mereka pergi.
+                    </div>
+                    <div class="smk-dataset-concept">
+                      💡 <b>Kenapa Wajib untuk Siswa:</b><br>
+                      • <b>Industri Telko / Startup:</b> Digunakan Telkomsel, Indosat, Gojek, Tokopedia.<br>
+                      • <b>Data Riwayat:</b> Durasi langganan, tagihan bulanan, keluhan komplain customer.<br>
+                      • <b>Target (y):</b> Berhenti Berlangganan (Ya / Tidak).
+                    </div>
+                    <button class="btn-try-dataset" onclick="loadDatasetInStudio('churn')">
+                      ⚡ Uji Coba Churn di Studio ML →
                     </button>
                   </div>
 
@@ -1398,10 +2522,40 @@
               <div class="glass-panel">
                 <div class="panel-header">
                   <div>
-                    <div class="panel-title">📋 Daftar Siswa Terdaftar (Master Data Siswa)</div>
+                    <div class="panel-title" style="display: flex; align-items: center; gap: 10px;">
+                      <span>📋 Daftar Siswa Terdaftar (Master Data Siswa)</span>
+                      <span class="nav-tag green" id="admin-students-count-badge">Memuat...</span>
+                    </div>
                     <div class="panel-subtitle">Siswa-siswa berikut yang berhak mengakses dan mengerjakan ujian CBT</div>
                   </div>
                 </div>
+
+                <!-- Filter Bar: Kelas & Cari Nama Siswa -->
+                <div style="display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 16px; padding: 12px 16px; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.18); border-radius: 8px;">
+                  <div style="flex: 1; min-width: 200px;">
+                    <label class="form-label-sm" style="font-weight: 700; color: #065f46; margin-bottom: 4px; display: block;">
+                      🏫 Filter Kelas:
+                    </label>
+                    <select class="app-select" id="filter-student-class" style="width: 100%; background: #ffffff;">
+                      <option value="">-- Semua Kelas --</option>
+                      <option value="X - SMK Cahaya Pertiwi">X - SMK Cahaya Pertiwi</option>
+                      <option value="XI - SMK Cahaya Pertiwi">XI - SMK Cahaya Pertiwi</option>
+                      <option value="XII - SMK Cahaya Pertiwi">XII - SMK Cahaya Pertiwi</option>
+                    </select>
+                  </div>
+                  <div style="flex: 2; min-width: 240px;">
+                    <label class="form-label-sm" style="font-weight: 700; color: #065f46; margin-bottom: 4px; display: block;">
+                      🔍 Cari Nama Siswa / NISN:
+                    </label>
+                    <input type="text" class="app-input" id="filter-student-name" placeholder="Ketik nama siswa atau NISN (misal: Alexa, Amar, atau 010...)" style="width: 100%; background: #ffffff;" autocomplete="off" />
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-secondary btn-sm" id="btn-reset-student-filter" type="button" style="height: 38px; display: flex; align-items: center; gap: 6px;">
+                      🔄 Reset Filter
+                    </button>
+                  </div>
+                </div>
+
                 <div class="table-container">
                   <table class="data-table">
                     <thead>
@@ -1741,6 +2895,135 @@
 
         <button class="btn btn-primary" id="btn-save-new-question" style="margin-top: 8px; justify-content: center;">
           Simpan Butir Soal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Paket Ujian & Kelola Soal (Admin) -->
+  <div class="modal-backdrop" id="modal-edit-exam">
+    <div class="modal-dialog" style="max-width: 820px; max-height: 90vh; overflow-y: auto;">
+      <div class="panel-header">
+        <div class="panel-title">✏️ Edit Paket Kuis & Kelola Soal CBT</div>
+        <button class="btn btn-sm btn-secondary modal-close" onclick="ELearning.closeEditExamModal()">✕</button>
+      </div>
+      <input type="hidden" id="edit-exam-id" value="" />
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        
+        <!-- Bagian 1: Pengaturan Paket Kuis -->
+        <div style="padding: 14px; background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px;">
+          <div style="font-weight: 700; color: var(--accent-primary); font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <span>⚙️ Informasi & Pengaturan Paket Kuis</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <label class="form-label-sm">Judul Kuis / Ujian:</label>
+              <input type="text" class="app-input" id="edit-exam-title" placeholder="Contoh: Kuis Dasar Pemrograman Python" style="width: 100%;" />
+            </div>
+            <div class="grid-2">
+              <div>
+                <label class="form-label-sm">Mata Pelajaran:</label>
+                <input type="text" class="app-input" id="edit-exam-subject" placeholder="Pemrograman Dasar" style="width: 100%;" />
+              </div>
+              <div>
+                <label class="form-label-sm">Durasi Waktu (Menit):</label>
+                <input type="number" class="app-input" id="edit-exam-duration" value="30" min="5" max="180" style="width: 100%;" />
+              </div>
+            </div>
+            <div>
+              <label class="form-label-sm">Deskripsi / Catatan Petunjuk:</label>
+              <textarea class="app-input" id="edit-exam-desc" rows="2" placeholder="Petunjuk pengerjaan bagi siswa..." style="width: 100%; resize: vertical;"></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+              <button class="btn btn-primary btn-sm" id="btn-save-edit-exam" type="button" style="display: flex; align-items: center; gap: 6px;">
+                💾 Simpan Informasi Kuis
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bagian 2: Daftar Butir Soal di Paket Kuis Ini -->
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: 700; font-size: 0.92rem; color: var(--text-main);">📋 Butir Soal di Paket Ini</span>
+              <span class="nav-tag purple" id="edit-exam-q-count-badge">Memuat soal...</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-edit-exam-add-q" type="button" style="display: flex; align-items: center; gap: 6px;">
+              ➕ Tambah Butir Soal Baru
+            </button>
+          </div>
+
+          <div id="edit-exam-questions-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; padding-right: 4px;">
+            <div style="text-align: center; color: var(--text-dim); padding: 16px;">Memuat butir soal...</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Butir Soal (Admin) -->
+  <div class="modal-backdrop" id="modal-edit-question">
+    <div class="modal-dialog" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+      <div class="panel-header">
+        <div class="panel-title">✏️ Edit Butir Soal</div>
+        <button class="btn btn-sm btn-secondary modal-close" onclick="ELearning.closeEditQuestionModal()">✕</button>
+      </div>
+      <input type="hidden" id="edit-q-id" value="" />
+      <input type="hidden" id="edit-q-exam-id" value="" />
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="grid-2">
+          <div>
+            <label class="form-label-sm">Tipe Soal:</label>
+            <select class="app-select" id="edit-q-type" style="width: 100%;">
+              <option value="mcq">Pilihan Ganda (MCQ)</option>
+              <option value="code_python">Praktik Coding Python</option>
+              <option value="code_sql">Praktik Coding SQL</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label-sm">Bobot Nilai (Poin):</label>
+            <input type="number" class="app-input" id="edit-q-points" value="20" min="1" max="100" style="width: 100%;" />
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label-sm">Pertanyaan / Instruksi Soal:</label>
+          <textarea class="app-input" id="edit-q-text" rows="3" placeholder="Tuliskan pertanyaan atau instruksi tugas di sini..." style="width: 100%; resize: vertical;"></textarea>
+        </div>
+
+        <!-- Bagian Khusus MCQ -->
+        <div id="edit-q-mcq-fields">
+          <label class="form-label-sm">Pilihan Jawaban (A, B, C, D):</label>
+          <input type="text" class="app-input" id="edit-q-opt-a" placeholder="Pilihan A" style="width: 100%; margin-bottom: 6px;" />
+          <input type="text" class="app-input" id="edit-q-opt-b" placeholder="Pilihan B" style="width: 100%; margin-bottom: 6px;" />
+          <input type="text" class="app-input" id="edit-q-opt-c" placeholder="Pilihan C" style="width: 100%; margin-bottom: 6px;" />
+          <input type="text" class="app-input" id="edit-q-opt-d" placeholder="Pilihan D" style="width: 100%; margin-bottom: 6px;" />
+          
+          <label class="form-label-sm" style="margin-top: 6px;">Kunci Jawaban Benar:</label>
+          <select class="app-select" id="edit-q-correct-ans" style="width: 100%;">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+
+        <!-- Bagian Khusus Praktik Coding -->
+        <div id="edit-q-code-fields" class="hidden">
+          <div>
+            <label class="form-label-sm">Template Kode Awal (Starter Code):</label>
+            <textarea class="app-input" id="edit-q-starter-code" rows="3" placeholder="# Kode template yang akan tampil di editor siswa..." style="width: 100%; font-family: var(--font-mono);"></textarea>
+          </div>
+          <div style="margin-top: 8px;">
+            <label class="form-label-sm">Output Program yang Diharapkan (Expected Output):</label>
+            <textarea class="app-input" id="edit-q-expected-output" rows="3" placeholder="Output eksak yang harus dihasilkan program siswa..." style="width: 100%; font-family: var(--font-mono);"></textarea>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-save-edit-question" style="margin-top: 8px; justify-content: center;">
+          💾 Simpan Perubahan Butir Soal
         </button>
       </div>
     </div>

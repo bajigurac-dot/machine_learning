@@ -177,13 +177,19 @@ body {
 }
 
 .nav-tag {
-  margin-left: auto;
   font-size: 0.65rem;
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: 600;
   background: #f1f5f9;
   color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.nav-item .nav-tag {
+  margin-left: auto;
 }
 
 .nav-tag.green {
@@ -208,6 +214,17 @@ body {
   background: #fffbeb;
   color: #b45309;
   border: 1px solid #fde68a;
+}
+
+.nav-tag.blue {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.panel-title .nav-tag {
+  margin: 0 !important;
+  vertical-align: middle;
 }
 
 .sidebar-footer {
@@ -382,7 +399,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 14px;
   margin-bottom: 18px;
+}
+
+.panel-header > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-header .btn {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .panel-title {

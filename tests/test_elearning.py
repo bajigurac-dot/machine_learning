@@ -207,14 +207,14 @@ class TestELearningEngine(unittest.TestCase):
         """Uji autentikasi login siswa terhadap Master Database Siswa resmi."""
         # 1. Login sukses dengan NISN dan nama resmi
         res_ok = self.client.post("/api/elearning/student/login", json={
-            "name": "Thoriq Azis",
-            "nisn": "006"
+            "name": "Alexa Angel",
+            "nisn": "0108492001"
         })
         self.assertEqual(res_ok.status_code, 200)
         data = res_ok.get_json()
         self.assertTrue(data["success"])
-        self.assertEqual(data["student"]["name"], "Thoriq Azis")
-        self.assertEqual(data["student"]["nisn"], "006")
+        self.assertEqual(data["student"]["name"], "Alexa Angel")
+        self.assertEqual(data["student"]["nisn"], "0108492001")
 
         # 2. Login ditolak jika NISN fiktif / tidak terdaftar
         res_unregistered = self.client.post("/api/elearning/student/login", json={
@@ -228,14 +228,14 @@ class TestELearningEngine(unittest.TestCase):
         # 3. Login ditolak jika nama bertolak belakang dengan pemilik NISN resmi
         res_name_mismatch = self.client.post("/api/elearning/student/login", json={
             "name": "Nama Berbeda Total",
-            "nisn": "006"
+            "nisn": "0108492001"
         })
         self.assertEqual(res_name_mismatch.status_code, 401)
         self.assertFalse(res_name_mismatch.get_json()["success"])
 
         # 4. Login gagal jika NISN kosong
         res_no_nisn = self.client.post("/api/elearning/student/login", json={
-            "name": "Thoriq Azis",
+            "name": "Alexa Angel",
             "nisn": ""
         })
         self.assertEqual(res_no_nisn.status_code, 400)
@@ -244,11 +244,11 @@ class TestELearningEngine(unittest.TestCase):
     def test_09_check_nisn_and_attempts_api(self):
         """Uji lookup instan NISN untuk autofill identitas siswa dan riwayat pengerjaan."""
         # 1. Check NISN terdaftar
-        res_chk = self.client.get("/api/elearning/student/check-nisn/006")
+        res_chk = self.client.get("/api/elearning/student/check-nisn/0108492001")
         self.assertEqual(res_chk.status_code, 200)
         chk_data = res_chk.get_json()
         self.assertTrue(chk_data["success"])
-        self.assertEqual(chk_data["student"]["name"], "Thoriq Azis")
+        self.assertEqual(chk_data["student"]["name"], "Alexa Angel")
 
         # 2. Check NISN tidak terdaftar
         res_chk_fake = self.client.get("/api/elearning/student/check-nisn/999999")
@@ -256,7 +256,7 @@ class TestELearningEngine(unittest.TestCase):
         self.assertFalse(res_chk_fake.get_json()["success"])
 
         # 3. Riwayat attempts siswa
-        res_att = self.client.get("/api/elearning/student/attempts?nisn=006")
+        res_att = self.client.get("/api/elearning/student/attempts?nisn=0108492001")
         self.assertEqual(res_att.status_code, 200)
         self.assertTrue(res_att.get_json()["success"])
 
@@ -297,6 +297,10 @@ class TestELearningEngine(unittest.TestCase):
         self.assertIn("sudah pernah menyelesaikan ujian", res2.get_json()["error"])
 
         delete_exam(unique_exam_id)
+        from ml_engine.elearning import get_db
+        with get_db() as conn:
+            conn.execute("DELETE FROM submissions WHERE exam_id = ?", (unique_exam_id,))
+            conn.commit()
 
     def test_11_admin_student_crud(self):
         """Uji panel Master Data Siswa untuk Guru/Admin (List, Tambah, Hapus)."""
@@ -332,6 +336,20 @@ class TestELearningEngine(unittest.TestCase):
         res_del = self.client.delete(f"/api/elearning/admin/students/{new_sid}")
         self.assertEqual(res_del.status_code, 200)
         self.assertTrue(res_del.get_json()["success"])
+
+        # 5. Uji filter kelas pada master siswa
+        res_x = self.client.get("/api/elearning/admin/students?class_name=X%20-%20SMK%20Cahaya%20Pertiwi")
+        self.assertEqual(res_x.status_code, 200)
+        x_students = res_x.get_json()["students"]
+        self.assertGreater(len(x_students), 0)
+        self.assertTrue(all("X -" in s["class_name"] for s in x_students))
+
+        # 6. Uji pencarian nama siswa
+        res_search = self.client.get("/api/elearning/admin/students?name=Alexa")
+        self.assertEqual(res_search.status_code, 200)
+        found_students = res_search.get_json()["students"]
+        self.assertEqual(len(found_students), 1)
+        self.assertEqual(found_students[0]["name"], "Alexa Angel")
 
     def test_12_admin_submissions_filter(self):
         """Uji filter rekapitulasi nilai siswa berdasarkan kelas dan tanggal."""
@@ -420,6 +438,10 @@ class TestELearningEngine(unittest.TestCase):
         self.assertTrue(res_retry.get_json()["success"])
 
         delete_exam(unique_exam_id)
+        from ml_engine.elearning import get_db
+        with get_db() as conn:
+            conn.execute("DELETE FROM submissions WHERE exam_id = ?", (unique_exam_id,))
+            conn.commit()
 
     def test_14_pdf_report_export(self):
         """Uji ekspor dan cetak laporan PDF resmi rekapitulasi nilai siswa."""
@@ -524,12 +546,12 @@ class TestELearningEngine(unittest.TestCase):
 
     def test_16_student_grade_card(self):
         """Uji fitur login siswa dan melihat kartu nilai / KHS mandiri siswa."""
-        # 1. Ambil kartu nilai siswa bawaan (Thoriq Azis - NISN 006)
-        res_card = self.client.get("/api/elearning/student/card/data?nisn=006")
+        # 1. Ambil kartu nilai siswa bawaan (Alexa Angel - NISN 0108492001)
+        res_card = self.client.get("/api/elearning/student/card/data?nisn=0108492001")
         self.assertEqual(res_card.status_code, 200)
         card_json = res_card.get_json()
         self.assertTrue(card_json["success"])
-        self.assertEqual(card_json["data"]["student"]["name"], "Thoriq Azis")
+        self.assertEqual(card_json["data"]["student"]["name"], "Alexa Angel")
         self.assertEqual(card_json["data"]["summary"]["kkm"], 75.0)
 
         # 2. Penolakan jika NISN tidak diisi
@@ -543,18 +565,18 @@ class TestELearningEngine(unittest.TestCase):
         self.assertFalse(res_unregistered.get_json()["success"])
 
         # 4. Uji berkas PDF Kartu Nilai Siswa (ReportLab)
-        res_pdf = self.client.get("/api/elearning/student/card/pdf?nisn=006")
+        res_pdf = self.client.get("/api/elearning/student/card/pdf?nisn=0108492001")
         self.assertEqual(res_pdf.status_code, 200)
         self.assertEqual(res_pdf.content_type, "application/pdf")
         self.assertTrue(res_pdf.data.startswith(b"%PDF-"))
         self.assertGreater(len(res_pdf.data), 1000)
 
         # 5. Uji pratinjau cetak HTML Kartu Nilai Siswa
-        res_print = self.client.get("/api/elearning/student/card/print?nisn=006")
+        res_print = self.client.get("/api/elearning/student/card/print?nisn=0108492001")
         self.assertEqual(res_print.status_code, 200)
         self.assertIn(b"SMK CAHAYA PERTIWI", res_print.data)
         self.assertIn(b"KARTU HASIL UJIAN", res_print.data)
-        self.assertIn(b"Thoriq Azis", res_print.data)
+        self.assertIn(b"Alexa Angel", res_print.data)
 
         # 6. Uji siswa baru yang mengerjakan ujian dan verifikasi perhitungan kartu nilainya
         import time
@@ -595,6 +617,11 @@ class TestELearningEngine(unittest.TestCase):
         self.assertEqual(len(check_data["attempts"]), 1)
 
         delete_exam(test_exam_id)
+        from ml_engine.elearning import get_db
+        with get_db() as conn:
+            conn.execute("DELETE FROM students WHERE nisn = ?", (test_nisn,))
+            conn.execute("DELETE FROM submissions WHERE student_nisn = ?", (test_nisn,))
+            conn.commit()
 
     def test_20_sql_mock_schema_api(self):
         """Uji endpoint skema database mock SQLite lab SMK dan data sampelnya."""
@@ -657,6 +684,87 @@ class TestELearningEngine(unittest.TestCase):
         self.assertFalse(res_indent["success"])
         self.assertIn("IndentationError", res_indent["error"])
         self.assertIn("Kesalahan indentasi", res_indent["error"])
+
+    def test_23_admin_update_exam_and_question(self):
+        """Uji fungsionalitas edit paket kuis dan butir soal oleh admin guru."""
+        from ml_engine.elearning import create_exam, add_question, get_exam_details, get_question, delete_exam
+
+        # 1. Buat paket ujian dan soal awal untuk uji edit
+        test_exam_id = create_exam("Kuis Testing Lama", "Deskripsi Sebelum Edit", "Pemrograman", 20)
+        q_id = add_question(
+            test_exam_id,
+            "mcq",
+            "Berapa hasil dari 2 + 2?",
+            ["A. 3", "B. 4", "C. 5", "D. 6"],
+            "B",
+            points=10
+        )
+
+        try:
+            # 2. Uji endpoint admin GET /api/elearning/admin/exams/<id> (harus menyertakan kunci jawaban)
+            res_admin_exam = self.client.get(f"/api/elearning/admin/exams/{test_exam_id}")
+            self.assertEqual(res_admin_exam.status_code, 200)
+            admin_exam_data = res_admin_exam.get_json()["exam"]
+            self.assertEqual(admin_exam_data["title"], "Kuis Testing Lama")
+            self.assertEqual(len(admin_exam_data["questions"]), 1)
+            self.assertEqual(admin_exam_data["questions"][0]["correct_answer"], "B")
+
+            # 3. Uji endpoint PUT /api/elearning/admin/exams/<id> (edit informasi kuis)
+            res_put_exam = self.client.put(f"/api/elearning/admin/exams/{test_exam_id}", json={
+                "title": "Kuis Testing Terupdate",
+                "subject": "Python & Database",
+                "duration_minutes": 45,
+                "description": "Deskripsi Baru Hasil Edit Guru",
+                "is_active": 1
+            })
+            self.assertEqual(res_put_exam.status_code, 200)
+            self.assertTrue(res_put_exam.get_json()["success"])
+
+            # Verifikasi perubahan paket kuis tersimpan di DB
+            updated_exam = get_exam_details(test_exam_id, include_correct_answers=True)
+            self.assertEqual(updated_exam["title"], "Kuis Testing Terupdate")
+            self.assertEqual(updated_exam["subject"], "Python & Database")
+            self.assertEqual(updated_exam["duration_minutes"], 45)
+            self.assertEqual(updated_exam["description"], "Deskripsi Baru Hasil Edit Guru")
+
+            # 4. Uji endpoint GET /api/elearning/questions/<id>
+            res_get_q = self.client.get(f"/api/elearning/questions/{q_id}")
+            self.assertEqual(res_get_q.status_code, 200)
+            q_data = res_get_q.get_json()["question"]
+            self.assertEqual(q_data["question_text"], "Berapa hasil dari 2 + 2?")
+
+            # 5. Uji endpoint PUT /api/elearning/questions/<id> (edit butir soal)
+            res_put_q = self.client.put(f"/api/elearning/questions/{q_id}", json={
+                "question_type": "mcq",
+                "question_text": "Berapa hasil dari 5 * 5 dalam Python?",
+                "options": ["A. 10", "B. 20", "C. 25", "D. 30"],
+                "correct_answer": "C",
+                "starter_code": None,
+                "expected_output": None,
+                "points": 25
+            })
+            self.assertEqual(res_put_q.status_code, 200)
+            self.assertTrue(res_put_q.get_json()["success"])
+
+            # Verifikasi perubahan butir soal tersimpan di DB
+            updated_q = get_question(q_id)
+            self.assertEqual(updated_q["question_text"], "Berapa hasil dari 5 * 5 dalam Python?")
+            self.assertEqual(updated_q["correct_answer"], "C")
+            self.assertEqual(updated_q["points"], 25)
+            self.assertEqual(len(updated_q["options"]), 4)
+            self.assertEqual(updated_q["options"][2], "C. 25")
+
+        finally:
+            # Bersihkan data uji
+            delete_exam(test_exam_id)
+
+    @classmethod
+    def tearDownClass(cls):
+        from ml_engine.elearning import get_db
+        with get_db() as conn:
+            conn.execute("DELETE FROM submissions WHERE student_name = 'Budi Penguji' OR student_name LIKE 'Siswa %'")
+            conn.execute("DELETE FROM students WHERE nisn LIKE 'KHS_%' OR nisn LIKE 'TEST_%' OR nisn LIKE 'NISN_%'")
+            conn.commit()
 
 if __name__ == "__main__":
     unittest.main()

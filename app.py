@@ -23,8 +23,8 @@ from ml_engine.project_storage import (
 )
 from ml_engine.ai_copilot import handle_ai_chat, generate_local_feature_spec, generate_local_prd, test_gemini_connection
 from ml_engine.elearning import (
-    init_elearning_db, list_active_exams, get_exam_details, create_exam, delete_exam,
-    add_question, delete_question, execute_python_code, execute_sql_query,
+    init_elearning_db, list_active_exams, get_exam_details, create_exam, update_exam, delete_exam,
+    add_question, get_question, update_question, delete_question, execute_python_code, execute_sql_query,
     get_sql_mock_schema,
     submit_exam_answers, list_submissions, update_submission_score, delete_submission,
     generate_scores_pdf,
@@ -637,6 +637,31 @@ def api_elearning_get_exam(exam_id):
         return jsonify({"success": False, "error": "Ujian tidak ditemukan."}), 404
     return jsonify({"success": True, "exam": exam})
 
+@app.route("/api/elearning/admin/exams/<int:exam_id>", methods=["GET"])
+def api_elearning_admin_get_exam(exam_id):
+    exam = get_exam_details(exam_id, include_correct_answers=True)
+    if not exam:
+        return jsonify({"success": False, "error": "Ujian tidak ditemukan."}), 404
+    return jsonify({"success": True, "exam": exam})
+
+@app.route("/api/elearning/admin/exams/<int:exam_id>", methods=["PUT"])
+def api_elearning_admin_update_exam(exam_id):
+    data = request.json or {}
+    title = data.get("title", "").strip()
+    description = data.get("description", "").strip()
+    subject = data.get("subject", "").strip()
+    duration = data.get("duration_minutes", 30)
+    is_active = data.get("is_active", 1)
+
+    if not title or not subject:
+        return jsonify({"success": False, "error": "Judul ujian dan mata pelajaran wajib diisi."}), 400
+
+    try:
+        update_exam(exam_id, title, description, subject, duration, is_active)
+        return jsonify({"success": True, "message": "Paket ujian berhasil diperbarui!"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
 @app.route("/api/elearning/exams/create", methods=["POST"])
 def api_elearning_create_exam():
     data = request.json or {}
@@ -655,6 +680,13 @@ def api_elearning_create_exam():
 def api_elearning_delete_exam(exam_id):
     delete_exam(exam_id)
     return jsonify({"success": True, "message": "Ujian berhasil dihapus."})
+
+@app.route("/api/elearning/questions/<int:question_id>", methods=["GET"])
+def api_elearning_get_question(question_id):
+    q = get_question(question_id)
+    if not q:
+        return jsonify({"success": False, "error": "Butir soal tidak ditemukan."}), 404
+    return jsonify({"success": True, "question": q})
 
 @app.route("/api/elearning/questions/add", methods=["POST"])
 def api_elearning_add_question():
@@ -682,6 +714,35 @@ def api_elearning_add_question():
         points=points
     )
     return jsonify({"success": True, "question_id": qid, "message": "Soal berhasil ditambahkan!"})
+
+@app.route("/api/elearning/questions/<int:question_id>", methods=["PUT"])
+def api_elearning_update_question(question_id):
+    data = request.json or {}
+    question_type = data.get("question_type", "mcq")
+    question_text = data.get("question_text", "").strip()
+    options = data.get("options", [])
+    correct_answer = data.get("correct_answer", "").strip()
+    starter_code = data.get("starter_code", "")
+    expected_output = data.get("expected_output", "")
+    points = data.get("points", 20)
+
+    if not question_text:
+        return jsonify({"success": False, "error": "Teks pertanyaan wajib diisi."}), 400
+
+    try:
+        update_question(
+            question_id=question_id,
+            question_type=question_type,
+            question_text=question_text,
+            options=options,
+            correct_answer=correct_answer,
+            starter_code=starter_code,
+            expected_output=expected_output,
+            points=points
+        )
+        return jsonify({"success": True, "message": "Butir soal berhasil diperbarui!"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
 
 @app.route("/api/elearning/questions/<int:question_id>", methods=["DELETE"])
 def api_elearning_delete_question(question_id):
@@ -816,7 +877,8 @@ def api_elearning_print_scores():
 @app.route("/api/elearning/admin/students", methods=["GET"])
 def api_elearning_get_students():
     class_name = request.args.get("class_name")
-    students = list_all_students(class_name)
+    search_name = request.args.get("name") or request.args.get("q")
+    students = list_all_students(class_name, search_name)
     return jsonify({"success": True, "students": students})
 
 @app.route("/api/elearning/admin/students", methods=["POST"])

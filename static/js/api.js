@@ -266,8 +266,36 @@ const API = {
     return await res.json();
   },
 
+  async getAdminExam(id) {
+    const res = await fetch(`/api/elearning/admin/exams/${id}`);
+    return await res.json();
+  },
+
+  async updateExam(id, data) {
+    const res = await fetch(`/api/elearning/admin/exams/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
+
   async deleteExam(id) {
     const res = await fetch(`/api/elearning/exams/${id}`, { method: 'DELETE' });
+    return await res.json();
+  },
+
+  async getQuestion(id) {
+    const res = await fetch(`/api/elearning/questions/${id}`);
+    return await res.json();
+  },
+
+  async updateQuestion(id, data) {
+    const res = await fetch(`/api/elearning/questions/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
     return await res.json();
   },
 
@@ -299,8 +327,12 @@ const API = {
     return await res.json();
   },
 
-  async getAdminStudents(className = '') {
-    const url = className ? `/api/elearning/admin/students?class_name=${encodeURIComponent(className)}` : '/api/elearning/admin/students';
+  async getAdminStudents(className = '', name = '') {
+    const params = new URLSearchParams();
+    if (className) params.append('class_name', className);
+    if (name) params.append('name', name);
+    const qs = params.toString();
+    const url = qs ? `/api/elearning/admin/students?${qs}` : '/api/elearning/admin/students';
     const res = await fetch(url);
     return await res.json();
   },

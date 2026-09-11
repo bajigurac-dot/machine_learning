@@ -505,6 +505,18 @@ def create_exam(title, description, subject, duration_minutes=30):
         conn.commit()
         return cur.lastrowid
 
+def update_exam(exam_id, title, description, subject, duration_minutes=30, is_active=1):
+    """Guru memperbarui paket ujian yang sudah ada."""
+    init_elearning_db()
+    with get_db() as conn:
+        conn.execute("""
+            UPDATE exams 
+            SET title = ?, description = ?, subject = ?, duration_minutes = ?, is_active = ?
+            WHERE id = ?
+        """, (title, description, subject, int(duration_minutes), int(is_active), exam_id))
+        conn.commit()
+        return True
+
 def delete_exam(exam_id):
     """Menghapus ujian."""
     init_elearning_db()
@@ -514,6 +526,23 @@ def delete_exam(exam_id):
         conn.execute("DELETE FROM exams WHERE id = ?", (exam_id,))
         conn.commit()
         return True
+
+def get_question(question_id):
+    """Mengambil detail butir soal berdasarkan ID-nya."""
+    init_elearning_db()
+    with get_db() as conn:
+        row = conn.execute("SELECT * FROM questions WHERE id = ?", (question_id,)).fetchone()
+        if not row:
+            return None
+        d = dict(row)
+        if d.get("options_json"):
+            try:
+                d["options"] = json.loads(d["options_json"])
+            except Exception:
+                d["options"] = []
+        else:
+            d["options"] = []
+        return d
 
 def add_question(exam_id, question_type, question_text, options=None, correct_answer=None, starter_code=None, expected_output=None, points=20):
     """Menambahkan butir soal ke ujian."""
@@ -527,6 +556,19 @@ def add_question(exam_id, question_type, question_text, options=None, correct_an
         """, (exam_id, question_type, question_text, options_json, correct_answer, starter_code, expected_output, int(points)))
         conn.commit()
         return cur.lastrowid
+
+def update_question(question_id, question_type, question_text, options=None, correct_answer=None, starter_code=None, expected_output=None, points=20):
+    """Guru memperbarui butir soal yang sudah ada."""
+    init_elearning_db()
+    options_json = json.dumps(options) if options else None
+    with get_db() as conn:
+        conn.execute("""
+            UPDATE questions 
+            SET question_type = ?, question_text = ?, options_json = ?, correct_answer = ?, starter_code = ?, expected_output = ?, points = ?
+            WHERE id = ?
+        """, (question_type, question_text, options_json, correct_answer, starter_code, expected_output, int(points), question_id))
+        conn.commit()
+        return True
 
 def delete_question(question_id):
     """Menghapus butir soal."""
@@ -1125,80 +1167,172 @@ def seed_default_exams():
         if count > 0:
             return
 
-        # Paket 1: Quiz Looping & Dasar Python (15 Menit)
+        # Paket 1: Kuis Dasar Python & MySQL (Kelas XI & XII) — 35 Menit
         cur = conn.execute("""
             INSERT INTO exams (title, description, subject, duration_minutes)
             VALUES (?, ?, ?, ?)
         """, (
-            "Kuis Mingguan: Dasar Python & Looping — SMK Cahaya Pertiwi",
-            "Kuis evaluasi pemahaman dasar pemrograman Python, tipe data, kondisi, dan perulangan for/while bagi siswa SMK Cahaya Pertiwi (Instruktur: Thoriq Azis).",
-            "Pemrograman Python",
-            15
+            "Kuis Dasar Pemrograman Python & MySQL (Kelas XI & XII) — SMK Cahaya Pertiwi",
+            "Kuis evaluasi pemahaman dasar pemrograman Python dan query database MySQL/SQL untuk siswa kelas XI & XII SMK Cahaya Pertiwi (Instruktur: Thoriq Azis, S.Kom). Terdiri dari 20 soal pilihan ganda konsep dasar dan 5 soal esai praktik koding interaktif.",
+            "Pemrograman Python & MySQL",
+            35
         ))
         exam1_id = cur.lastrowid
 
-        # Soal-soal Paket 1
-        q1_opts = json.dumps([
-            "A. Mengubah angka desimal menjadi bilangan bulat",
-            "B. Menghasilkan sisa hasil bagi antara dua bilangan",
-            "C. Menghitung persentase dari sebuah nilai",
-            "D. Menghitung pangkat dari sebuah bilangan"
-        ])
-        conn.execute("""
-            INSERT INTO questions (exam_id, question_type, question_text, options_json, correct_answer, points)
-            VALUES (?, 'mcq', ?, ?, 'B', 20)
-        """, (exam1_id, "Pada bahasa Python, operator `%` (modulus) digunakan untuk tujuan apa?", q1_opts))
+        # 20 Soal Pilihan Ganda (Bobot masing-masing 3 Poin, Total = 60 Poin)
+        mcqs_exam1 = [
+            (
+                "Fungsi bawaan Python manakah yang digunakan untuk mencetak atau menampilkan teks/data ke layar?",
+                ["A. input()", "B. print()", "C. echo()", "D. write()"],
+                "B"
+            ),
+            (
+                "Manakah aturan penulisan nama variabel yang benar dan diizinkan pada bahasa Python?",
+                ["A. 123nama", "B. nama-siswa", "C. nama_siswa", "D. class"],
+                "C"
+            ),
+            (
+                "Jika terdapat perintah umur = 17, tipe data dari variabel umur tersebut adalah?",
+                ["A. int (bilangan bulat)", "B. float (desimal/pecahan)", "C. str (teks string)", "D. bool (boolean)"],
+                "A"
+            ),
+            (
+                "Manakah nilai di bawah ini yang merupakan contoh tipe data float (bilangan desimal) di Python?",
+                ["A. 90", "B. 85.5", "C. '90.5'", "D. True"],
+                "B"
+            ),
+            (
+                "Data bertipe string (teks) pada bahasa pemrograman Python selalu diapit oleh tanda apa?",
+                ["A. Tanda kurung siku [ ]", "B. Tanda petik '...' atau \"...\"", "C. Tanda kurung kurawal { }", "D. Tanda kurung biasa ( )"],
+                "B"
+            ),
+            (
+                "Karakter apa yang digunakan untuk menulis baris komentar di Python agar tidak dijalankan oleh komputer?",
+                ["A. //", "B. <!-- -->", "C. #", "D. /* */"],
+                "C"
+            ),
+            (
+                "Simbol operator matematika yang digunakan untuk operasi perkalian di Python adalah?",
+                ["A. x", "B. *", "C. ^", "D. %"],
+                "B"
+            ),
+            (
+                "Pada operasi matematika Python hasil = 10 % 3, berapakah nilai yang dihasilkan?",
+                ["A. 3", "B. 1", "C. 0", "D. 3.33"],
+                "B"
+            ),
+            (
+                "Operator perbandingan apa yang digunakan untuk menguji apakah dua nilai bernilai sama persis?",
+                ["A. =", "B. ==", "C. !==", "D. <>"],
+                "B"
+            ),
+            (
+                "Kata kunci apa yang digunakan pada Python untuk memeriksa kondisi kedua jika kondisi if pertama bernilai False?",
+                ["A. else if", "B. elif", "C. otherwise", "D. case"],
+                "B"
+            ),
+            (
+                "Tipe data boolean di Python hanya memiliki dua kemungkinan nilai kebenaran, yaitu?",
+                ["A. Yes dan No", "B. True dan False", "C. 1 dan -1", "D. On dan Off"],
+                "B"
+            ),
+            (
+                "Manakah cara yang benar untuk membuat struktur data kumpulan data (List) di Python?",
+                ["A. data = (80, 90, 85)", "B. data = [80, 90, 85]", "C. data = {80, 90, 85}", "D. data = <80, 90, 85>"],
+                "B"
+            ),
+            (
+                "Di Python, nomor indeks untuk mengambil elemen pertama dari sebuah List selalu dimulai dari angka berapa?",
+                ["A. 1", "B. 0", "C. -1", "D. 10"],
+                "B"
+            ),
+            (
+                "Fungsi bawaan Python manakah yang digunakan untuk menghitung jumlah isi elemen pada suatu List?",
+                ["A. size()", "B. count()", "C. len()", "D. length()"],
+                "C"
+            ),
+            (
+                "Perintah perulangan for i in range(3): akan mengulang blok kode sebanyak berapa kali?",
+                ["A. 2 kali", "B. 3 kali (nilai 0, 1, 2)", "C. 4 kali", "D. Tidak terbatas"],
+                "B"
+            ),
+            (
+                "Kata kunci (keyword) apa yang digunakan untuk membuat atau mendefinisikan sebuah fungsi kustom di Python?",
+                ["A. function", "B. def", "C. create", "D. proc"],
+                "B"
+            ),
+            (
+                "Pada sistem basis data relasional (MySQL/SQL), tempat penyimpanan data yang terdiri atas kolom (field) dan baris (record) dinamakan?",
+                ["A. Dokumen", "B. Tabel (Table)", "C. Worksheet", "D. Formulir"],
+                "B"
+            ),
+            (
+                "Perintah SQL dasar manakah yang digunakan untuk menampilkan atau membaca data dari dalam tabel database?",
+                ["A. GET", "B. SHOW", "C. SELECT", "D. FETCH"],
+                "C"
+            ),
+            (
+                "Pada query SQL SELECT * FROM siswa;, tanda bintang (*) berfungsi untuk?",
+                ["A. Menampilkan baris pertama saja", "B. Menampilkan semua kolom yang ada pada tabel siswa", "C. Mengalikan seluruh angka di tabel", "D. Menghapus tabel siswa"],
+                "B"
+            ),
+            (
+                "Klausul WHERE pada perintah SQL SELECT * FROM siswa WHERE nilai_kejuruan >= 75; digunakan untuk?",
+                ["A. Mengubah nilai siswa menjadi 75", "B. Menyaring data siswa yang memenuhi syarat nilai 75 ke atas", "C. Menghapus siswa dengan nilai 75", "D. Mengurutkan tabel sebanyak 75 baris"],
+                "B"
+            )
+        ]
 
-        q2_opts = json.dumps([
-            "A. for loop digunakan saat jumlah perulangan sudah diketahui pasti",
-            "B. while loop tidak memerlukan kondisi berhenti",
-            "C. for loop hanya bisa digunakan untuk tipe data dictionary",
-            "D. while loop selalu berjalan tepat 10 kali"
-        ])
-        conn.execute("""
-            INSERT INTO questions (exam_id, question_type, question_text, options_json, correct_answer, points)
-            VALUES (?, 'mcq', ?, ?, 'A', 20)
-        """, (exam1_id, "Manakah pernyataan yang paling benar mengenai perbedaan `for` loop dan `while` loop di Python?", q2_opts))
+        for text, opts, ans in mcqs_exam1:
+            conn.execute("""
+                INSERT INTO questions (exam_id, question_type, question_text, options_json, correct_answer, points)
+                VALUES (?, 'mcq', ?, ?, ?, 3)
+            """, (exam1_id, text, json.dumps(opts), ans))
 
-        # Soal Coding Python 1: Looping bilangan ganjil
-        starter_code_1 = """# Tuliskan perulangan for untuk mencetak bilangan ganjil dari 1 sampai 9
-# Setiap angka dicetak pada baris baru menggunakan print()
+        # 5 Soal Esai / Praktik Coding Interaktif (Bobot masing-masing 8 Poin, Total = 40 Poin)
+        coding_exam1 = [
+            (
+                "code_python",
+                "Tuliskan perintah Python menggunakan fungsi print() untuk mencetak kalimat sambutan berikut ke layar monitor:\nHalo SMK Cahaya Pertiwi",
+                "# Tuliskan fungsi print() untuk menampilkan kalimat persis seperti contoh:\n# Halo SMK Cahaya Pertiwi\n\nprint(\"Halo SMK Cahaya Pertiwi\")\n",
+                "Halo SMK Cahaya Pertiwi",
+                8
+            ),
+            (
+                "code_python",
+                "Lengkapi kode Python berikut untuk menjumlahkan nilai tugas = 80 dan uts = 90, simpan ke variabel total, lalu cetak dengan format: Total Nilai: 170!",
+                "tugas = 80\nuts = 90\n\n# Hitung total nilai siswa (tugas ditambah uts)\ntotal = tugas + uts\n\n# Cetak hasil penjumlahan\nprint(f\"Total Nilai: {total}\")\n",
+                "Total Nilai: 170",
+                8
+            ),
+            (
+                "code_python",
+                "Diberikan nilai siswa nilai = 85. Lengkapi logika percabangan if-else untuk mengecek: jika nilai >= 75 cetak 'Status: LULUS', selain itu cetak 'Status: REMEDIAL'!",
+                "nilai = 85\n\n# Periksa kelulusan standar KKM 75 SMK Cahaya Pertiwi\nif nilai >= 75:\n    print(\"Status: LULUS\")\nelse:\n    print(\"Status: REMEDIAL\")\n",
+                "Status: LULUS",
+                8
+            ),
+            (
+                "code_sql",
+                "Tuliskan query SQL dasar untuk menampilkan seluruh kolom dan seluruh baris data yang ada pada tabel siswa!",
+                "-- Tuliskan perintah query SQL untuk mengambil seluruh kolom data dari tabel siswa\nSELECT * FROM siswa;\n",
+                "SELECT * FROM siswa;",
+                8
+            ),
+            (
+                "code_sql",
+                "Tuliskan query SQL untuk menampilkan kolom nama dan nilai_kejuruan dari tabel siswa khusus untuk siswa yang memiliki status 'LULUS'!",
+                "-- Tuliskan query SQL untuk menampilkan kolom nama dan nilai_kejuruan\n-- dari tabel siswa dengan kondisi status = 'LULUS'\n\nSELECT nama, nilai_kejuruan FROM siswa WHERE status = 'LULUS';\n",
+                "SELECT nama, nilai_kejuruan FROM siswa WHERE status = 'LULUS';",
+                8
+            )
+        ]
 
-for i in range(1, 10):
-    # Lengkapi kode di sini
-    pass
-"""
-        expected_output_1 = "1\n3\n5\n7\n9"
-        conn.execute("""
-            INSERT INTO questions (exam_id, question_type, question_text, starter_code, expected_output, points)
-            VALUES (?, 'code_python', ?, ?, ?, 30)
-        """, (
-            exam1_id,
-            "Buatlah perulangan `for` di Python yang mencetak bilangan **ganjil** saja dari angka 1 hingga 9 (1, 3, 5, 7, 9). Masing-masing angka dicetak per baris!",
-            starter_code_1,
-            expected_output_1
-        ))
-
-        # Soal Coding Python 2: Fungsi diskon kartu pelajar
-        starter_code_2 = """def hitung_bayar(total_belanja, diskon_persen):
-    # Hitung total yang harus dibayar setelah potongan diskon kartu pelajar SMK Cahaya Pertiwi
-    # Kembalikan nilai total_akhir (float/int)
-    pass
-
-# Program utama
-bayar = hitung_bayar(100000, 15)
-print(f"Total Bayar: Rp {bayar}")
-"""
-        expected_output_2 = "Total Bayar: Rp 85000.0"
-        conn.execute("""
-            INSERT INTO questions (exam_id, question_type, question_text, starter_code, expected_output, points)
-            VALUES (?, 'code_python', ?, ?, ?, 30)
-        """, (
-            exam1_id,
-            "Lengkapi fungsi `hitung_bayar(total_belanja, diskon_persen)` agar menghitung potongan harga kartu pelajar SMK Cahaya Pertiwi dan mengembalikan nilai akhir belanja!",
-            starter_code_2,
-            expected_output_2
-        ))
+        for q_type, text, starter, expected, pts in coding_exam1:
+            conn.execute("""
+                INSERT INTO questions (exam_id, question_type, question_text, starter_code, expected_output, points)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (exam1_id, q_type, text, starter, expected, pts))
 
         # Paket 2: Ulangan Semester: Python, SQL Database & Machine Learning (45 Menit)
         cur2 = conn.execute("""
@@ -1289,17 +1423,47 @@ Deni Pratama | 81.5"""
 def seed_default_students():
     """Mengisi master data siswa resmi SMK Cahaya Pertiwi jika tabel students masih kosong."""
     default_students = [
-        ("001", "Ahmad Rizki", "XII - SMK Cahaya Pertiwi"),
-        ("002", "Budi Santoso", "XII - SMK Cahaya Pertiwi"),
-        ("003", "Citra Dewi", "XII - SMK Cahaya Pertiwi"),
-        ("004", "Deni Pratama", "XII - SMK Cahaya Pertiwi"),
-        ("005", "Eka Rahmawati", "XII - SMK Cahaya Pertiwi"),
-        ("006", "Thoriq Azis", "XII - SMK Cahaya Pertiwi"),
-        ("0058192841", "Thoriq Azis", "XII - SMK Cahaya Pertiwi"),
-        ("007", "Fajar Ramadhan", "XI - SMK Cahaya Pertiwi"),
-        ("008", "Gita Permata", "XI - SMK Cahaya Pertiwi"),
-        ("009", "Hendra Setiawan", "X - SMK Cahaya Pertiwi"),
-        ("010", "Indah Putri", "X - SMK Cahaya Pertiwi"),
+        ("0108492001", "Alexa Angel", "X - SMK Cahaya Pertiwi"),
+        ("0108492002", "Padrizal", "X - SMK Cahaya Pertiwi"),
+        ("0108492003", "Haugrahazqikatama", "X - SMK Cahaya Pertiwi"),
+        ("0108492004", "Zahra Ainun Hanipa", "X - SMK Cahaya Pertiwi"),
+        ("0108492005", "Ahmad Raihan", "X - SMK Cahaya Pertiwi"),
+        ("0108492006", "Damar Arsito Ramadhan", "X - SMK Cahaya Pertiwi"),
+        ("0108492007", "Liydia Fadila Amalia", "X - SMK Cahaya Pertiwi"),
+        ("0108492008", "Eka Ramdani", "X - SMK Cahaya Pertiwi"),
+        ("0108492009", "M. Rusakib", "X - SMK Cahaya Pertiwi"),
+        ("0108492010", "M. Rifki Haikal", "X - SMK Cahaya Pertiwi"),
+        ("0108492011", "Taju Tabriji", "X - SMK Cahaya Pertiwi"),
+        ("0108492012", "Sahrul Dwi Putar", "X - SMK Cahaya Pertiwi"),
+        ("0108492013", "Ahmad Abdu Rohma", "X - SMK Cahaya Pertiwi"),
+        ("0108492014", "Satria Maulana Prabowo", "X - SMK Cahaya Pertiwi"),
+        ("0108492015", "M. Ilham Al-Rizky", "X - SMK Cahaya Pertiwi"),
+        ("0108492016", "Muhammad Rizky", "X - SMK Cahaya Pertiwi"),
+        ("0108492017", "Fitria Wulan Dari", "X - SMK Cahaya Pertiwi"),
+        ("0108492018", "M. Rifki Haditia", "X - SMK Cahaya Pertiwi"),
+        ("0108492019", "Rendi Dwitama", "X - SMK Cahaya Pertiwi"),
+        ("0098492020", "Abdi Rohim", "XI - SMK Cahaya Pertiwi"),
+        ("0098492021", "Ana Pebrianti", "XI - SMK Cahaya Pertiwi"),
+        ("0098492022", "Annisa Sopian", "XI - SMK Cahaya Pertiwi"),
+        ("0098492023", "Devia Helma A", "XI - SMK Cahaya Pertiwi"),
+        ("0098492024", "M. Ibnu Hasan", "XI - SMK Cahaya Pertiwi"),
+        ("0098492025", "Rani Oktaviani", "XI - SMK Cahaya Pertiwi"),
+        ("0098492026", "Ridho", "XI - SMK Cahaya Pertiwi"),
+        ("0098492027", "Farell Idelmy Buffon", "XI - SMK Cahaya Pertiwi"),
+        ("0098492028", "Khoirul Fajri", "XI - SMK Cahaya Pertiwi"),
+        ("0088492029", "Amar Hadi", "XII - SMK Cahaya Pertiwi"),
+        ("0088492030", "Amelia Sagita", "XII - SMK Cahaya Pertiwi"),
+        ("0088492031", "Andika Wardana", "XII - SMK Cahaya Pertiwi"),
+        ("0088492032", "Fairuz Ad'at", "XII - SMK Cahaya Pertiwi"),
+        ("0088492033", "Intan Fatmawati", "XII - SMK Cahaya Pertiwi"),
+        ("0088492034", "M. Gilang", "XII - SMK Cahaya Pertiwi"),
+        ("0088492035", "M. Junaedi", "XII - SMK Cahaya Pertiwi"),
+        ("0088492036", "Nadwah Rizkia", "XII - SMK Cahaya Pertiwi"),
+        ("0088492037", "Rezky Futu", "XII - SMK Cahaya Pertiwi"),
+        ("0088492038", "Ridho Agung", "XII - SMK Cahaya Pertiwi"),
+        ("0088492039", "Siti Nurhasanah", "XII - SMK Cahaya Pertiwi"),
+        ("0088492040", "Siti Zulaikha", "XII - SMK Cahaya Pertiwi"),
+        ("0088492041", "Fikri Wardiansyah", "XII - SMK Cahaya Pertiwi"),
     ]
     with get_db() as conn:
         conn.executemany(
@@ -1311,10 +1475,15 @@ def seed_default_students():
 # ==================== STUDENT MASTER DATA & AUTH ====================
 
 def get_student_by_nisn(nisn):
-    """Mencari siswa resmi berdasarkan NISN."""
+    """Mencari siswa resmi berdasarkan NISN atau nomor urut / kode unik."""
     init_elearning_db()
     with get_db() as conn:
-        row = conn.execute("SELECT * FROM students WHERE LOWER(TRIM(nisn)) = LOWER(TRIM(?))", (str(nisn),)).fetchone()
+        clean_nisn = str(nisn).strip()
+        row = conn.execute("SELECT * FROM students WHERE LOWER(TRIM(nisn)) = LOWER(TRIM(?))", (clean_nisn,)).fetchone()
+        if not row and clean_nisn.isdigit() and len(clean_nisn) <= 3:
+            # Fallback: izinkan login dengan nomor urut pendek (misal '1' -> '001', '29' -> '029')
+            padded = clean_nisn.zfill(3)
+            row = conn.execute("SELECT * FROM students WHERE nisn LIKE ? ORDER BY id ASC LIMIT 1", (f"%{padded}",)).fetchone()
         return dict(row) if row else None
 
 def verify_student_login(nisn, name=None):
@@ -1444,15 +1613,22 @@ def check_student_exam_attempt(student_nisn, exam_id):
         """, (str(student_nisn), int(exam_id))).fetchone()
         return dict(row) if row else None
 
-def list_all_students(class_filter=None):
-    """Mendapatkan daftar seluruh siswa terdaftar untuk Guru / Admin."""
+def list_all_students(class_filter=None, name_filter=None):
+    """Mendapatkan daftar seluruh siswa terdaftar untuk Guru / Admin dengan filter kelas dan pencarian nama/NISN."""
     init_elearning_db()
     with get_db() as conn:
-        if class_filter and class_filter.strip() and class_filter.strip().lower() != "semua":
-            c_val = class_filter.strip()
-            rows = conn.execute("SELECT * FROM students WHERE (LOWER(TRIM(class_name)) = LOWER(TRIM(?)) OR LOWER(class_name) LIKE LOWER(?)) ORDER BY nisn ASC", (c_val, f"%{c_val}%")).fetchall()
-        else:
-            rows = conn.execute("SELECT * FROM students ORDER BY nisn ASC").fetchall()
+        query = "SELECT * FROM students WHERE 1=1"
+        params = []
+        if class_filter and str(class_filter).strip() and str(class_filter).strip().lower() != "semua":
+            c_val = str(class_filter).strip()
+            query += " AND (LOWER(TRIM(class_name)) = LOWER(TRIM(?)) OR LOWER(class_name) LIKE LOWER(?))"
+            params.extend([c_val, f"%{c_val}%"])
+        if name_filter and str(name_filter).strip():
+            n_val = f"%{str(name_filter).strip()}%"
+            query += " AND (LOWER(name) LIKE LOWER(?) OR LOWER(nisn) LIKE LOWER(?))"
+            params.extend([n_val, n_val])
+        query += " ORDER BY nisn ASC"
+        rows = conn.execute(query, params).fetchall()
         return [dict(r) for r in rows]
 
 def add_student(nisn, name, class_name):
