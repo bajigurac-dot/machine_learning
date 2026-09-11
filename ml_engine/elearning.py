@@ -880,7 +880,7 @@ def generate_scores_pdf(submissions, class_filter=None, date_filter=None):
     sig_data = [
         [
             Paragraph("Mengetahui,<br/><b>Kepala SMK Cahaya Pertiwi</b><br/><br/><br/><br/><b><u>M. Tarmizi Aziz, SE, M.Pd</u></b><br/>NIP. ___________________________", meta_style),
-            Paragraph("Bogor, " + datetime.date.today().strftime("%d %B %Y") + "<br/><b>Guru Pengampu & Instruktur</b><br/><br/><br/><br/><b><u>Thoriq Azis, S.Kom</u></b><br/>Instruktur AI & Pemrograman", ParagraphStyle('SigRight', parent=meta_style, alignment=2))
+            Paragraph("Balaraja, " + datetime.date.today().strftime("%d %B %Y") + "<br/><b>Guru Pengampu & Instruktur</b><br/><br/><br/><br/><b><u>Thoriq Azis, S.Kom</u></b><br/>Instruktur AI & Pemrograman", ParagraphStyle('SigRight', parent=meta_style, alignment=2))
         ]
     ]
     sig_table = Table(sig_data, colWidths=[390, 390])
@@ -1102,7 +1102,7 @@ def generate_student_card_pdf(student_nisn):
     sig_data = [
         [
             Paragraph("Mengetahui,<br/><b>Kepala SMK Cahaya Pertiwi</b><br/><br/><br/><br/><b><u>M. Tarmizi Aziz, SE, M.Pd</u></b><br/>NIP. ___________________________", meta_style),
-            Paragraph("Bogor, " + datetime.date.today().strftime("%d %B %Y") + "<br/><b>Guru Pengampu & Instruktur</b><br/><br/><br/><br/><b><u>Thoriq Azis, S.Kom</u></b><br/>Instruktur AI & Pemrograman", ParagraphStyle('CardSigRight', parent=meta_style, alignment=2))
+            Paragraph("Balaraja, " + datetime.date.today().strftime("%d %B %Y") + "<br/><b>Guru Pengampu & Instruktur</b><br/><br/><br/><br/><b><u>Thoriq Azis, S.Kom</u></b><br/>Instruktur AI & Pemrograman", ParagraphStyle('CardSigRight', parent=meta_style, alignment=2))
         ]
     ]
     sig_table = Table(sig_data, colWidths=[260, 260])

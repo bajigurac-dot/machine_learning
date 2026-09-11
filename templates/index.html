@@ -815,7 +815,7 @@
 
             <!-- 3. MODUL PEMBELAJARAN: BEDAH 6 DATASET CONTOH STANDAR DUNIA -->
             <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #a7f3d0; background: linear-gradient(135deg, rgba(236,253,245,0.7), #ffffff);">
-              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-dataset-guide-content'); c.classList.toggle('hidden');">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-dataset-guide-content'); const b = document.getElementById('btn-toggle-elearning-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
                 <div style="display: flex; align-items: center; gap: 12px;">
                   <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.25);">
                     📚
@@ -829,12 +829,12 @@
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-secondary btn-sm" type="button" style="border-color: #10b981; color: #065f46; font-weight: 700;">
-                  📖 Buka / Tutup Materi
+                <button class="btn btn-secondary btn-sm" id="btn-toggle-elearning-guide" type="button" style="border-color: #10b981; color: #065f46; font-weight: 700;">
+                  📖 Buka Materi
                 </button>
               </div>
 
-              <div id="elearning-dataset-guide-content" style="margin-top: 20px; border-top: 1px dashed rgba(16, 185, 129, 0.3); padding-top: 18px;">
+              <div id="elearning-dataset-guide-content" class="hidden" style="margin-top: 20px; border-top: 1px dashed rgba(16, 185, 129, 0.3); padding-top: 18px;">
                 
                 <div class="grid-3" style="gap: 16px; margin-bottom: 20px;">
                   
@@ -1491,7 +1491,7 @@
         </button>
         <button class="mobile-nav-btn" data-tab="tab-elearning" id="mob-nav-elearning">
           <span class="mobile-nav-icon">📝</span>
-          <span class="mobile-nav-label">Ujian CBT</span>
+          <span class="mobile-nav-label">E-Learning</span>
         </button>
         <button class="mobile-nav-btn" data-tab="tab-ai" id="mob-nav-ai">
           <span class="mobile-nav-icon">🎓</span>
