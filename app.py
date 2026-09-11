@@ -513,13 +513,16 @@ def api_download_markdown():
 
 @app.route("/api/elearning/admin/login", methods=["POST"])
 def api_elearning_admin_login():
-    data = request.json or {}
-    username = data.get("username", "").strip()
-    password = data.get("password", "").strip()
-    res = verify_admin_login(username, password)
-    if not res["success"]:
-        return jsonify(res), 401
-    return jsonify(res)
+    try:
+        data = request.json or {}
+        username = data.get("username", "").strip()
+        password = data.get("password", "").strip()
+        res = verify_admin_login(username, password)
+        if not res.get("success"):
+            return jsonify(res), 401
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"success": False, "error": f"Server error: {str(e)}"}), 500
 
 @app.route("/api/elearning/admin/change-password", methods=["POST"])
 def api_elearning_admin_change_password():

@@ -11,7 +11,10 @@ echo "========================================================="
 
 # 1. Tarik pembaruan kode dan file database terbaru dari GitHub
 echo "📥 Menarik commit terbaru dari branch main..."
-git pull origin main
+git fetch origin main
+# Buang perubahan lokal sementara di EC2 agar pull tidak pernah bentrok/conflict
+git checkout -- studio_ml.db 2>/dev/null || true
+git reset --hard origin/main
 
 # 2. Backup database yang saat ini sedang aktif di EC2
 echo "💾 Membuat salinan cadangan (backup) database aktif..."

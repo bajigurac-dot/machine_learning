@@ -1675,7 +1675,7 @@ def seed_default_admin():
 
 def verify_admin_login(username, password):
     """Memverifikasi kredensial login akun Guru/Admin."""
-    from werkzeug.security import check_password_hash
+    from werkzeug.security import check_password_hash, generate_password_hash
     init_elearning_db()
     clean_user = (username or "").strip().lower()
     clean_pass = (password or "").strip()
@@ -1686,15 +1686,17 @@ def verify_admin_login(username, password):
     with get_db() as conn:
         row = conn.execute("SELECT * FROM admin_users WHERE LOWER(username) = ?", (clean_user,)).fetchone()
         if not row:
-            # Fallback legacy akun guru / admin
+            # Fallback jika belum ada baris admin di database
             if clean_user in ["guru", "admin"] and clean_pass in ["guru123", "admin123"]:
                 seed_default_admin()
                 return {"success": True, "token": "admin-valid-token-2026", "username": clean_user, "message": "Login Guru Berhasil!"}
             return {"success": False, "error": "Username atau Password salah. (Default: guru / guru123)"}
 
+        # 1. Cek kecocokan password hash tersimpan
         if check_password_hash(row["password_hash"], clean_pass):
             return {"success": True, "token": "admin-valid-token-2026", "username": row["username"], "message": "Login Guru Berhasil!"}
-        return {"success": False, "error": "Password salah."}
+
+        return {"success": False, "error": "Password salah. Silakan coba password guru Anda atau default: guru123"}
 
 def change_admin_password(username, old_password, new_password):
     """
