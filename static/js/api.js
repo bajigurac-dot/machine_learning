@@ -232,27 +232,58 @@ const API = {
     return await res.json();
   },
 
+  async safeJson(res) {
+    const contentType = res.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      return await res.json();
+    }
+    if (res.status === 404) {
+      return {
+        success: false,
+        error: "Server EC2 belum menjalankan versi terbaru (404 Not Found). Silakan jalankan 'bash update_ec2.sh' di terminal EC2 untuk me-restart Docker."
+      };
+    }
+    if (res.status === 502 || res.status === 503) {
+      return {
+        success: false,
+        error: "Server EC2 sedang memulai ulang (HTTP " + res.status + "). Tunggu beberapa saat lalu coba kembali."
+      };
+    }
+    return {
+      success: false,
+      error: "Server mengembalikan respon bukan JSON (HTTP " + res.status + "). Silakan rebuild container di EC2."
+    };
+  },
+
   async adminLogin(username, password) {
-    const res = await fetch('/api/elearning/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    return await res.json();
+    try {
+      const res = await fetch('/api/elearning/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      return await this.safeJson(res);
+    } catch (err) {
+      return { success: false, error: err.message || "Gagal menghubungi server." };
+    }
   },
 
   async adminChangePassword(oldPassword, newPassword, confirmPassword, username = 'guru') {
-    const res = await fetch('/api/elearning/admin/change-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username,
-        old_password: oldPassword,
-        new_password: newPassword,
-        confirm_password: confirmPassword
-      })
-    });
-    return await res.json();
+    try {
+      const res = await fetch('/api/elearning/admin/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          old_password: oldPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword
+        })
+      });
+      return await this.safeJson(res);
+    } catch (err) {
+      return { success: false, error: err.message || "Gagal menghubungi server." };
+    }
   },
 
   async createExam(title, description, subject, durationMinutes) {
