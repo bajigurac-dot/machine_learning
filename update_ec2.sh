@@ -64,6 +64,6 @@ sudo docker compose up -d --build
 
 echo "========================================================="
 echo "🎉 UPDATE BERHASIL!"
-echo "Aplikasi dan database baru (41 siswa, kuis baru, modul baru) sudah aktif di EC2."
+echo "Aplikasi dan database baru (45 siswa, kuis baru, modul baru) sudah aktif di EC2."
 echo "Status kontainer: sudo docker compose ps"
 echo "========================================================="
