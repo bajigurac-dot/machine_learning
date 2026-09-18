@@ -351,6 +351,13 @@ class TestELearningEngine(unittest.TestCase):
         self.assertEqual(len(found_students), 1)
         self.assertEqual(found_students[0]["name"], "Alexa Angel")
 
+        # 7. Uji endpoint cetak master data siswa & kartu login
+        res_print_students = self.client.get("/api/elearning/admin/report/students/print?class_name=X%20-%20SMK%20Cahaya%20Pertiwi")
+        self.assertEqual(res_print_students.status_code, 200)
+        self.assertIn(b"SMK CAHAYA PERTIWI", res_print_students.data)
+        self.assertIn(b"Alexa Angel", res_print_students.data)
+        self.assertIn(b"KARTU LOGIN", res_print_students.data)
+
     def test_12_admin_submissions_filter(self):
         """Uji filter rekapitulasi nilai siswa berdasarkan kelas dan tanggal."""
         import datetime

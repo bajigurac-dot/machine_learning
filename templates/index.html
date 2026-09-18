@@ -15,6 +15,26 @@
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/static/css/style.css">
+
+  <!-- UI Guide Toggle Helpers -->
+  <script>
+    function toggleGuideSection(contentId, btnId, openText, closeText) {
+      var c = document.getElementById(contentId);
+      var b = document.getElementById(btnId);
+      if (c) c.classList.toggle('hidden');
+      if (b && c) b.innerHTML = c.classList.contains('hidden') ? (openText || '📖 Buka Materi') : (closeText || '📕 Tutup Materi');
+    }
+    function closeGuideSection(contentId, btnId, openText) {
+      var c = document.getElementById(contentId);
+      var b = document.getElementById(btnId);
+      if (c) c.classList.add('hidden');
+      if (b) b.innerHTML = openText || '📖 Buka Materi';
+    }
+    function toggleGuideDetails(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden');
+    }
+  </script>
 </head>
 <body>
 
@@ -33,7 +53,16 @@
       <nav class="nav-menu">
         <div class="nav-section-title">Fase 1: Eksperimen Cepat</div>
         <div class="nav-item active" data-tab="tab-automl" id="nav-automl">
-          <span class="nav-icon">🚀</span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+              <rect x="9" y="9" width="6" height="6" fill="currentColor" fill-opacity="0.2"></rect>
+              <path d="M9 1v3M15 1v3"></path>
+              <path d="M9 20v3M15 20v3"></path>
+              <path d="M1 9h3M1 15h3"></path>
+              <path d="M20 9h3M20 15h3"></path>
+            </svg>
+          </span>
           <span>Coba Langsung</span>
           <span class="nav-tag green">AutoML</span>
         </div>
@@ -105,7 +134,17 @@
         </button>
 
         <div class="top-info">
-          <h2 class="page-title" id="top-page-title">🚀 Coba Langsung (AutoML 1-Klik)</h2>
+          <h2 class="page-title" id="top-page-title" style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-primary);">
+              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+              <rect x="9" y="9" width="6" height="6" fill="currentColor" fill-opacity="0.2"></rect>
+              <path d="M9 1v3M15 1v3"></path>
+              <path d="M9 20v3M15 20v3"></path>
+              <path d="M1 9h3M1 15h3"></path>
+              <path d="M20 9h3M20 15h3"></path>
+            </svg>
+            <span>Coba Langsung (AutoML 1-Klik)</span>
+          </h2>
           <div class="dataset-pill" id="badge-active-dataset">📂 titanic</div>
           <div class="dataset-pill" id="task-type-badge">🎯 Klasifikasi</div>
         </div>
@@ -166,7 +205,7 @@
 
           <!-- Pojok Belajar Siswa SMK: 5 Langkah Mudah Machine Learning -->
           <div class="smk-ml-guide-box" style="margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="const el = document.getElementById('smk-steps-details'); el.classList.toggle('hidden');">
+            <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleGuideDetails('smk-steps-details')">
               <div style="display: flex; align-items: center; gap: 12px;">
                 <span style="font-size: 1.6rem;">💡</span>
                 <div>
@@ -815,7 +854,7 @@
 
             <!-- 2.5 MODUL PEMBELAJARAN: PENGANTAR INFORMATIKA & DASAR-DASARNYA (SMK KELAS X) -->
             <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #93c5fd; background: linear-gradient(135deg, rgba(239,246,255,0.8), #ffffff);">
-              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-informatika-guide-content'); const b = document.getElementById('btn-toggle-informatika-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="toggleGuideSection('elearning-informatika-guide-content', 'btn-toggle-informatika-guide')">
                 <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
                   <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(37,99,235,0.25); flex-shrink: 0;">
                     💻
@@ -1096,16 +1135,17 @@ for i, skor in enumerate(nilai_siswa, 1):
                 <!-- Roadmap Belajar & Tips Belajar Informatika -->
                 <div style="background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(16,185,129,0.08)); border: 1px solid #93c5fd; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
                   <div style="flex: 1; min-width: 280px;">
-                    <div style="font-weight: 800; font-size: 0.9rem; color: #1e3a8a; margin-bottom: 4px;">
-                      🎓 Kunci Sukses Siswa SMK Kelas X dalam Mata Pelajaran Informatika:
+                    <div style="font-weight: 800; font-size: 0.92rem; color: #1e3a8a; margin-bottom: 4px;">
+                      🎯 Siap Menguji Pemahaman Informatika Kelas X?
                     </div>
-                    <div style="font-size: 0.8rem; color: #334155; line-height: 1.6;">
-                      1. <b>Koding Sambil Praktik:</b> Jangan hanya membaca teori, ketik kodenya langsung di menu Ujian/Lab.<br>
-                      2. <b>Jangan Takut Pesan Error:</b> Pesan error (SyntaxError, TypeError) adalah teman belajar terbaik programmer.<br>
-                      3. <b>Biasakan Berpikir Sistematis:</b> Uraikan masalah rumit jadi langkah-langkah kecil sebelum menulis kode!
+                    <div style="font-size: 0.8rem; color: #334155; line-height: 1.6; margin-bottom: 6px;">
+                      Kerjakan paket ujian <b>"Kuis Dasar Informatika & Berpikir Komputasional (Kelas X)"</b> di daftar kuis di atas yang terdiri dari 20 soal pilihan ganda konsep komputasi dan 5 soal praktik koding Python langsung di editor CBT!
+                    </div>
+                    <div style="font-size: 0.78rem; color: #475569; line-height: 1.5;">
+                      💡 <b>Tips Sukses Siswa:</b> Koding sambil praktik langsung di editor, jangan takut pesan error, dan uraikan persoalan rumit jadi langkah kecil yang terstruktur!
                     </div>
                   </div>
-                  <button class="btn btn-primary btn-sm" onclick="const c = document.getElementById('elearning-informatika-guide-content'); const b = document.getElementById('btn-toggle-informatika-guide'); c.classList.add('hidden'); if(b) b.innerHTML = '📖 Buka Materi';" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); white-space: nowrap; height: 38px;">
+                  <button class="btn btn-primary btn-sm" onclick="closeGuideSection('elearning-informatika-guide-content', 'btn-toggle-informatika-guide')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); white-space: nowrap; height: 38px;">
                     📕 Tutup Materi
                   </button>
                 </div>
@@ -1115,7 +1155,7 @@ for i, skor in enumerate(nilai_siswa, 1):
 
             <!-- 2.6 MODUL PEMBELAJARAN: DASAR-DASAR PEMROGRAMAN PYTHON (SMK KELAS XI & XII) -->
             <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #fcd34d; background: linear-gradient(135deg, rgba(254,243,199,0.7), #ffffff);">
-              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-python-guide-content'); const b = document.getElementById('btn-toggle-python-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="toggleGuideSection('elearning-python-guide-content', 'btn-toggle-python-guide')">
                 <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
                   <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(245,158,11,0.25); flex-shrink: 0;">
                     🐍
@@ -1485,7 +1525,7 @@ print(bagi_angka(10, 0))   # Menghasilkan pesan peringatan aman, program tidak c
                       Kerjakan paket ujian <b>"Kuis Dasar Pemrograman Python & MySQL (Kelas XI & XII)"</b> di atas yang terdiri dari 20 soal pilihan ganda dan 5 soal praktik koding langsung di editor CBT!
                     </div>
                   </div>
-                  <button class="btn btn-primary btn-sm" onclick="const c = document.getElementById('elearning-python-guide-content'); const b = document.getElementById('btn-toggle-python-guide'); c.classList.add('hidden'); if(b) b.innerHTML = '📖 Buka Materi';" style="background: linear-gradient(135deg, #f59e0b, #d97706); white-space: nowrap; height: 38px;">
+                  <button class="btn btn-primary btn-sm" onclick="closeGuideSection('elearning-python-guide-content', 'btn-toggle-python-guide')" style="background: linear-gradient(135deg, #f59e0b, #d97706); white-space: nowrap; height: 38px;">
                     📕 Tutup Materi
                   </button>
                 </div>
@@ -1495,7 +1535,7 @@ print(bagi_angka(10, 0))   # Menghasilkan pesan peringatan aman, program tidak c
 
             <!-- 2.7 MODUL PEMBELAJARAN: DASAR-DASAR DATABASE & SQL (SMK KELAS XI & XII) -->
             <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #7dd3fc; background: linear-gradient(135deg, rgba(224,242,254,0.7), #ffffff);">
-              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-database-guide-content'); const b = document.getElementById('btn-toggle-database-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="toggleGuideSection('elearning-database-guide-content', 'btn-toggle-database-guide')">
                 <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
                   <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(2,132,199,0.25); flex-shrink: 0;">
                     🗄️
@@ -1928,7 +1968,7 @@ conn.close()
                       Kerjakan paket ujian <b>"Kuis Dasar Pemrograman Python & MySQL (Kelas XI & XII)"</b> di menu atas yang mencakup teori RDBMS, query CRUD, sintaks SQL, hingga integrasi Python Database!
                     </div>
                   </div>
-                  <button class="btn btn-primary btn-sm" onclick="const c = document.getElementById('elearning-database-guide-content'); const b = document.getElementById('btn-toggle-database-guide'); c.classList.add('hidden'); if(b) b.innerHTML = '📖 Buka Materi';" style="background: linear-gradient(135deg, #0284c7, #0369a1); white-space: nowrap; height: 38px;">
+                  <button class="btn btn-primary btn-sm" onclick="closeGuideSection('elearning-database-guide-content', 'btn-toggle-database-guide')" style="background: linear-gradient(135deg, #0284c7, #0369a1); white-space: nowrap; height: 38px;">
                     📕 Tutup Materi
                   </button>
                 </div>
@@ -1938,7 +1978,7 @@ conn.close()
 
             <!-- 3. MODUL PEMBELAJARAN: BEDAH 6 DATASET CONTOH STANDAR DUNIA -->
             <div class="glass-panel" style="margin-top: 28px; border: 1.5px solid #a7f3d0; background: linear-gradient(135deg, rgba(236,253,245,0.7), #ffffff);">
-              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="const c = document.getElementById('elearning-dataset-guide-content'); const b = document.getElementById('btn-toggle-elearning-guide'); c.classList.toggle('hidden'); if(b) b.innerHTML = c.classList.contains('hidden') ? '📖 Buka Materi' : '📕 Tutup Materi';">
+              <div class="panel-header" style="cursor: pointer; margin-bottom: 0;" onclick="toggleGuideSection('elearning-dataset-guide-content', 'btn-toggle-elearning-guide')">
                 <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
                   <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16,185,129,0.25); flex-shrink: 0;">
                     📚
@@ -2549,9 +2589,12 @@ conn.close()
                     </label>
                     <input type="text" class="app-input" id="filter-student-name" placeholder="Ketik nama siswa atau NISN (misal: Alexa, Amar, atau 010...)" style="width: 100%; background: #ffffff;" autocomplete="off" />
                   </div>
-                  <div style="display: flex; gap: 8px;">
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <button class="btn btn-secondary btn-sm" id="btn-reset-student-filter" type="button" style="height: 38px; display: flex; align-items: center; gap: 6px;">
-                      🔄 Reset Filter
+                      🔄 Reset
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btn-print-students" type="button" style="height: 38px; display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #059669, #047857); font-weight: 700; box-shadow: 0 2px 8px rgba(5,150,105,0.25);">
+                      🖨️ Cetak Data & Slip NISN
                     </button>
                   </div>
                 </div>
@@ -2636,7 +2679,16 @@ conn.close()
       <!-- MOBILE BOTTOM NAVIGATION BAR -->
       <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
         <button class="mobile-nav-btn active" data-tab="tab-automl" id="mob-nav-automl">
-          <span class="mobile-nav-icon">🚀</span>
+          <span class="mobile-nav-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+              <rect x="9" y="9" width="6" height="6" fill="currentColor" fill-opacity="0.2"></rect>
+              <path d="M9 1v3M15 1v3"></path>
+              <path d="M9 20v3M15 20v3"></path>
+              <path d="M1 9h3M1 15h3"></path>
+              <path d="M20 9h3M20 15h3"></path>
+            </svg>
+          </span>
           <span class="mobile-nav-label">AutoML</span>
         </button>
         <button class="mobile-nav-btn" data-tab="tab-data" id="mob-nav-data">

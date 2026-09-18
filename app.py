@@ -877,6 +877,22 @@ def api_elearning_print_scores():
         today=datetime.date.today().strftime("%d %B %Y")
     )
 
+@app.route("/api/elearning/admin/report/students/print", methods=["GET"])
+def api_elearning_print_students():
+    class_name = request.args.get("class_name")
+    search_name = request.args.get("name") or request.args.get("q")
+    students = list_all_students(class_name, search_name)
+    now = datetime.datetime.now()
+    return render_template(
+        "report_students.html",
+        students=students,
+        class_filter=class_name or "",
+        search_filter=search_name or "",
+        total_students=len(students),
+        today=now.strftime("%d %B %Y"),
+        print_date=now.strftime("%d-%m-%Y %H:%M WIB")
+    )
+
 @app.route("/api/elearning/admin/students", methods=["GET"])
 def api_elearning_get_students():
     class_name = request.args.get("class_name")

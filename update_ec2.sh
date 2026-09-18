@@ -22,11 +22,31 @@ if [ -f backup_db.sh ]; then
     bash backup_db.sh || true
 fi
 
-# 3. Terapkan database baru hasil git pull ke folder persistensi docker
+# 3. Terapkan database baru hasil git pull ke folder persistensi docker (Pertahankan password EC2)
 if [ -f studio_ml.db ]; then
     echo "📋 Menyalin database baru ke data/studio_ml.db..."
     mkdir -p data
-    cp studio_ml.db data/studio_ml.db
+    if [ -f data/studio_ml.db ]; then
+        python3 -c "
+import sqlite3, shutil
+try:
+    c_dest = sqlite3.connect('data/studio_ml.db')
+    pw_rows = c_dest.execute('SELECT username, password_hash FROM admin_users').fetchall()
+    c_dest.close()
+    shutil.copy2('studio_ml.db', 'data/studio_ml.db')
+    if pw_rows:
+        c_new = sqlite3.connect('data/studio_ml.db')
+        for u, p in pw_rows:
+            c_new.execute('UPDATE admin_users SET password_hash = ? WHERE username = ?', (p, u))
+        c_new.commit()
+        c_new.close()
+        print('🔒 Password guru aktif di EC2 berhasil dipertahankan.')
+except Exception:
+    shutil.copy2('studio_ml.db', 'data/studio_ml.db')
+" 2>/dev/null || cp studio_ml.db data/studio_ml.db
+    else
+        cp studio_ml.db data/studio_ml.db
+    fi
     echo "✅ Database baru berhasil disalin!"
 fi
 

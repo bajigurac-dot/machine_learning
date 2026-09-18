@@ -111,7 +111,7 @@ const App = {
 
     // Update page title
     const titles = {
-      'tab-automl': '🚀 Coba Langsung (AutoML 1-Klik)',
+      'tab-automl': '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-primary); display: inline-block; vertical-align: middle; margin-right: 6px;"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6" fill="currentColor" fill-opacity="0.2"></rect><path d="M9 1v3M15 1v3"></path><path d="M9 20v3M15 20v3"></path><path d="M1 9h3M1 15h3"></path><path d="M20 9h3M20 15h3"></path></svg>Coba Langsung (AutoML 1-Klik)',
       'tab-data': '📊 Kelola & Bersihkan Data',
       'tab-models': '🧠 Pilih & Atur Model ML',
       'tab-eval': '📈 Evaluasi Hasil & Prediksi Live',
@@ -122,7 +122,7 @@ const App = {
     };
     const titleEl = document.getElementById('top-page-title');
     if (titleEl && titles[tabId]) {
-      titleEl.innerText = titles[tabId];
+      titleEl.innerHTML = titles[tabId];
     }
 
     // Refresh elearning if navigated
@@ -999,6 +999,26 @@ window.loadDatasetInStudio = function(datasetId) {
     App.showToast(`Memuat data contoh: ${datasetId.toUpperCase()} di Studio ML!`, 'success');
   }
 };
+
+window.toggleGuideSection = function(contentId, btnId, openText, closeText) {
+  const c = document.getElementById(contentId);
+  const b = document.getElementById(btnId);
+  if (c) c.classList.toggle('hidden');
+  if (b && c) b.innerHTML = c.classList.contains('hidden') ? (openText || '📖 Buka Materi') : (closeText || '📕 Tutup Materi');
+};
+
+window.closeGuideSection = function(contentId, btnId, openText) {
+  const c = document.getElementById(contentId);
+  const b = document.getElementById(btnId);
+  if (c) c.classList.add('hidden');
+  if (b) b.innerHTML = openText || '📖 Buka Materi';
+};
+
+window.toggleGuideDetails = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('hidden');
+};
+
 
 // Start app on DOM ready
 document.addEventListener('DOMContentLoaded', () => {

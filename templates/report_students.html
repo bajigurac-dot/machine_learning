@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Data & Kartu Login Siswa CBT — SMK Cahaya Pertiwi</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 24px;
+      font-size: 13px;
+    }
+    .print-container {
+      max-width: 1060px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 36px 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .no-print-bar {
+      max-width: 1060px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-group-mode {
+      display: inline-flex;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: 8px;
+      gap: 2px;
+    }
+    .btn-mode {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: #475569;
+      transition: all 0.2s ease;
+    }
+    .btn-mode.active {
+      background: #ffffff;
+      color: #065f46;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #047857;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #f8fafc;
+    }
+
+    /* KOP SURAT */
+    .header-kop {
+      text-align: center;
+      border-bottom: 2.5px solid #059669;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .kop-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #065f46;
+      letter-spacing: 0.04em;
+    }
+    .kop-subtitle {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 2px;
+    }
+    .kop-desc {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* METADATA BAR */
+    .meta-box {
+      display: flex;
+      justify-content: space-between;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .meta-item b {
+      color: #065f46;
+    }
+
+    /* TABEL DATA */
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .report-table th {
+      background: #059669;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 9px 10px;
+      font-size: 12px;
+      text-align: left;
+      border: 1px solid #047857;
+    }
+    .report-table td {
+      padding: 8px 10px;
+      font-size: 12px;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+    }
+    .report-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .font-mono {
+      font-family: "JetBrains Mono", Consolas, Monaco, monospace;
+      letter-spacing: 0.05em;
+    }
+
+    /* KARTU SLIP LOGIN SISWA (UNTUK DIGUNTING) */
+    .cards-grid {
+      display: none;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .student-card-slip {
+      border: 1.5px dashed #059669;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      position: relative;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .card-cut-badge {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 10px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .card-kop {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .card-logo {
+      font-size: 1.3rem;
+    }
+    .card-kop-text h4 {
+      font-size: 11px;
+      font-weight: 800;
+      color: #065f46;
+      margin: 0;
+      letter-spacing: 0.03em;
+    }
+    .card-kop-text span {
+      font-size: 9.5px;
+      color: #64748b;
+      display: block;
+    }
+    .card-body-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-size: 11.5px;
+    }
+    .card-body-label {
+      color: #64748b;
+      font-weight: 600;
+      width: 90px;
+    }
+    .card-body-val {
+      color: #0f172a;
+      font-weight: 700;
+      flex: 1;
+    }
+    .card-nisn-box {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 10px 0 8px 0;
+      text-align: center;
+    }
+    .card-nisn-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #047857;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+    .card-nisn-code {
+      font-family: "JetBrains Mono", Consolas, Monaco, monospace;
+      font-size: 18px;
+      font-weight: 800;
+      color: #065f46;
+      letter-spacing: 0.1em;
+    }
+    .card-instructions {
+      font-size: 9.5px;
+      color: #475569;
+      line-height: 1.4;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 6px 8px;
+    }
+    .card-instructions b {
+      color: #1e293b;
+    }
+
+    /* TANDA TANGAN */
+    .signature-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 36px;
+      page-break-inside: avoid;
+    }
+    .sig-col {
+      width: 280px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .sig-space {
+      height: 64px;
+    }
+
+    /* PRINT MEDIA SPECIFIC */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .no-print-bar {
+        display: none !important;
+      }
+      .print-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+      .student-card-slip {
+        border-color: #475569 !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar (Hidden during Print) -->
+  <div class="no-print-bar">
+    <a href="javascript:window.close()" class="btn btn-secondary">
+      ← Tutup / Kembali ke Aplikasi
+    </a>
+
+    <!-- Mode Tampilan Switcher -->
+    <div class="btn-group-mode">
+      <button class="btn-mode active" id="btn-mode-table" onclick="switchView('table')">
+        📋 Format Tabel Rekap
+      </button>
+      <button class="btn-mode" id="btn-mode-cards" onclick="switchView('cards')">
+        🪪 Format Kartu / Slip Login (Siap Gunting)
+      </button>
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <button onclick="window.print()" class="btn btn-primary" style="font-weight: 700; box-shadow: 0 4px 10px rgba(5,150,105,0.25);">
+        🖨️ Cetak / Simpan PDF (Ctrl + P)
+      </button>
+    </div>
+  </div>
+
+  <div class="print-container">
+    <!-- Kop Surat -->
+    <div class="header-kop">
+      <div class="kop-title">SMK CAHAYA PERTIWI</div>
+      <div class="kop-subtitle" id="report-title-text">DAFTAR MASTER DATA & KARTU LOGIN SISWA CBT E-LEARNING</div>
+      <div class="kop-desc">Studio ML Python & AI Learning Center • Instruktur / Pengawas CBT: Thoriq Azis, S.Kom</div>
+    </div>
+
+    <!-- Metadata Laporan -->
+    <div class="meta-box">
+      <div class="meta-item">
+        <b>Filter Kelas:</b> {{ class_filter if class_filter and class_filter.lower() != 'semua' else 'Seluruh Kelas (X, XI, XII)' }}
+      </div>
+      <div class="meta-item">
+        <b>Total Siswa:</b> {{ total_students }} Siswa
+      </div>
+      <div class="meta-item">
+        <b>Status Akun:</b> <span style="color: #059669; font-weight: 700;">🟢 Terverifikasi Aktif</span>
+      </div>
+      <div class="meta-item">
+        <b>Tanggal Cetak:</b> {{ today }}
+      </div>
+    </div>
+
+    <!-- MODE 1: TABEL REKAPITULASI DATA SISWA & TANDA TANGAN SERAH TERIMA -->
+    <div id="student-table-view">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 42px;">No</th>
+            <th class="text-center" style="width: 140px;">NISN (Kredensial Login)</th>
+            <th>Nama Lengkap Siswa</th>
+            <th class="text-center" style="width: 180px;">Kelas</th>
+            <th class="text-center" style="width: 110px;">Status CBT</th>
+            <th class="text-center" style="width: 150px;">Paraf Terima Siswa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if students and students|length > 0 %}
+            {% for s in students %}
+            <tr>
+              <td class="text-center">{{ loop.index }}</td>
+              <td class="text-center font-mono" style="font-weight: 800; color: #065f46; font-size: 12.5px;">{{ s.nisn }}</td>
+              <td style="font-weight: 600;">{{ s.name }}</td>
+              <td class="text-center">{{ s.class_name }}</td>
+              <td class="text-center" style="color: #059669; font-weight: 700; font-size: 11px;">Aktif</td>
+              <td class="text-center" style="height: 34px; background: #ffffff;"></td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="6" class="text-center" style="padding: 24px; color: #64748b;">
+                Tidak ada data siswa yang sesuai dengan filter.
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODE 2: KARTU / SLIP LOGIN SISWA (SIAP GUNTING & BAGIKAN) -->
+    <div id="student-cards-view" class="cards-grid">
+      {% if students and students|length > 0 %}
+        {% for s in students %}
+        <div class="student-card-slip">
+          <span class="card-cut-badge">✂️ Gunting di sini</span>
+          <div class="card-kop">
+            <div class="card-logo">🦊</div>
+            <div class="card-kop-text">
+              <h4>SMK CAHAYA PERTIWI</h4>
+              <span>Kartu Login Peserta Ujian CBT E-Learning</span>
+            </div>
+          </div>
+
+          <div class="card-body-row">
+            <span class="card-body-label">Nama Siswa:</span>
+            <span class="card-body-val">{{ s.name }}</span>
+          </div>
+          <div class="card-body-row">
+            <span class="card-body-label">Kelas:</span>
+            <span class="card-body-val">{{ s.class_name }}</span>
+          </div>
+
+          <div class="card-nisn-box">
+            <div class="card-nisn-label">🔑 NISN UNTUK LOGIN CBT:</div>
+            <div class="card-nisn-code">{{ s.nisn }}</div>
+          </div>
+
+          <div class="card-instructions">
+            <b>Panduan Login Siswa:</b><br>
+            1. Buka menu <b>E-Learning CBT</b> di komputer/HP.<br>
+            2. Masukkan nomor <b>NISN</b> di atas lalu klik <i>Masuk Ujian</i>.<br>
+            3. Pilih paket kuis kelas Anda dan mulailah mengerjakan soal.<br>
+            <span style="color: #e11d48; font-weight: 700;">* Harap simpan NISN ini dengan baik dan jangan hilangkan!</span>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="grid-column: span 2; text-align: center; padding: 24px; color: #64748b;">
+          Tidak ada data siswa untuk dicetak.
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Tanda Tangan Resmi Pengesahan Dokumen -->
+    <div class="signature-row">
+      <div class="sig-col">
+        Mengetahui,<br>
+        <b>Wali Kelas / Guru Pendamping</b>
+        <div class="sig-space"></div>
+        <b>( .................................................. )</b><br>
+        NIP. -
+      </div>
+      <div class="sig-col">
+        Bekasi, {{ today }}<br>
+        <b>Instruktur / Pengawas CBT E-Learning</b>
+        <div class="sig-space"></div>
+        <b>Thoriq Azis, S.Kom</b><br>
+        Koordinator CBT & Rekayasa Perangkat Lunak
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchView(mode) {
+      const tableView = document.getElementById('student-table-view');
+      const cardsView = document.getElementById('student-cards-view');
+      const btnTable = document.getElementById('btn-mode-table');
+      const btnCards = document.getElementById('btn-mode-cards');
+      const titleText = document.getElementById('report-title-text');
+
+      if (mode === 'cards') {
+        tableView.style.display = 'none';
+        cardsView.style.display = 'grid';
+        btnCards.classList.add('active');
+        btnTable.classList.remove('active');
+        if (titleText) titleText.innerText = 'KARTU LOGIN RESMI SISWA CBT E-LEARNING (SIAP GUNTING)';
+      } else {
+        tableView.style.display = 'block';
+        cardsView.style.display = 'none';
+        btnTable.classList.add('active');
+        btnCards.classList.remove('active');
+        if (titleText) titleText.innerText = 'DAFTAR MASTER DATA & KREDENSIAL LOGIN SISWA CBT E-LEARNING';
+      }
+    }
+
+    // Cek parameter query ?mode=cards jika ada
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'cards') {
+      switchView('cards');
+    }
+  </script>
+</body>
+</html>

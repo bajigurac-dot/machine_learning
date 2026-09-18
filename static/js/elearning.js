@@ -219,6 +219,20 @@ const ELearning = {
       });
     }
 
+    // Cetak Master Data Siswa & Slip Login NISN (Admin)
+    const btnPrintStudents = document.getElementById('btn-print-students');
+    if (btnPrintStudents) {
+      btnPrintStudents.addEventListener('click', () => {
+        const classFilter = document.getElementById('filter-student-class') ? document.getElementById('filter-student-class').value : '';
+        const nameFilter = document.getElementById('filter-student-name') ? document.getElementById('filter-student-name').value : '';
+        const params = new URLSearchParams();
+        if (classFilter) params.append('class_name', classFilter);
+        if (nameFilter) params.append('name', nameFilter);
+        const queryStr = params.toString() ? `?${params.toString()}` : '';
+        window.open(`/api/elearning/admin/report/students/print${queryStr}`, '_blank');
+      });
+    }
+
     // Unduh Rekap Nilai PDF (ReportLab)
     const btnExportPdf = document.getElementById('btn-export-scores-pdf');
     if (btnExportPdf) {
