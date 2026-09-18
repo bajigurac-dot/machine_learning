@@ -23,8 +23,8 @@ from ml_engine.project_storage import (
 )
 from ml_engine.ai_copilot import handle_ai_chat, generate_local_feature_spec, generate_local_prd, test_gemini_connection
 from ml_engine.elearning import (
-    init_elearning_db, list_active_exams, get_exam_details, create_exam, update_exam, delete_exam,
-    add_question, get_question, update_question, toggle_question_active, delete_question, execute_python_code, execute_sql_query,
+    init_elearning_db, list_active_exams, get_exam_details, create_exam, update_exam, toggle_exam_active, delete_exam,
+    add_question, get_question, update_question, toggle_question_active, bulk_toggle_questions_active, delete_question, execute_python_code, execute_sql_query,
     get_sql_mock_schema,
     submit_exam_answers, list_submissions, update_submission_score, delete_submission,
     generate_scores_pdf,
@@ -630,7 +630,7 @@ def api_elearning_student_card_print():
 
 @app.route("/api/elearning/exams", methods=["GET"])
 def api_elearning_get_exams():
-    exams = list_active_exams()
+    exams = list_active_exams(include_inactive=False)
     return jsonify({"success": True, "exams": exams})
 
 @app.route("/api/elearning/exams/<int:exam_id>", methods=["GET"])
@@ -638,7 +638,14 @@ def api_elearning_get_exam(exam_id):
     exam = get_exam_details(exam_id, include_correct_answers=False)
     if not exam:
         return jsonify({"success": False, "error": "Ujian tidak ditemukan."}), 404
+    if exam.get("is_active") == 0:
+        return jsonify({"success": False, "error": "Paket ujian ini sedang dinonaktifkan atau disembunyikan oleh guru."}), 403
     return jsonify({"success": True, "exam": exam})
+
+@app.route("/api/elearning/admin/exams", methods=["GET"])
+def api_elearning_admin_get_exams():
+    exams = list_active_exams(include_inactive=True)
+    return jsonify({"success": True, "exams": exams})
 
 @app.route("/api/elearning/admin/exams/<int:exam_id>", methods=["GET"])
 def api_elearning_admin_get_exam(exam_id):
@@ -662,6 +669,37 @@ def api_elearning_admin_update_exam(exam_id):
     try:
         update_exam(exam_id, title, description, subject, duration, is_active)
         return jsonify({"success": True, "message": "Paket ujian berhasil diperbarui!"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@app.route("/api/elearning/admin/exams/<int:exam_id>/toggle-active", methods=["POST"])
+def api_elearning_admin_toggle_exam(exam_id):
+    data = request.json or {}
+    is_active = data.get("is_active")
+    try:
+        new_state = toggle_exam_active(exam_id, is_active)
+        status_text = "ditampilkan ke siswa" if new_state == 1 else "disembunyikan dari siswa"
+        return jsonify({
+            "success": True,
+            "is_active": new_state,
+            "message": f"Seluruh paket ujian berhasil {status_text}!"
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@app.route("/api/elearning/admin/exams/<int:exam_id>/questions/toggle-all", methods=["POST"])
+def api_elearning_admin_bulk_toggle_questions(exam_id):
+    data = request.json or {}
+    is_active = data.get("is_active", 1)
+    try:
+        count = bulk_toggle_questions_active(exam_id, is_active)
+        status_text = "ditampilkan" if is_active == 1 else "disembunyikan"
+        return jsonify({
+            "success": True,
+            "updated_count": count,
+            "is_active": 1 if is_active else 0,
+            "message": f"Seluruh ({count}) butir soal berhasil {status_text}!"
+        })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
 

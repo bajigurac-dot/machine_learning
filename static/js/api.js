@@ -297,6 +297,11 @@ const API = {
     return await res.json();
   },
 
+  async getAdminExams() {
+    const res = await fetch('/api/elearning/admin/exams');
+    return await res.json();
+  },
+
   async getAdminExam(id) {
     const res = await fetch(`/api/elearning/admin/exams/${id}`);
     return await res.json();
@@ -307,6 +312,24 @@ const API = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
+
+  async toggleExamActive(id, isActive = null) {
+    const res = await fetch(`/api/elearning/admin/exams/${id}/toggle-active`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(isActive !== null ? { is_active: isActive } : {})
+    });
+    return await res.json();
+  },
+
+  async bulkToggleQuestions(examId, isActive) {
+    const res = await fetch(`/api/elearning/admin/exams/${examId}/questions/toggle-all`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ is_active: isActive })
     });
     return await res.json();
   },

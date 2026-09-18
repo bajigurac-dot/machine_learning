@@ -456,17 +456,19 @@ def execute_sql_query(query_str, expected_output=None):
 
 # ==================== EXAM & QUESTION MANAGEMENT ====================
 
-def list_active_exams():
-    """Mengambil daftar ujian yang aktif untuk siswa."""
+def list_active_exams(include_inactive=False):
+    """Mengambil daftar ujian untuk siswa (hanya aktif) atau admin (semua termasuk yang disembunyikan)."""
     init_elearning_db()
     with get_db() as conn:
-        rows = conn.execute("""
+        where_clause = "" if include_inactive else "WHERE e.is_active = 1"
+        rows = conn.execute(f"""
             SELECT e.*, 
                    COUNT(CASE WHEN q.is_active = 1 OR q.is_active IS NULL THEN q.id ELSE NULL END) as question_count, 
+                   COUNT(q.id) as total_question_count,
                    COALESCE(SUM(CASE WHEN q.is_active = 1 OR q.is_active IS NULL THEN q.points ELSE 0 END), 0) as total_points
             FROM exams e
             LEFT JOIN questions q ON e.id = q.exam_id
-            WHERE e.is_active = 1
+            {where_clause}
             GROUP BY e.id
             ORDER BY e.created_at DESC
         """).fetchall()
@@ -540,6 +542,22 @@ def delete_exam(exam_id):
         conn.commit()
         return True
 
+def toggle_exam_active(exam_id, is_active=None):
+    """Menyembunyikan (hide) atau menampilkan kembali (unhide) seluruh paket ujian."""
+    init_elearning_db()
+    with get_db() as conn:
+        current = conn.execute("SELECT is_active FROM exams WHERE id = ?", (exam_id,)).fetchone()
+        if not current:
+            raise ValueError(f"Paket ujian dengan ID #{exam_id} tidak ditemukan.")
+        curr_val = 1 if current[0] is None else current[0]
+        if is_active is None:
+            new_val = 0 if curr_val == 1 else 1
+        else:
+            new_val = 1 if is_active else 0
+        conn.execute("UPDATE exams SET is_active = ? WHERE id = ?", (new_val, exam_id))
+        conn.commit()
+        return new_val
+
 def get_question(question_id):
     """Mengambil detail butir soal berdasarkan ID-nya."""
     init_elearning_db()
@@ -608,6 +626,18 @@ def delete_question(question_id):
         conn.commit()
         return True
 
+def bulk_toggle_questions_active(exam_id, is_active=1):
+    """Menyembunyikan atau menampilkan sekaligus seluruh butir soal dalam suatu paket ujian."""
+    init_elearning_db()
+    with get_db() as conn:
+        exam = conn.execute("SELECT id FROM exams WHERE id = ?", (exam_id,)).fetchone()
+        if not exam:
+            raise ValueError(f"Paket ujian dengan ID #{exam_id} tidak ditemukan.")
+        target_val = 1 if is_active else 0
+        cur = conn.execute("UPDATE questions SET is_active = ? WHERE exam_id = ?", (target_val, exam_id))
+        conn.commit()
+        return cur.rowcount
+
 # ==================== SUBMISSION & AUTO-GRADING ====================
 
 def submit_exam_answers(exam_id, student_info, answers_dict, duration_seconds=0):
@@ -620,6 +650,8 @@ def submit_exam_answers(exam_id, student_info, answers_dict, duration_seconds=0)
     exam = get_exam_details(exam_id, include_correct_answers=True, include_hidden=False)
     if not exam:
         raise ValueError("Ujian tidak ditemukan.")
+    if exam.get("is_active") == 0:
+        raise ValueError("Paket ujian ini sedang dinonaktifkan atau disembunyikan oleh guru.")
 
     total_points = 0
     earned_points = 0

@@ -2450,11 +2450,12 @@ conn.close()
                         <th>Mata Pelajaran</th>
                         <th>Durasi Waktu</th>
                         <th>Jumlah Soal</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody id="admin-exams-table-body">
-                      <tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Memuat data ujian...</td></tr>
+                      <tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Memuat data ujian...</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -2986,6 +2987,16 @@ conn.close()
               <label class="form-label-sm">Deskripsi / Catatan Petunjuk:</label>
               <textarea class="app-input" id="edit-exam-desc" rows="2" placeholder="Petunjuk pengerjaan bagi siswa..." style="width: 100%; resize: vertical;"></textarea>
             </div>
+            <div>
+              <label class="form-label-sm" style="font-weight: 700;">Status Visibilitas Seluruh Paket Kuis:</label>
+              <select class="app-select" id="edit-exam-active" style="width: 100%; font-weight: 600;">
+                <option value="1">✅ Tampilkan ke Siswa (Aktif di Halaman Siswa)</option>
+                <option value="0">🙈 Sembunyikan Seluruh Paket (Draft / Guru Saja)</option>
+              </select>
+              <small style="color: var(--text-dim); font-size: 0.76rem; display: block; margin-top: 3px;">
+                Jika disembunyikan, seluruh paket kuis ini tidak akan muncul di lobi e-learning siswa dan siswa tidak dapat mengaksesnya.
+              </small>
+            </div>
             <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
               <button class="btn btn-primary btn-sm" id="btn-save-edit-exam" type="button" style="display: flex; align-items: center; gap: 6px;">
                 💾 Simpan Informasi Kuis
@@ -3001,9 +3012,17 @@ conn.close()
               <span style="font-weight: 700; font-size: 0.92rem; color: var(--text-main);">📋 Butir Soal di Paket Ini</span>
               <span class="nav-tag purple" id="edit-exam-q-count-badge">Memuat soal...</span>
             </div>
-            <button class="btn btn-secondary btn-sm" id="btn-edit-exam-add-q" type="button" style="display: flex; align-items: center; gap: 6px;">
-              ➕ Tambah Butir Soal Baru
-            </button>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button class="btn btn-secondary btn-sm" id="btn-bulk-hide-q" type="button" style="display: flex; align-items: center; gap: 4px; font-size: 0.76rem;" title="Sembunyikan seluruh butir soal di paket ini">
+                🙈 Sembunyikan Semua Soal
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btn-bulk-show-q" type="button" style="display: flex; align-items: center; gap: 4px; font-size: 0.76rem;" title="Tampilkan kembali seluruh butir soal di paket ini">
+                👁️ Tampilkan Semua Soal
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btn-edit-exam-add-q" type="button" style="display: flex; align-items: center; gap: 6px;">
+                ➕ Tambah Butir Soal Baru
+              </button>
+            </div>
           </div>
 
           <div id="edit-exam-questions-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; padding-right: 4px;">

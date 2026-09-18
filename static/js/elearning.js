@@ -1441,7 +1441,7 @@ const ELearning = {
     if (!tbody) return;
 
     try {
-      const res = await API.getExams();
+      const res = await API.getAdminExams();
       if (res.success && res.exams.length > 0) {
         tbody.innerHTML = res.exams.map(exam => {
           let classBadge = '';
@@ -1452,15 +1452,26 @@ const ELearning = {
             classBadge = ` <span class="nav-tag purple" style="font-size: 0.68rem; font-weight: 700; padding: 1px 6px;">Kelas X</span>`;
           }
 
+          const isHidden = (exam.is_active === 0);
+          const statusBadge = isHidden
+            ? `<span class="nav-tag rose" style="font-size: 0.72rem; padding: 2px 8px; font-weight: 700;">🙈 Disembunyikan</span>`
+            : `<span class="nav-tag green" style="font-size: 0.72rem; padding: 2px 8px; font-weight: 700;">✅ Tampil di Siswa</span>`;
+
+          const toggleActionBtn = isHidden
+            ? `<button class="btn btn-secondary btn-sm" style="color: #059669; font-weight: 600;" onclick="ELearning.handleToggleExamActive(${exam.id}, 1)" title="Tampilkan paket ujian ini ke siswa">👁️ Tampilkan</button>`
+            : `<button class="btn btn-secondary btn-sm" style="color: #d97706; font-weight: 600;" onclick="ELearning.handleToggleExamActive(${exam.id}, 0)" title="Sembunyikan seluruh paket ujian ini dari siswa">🙈 Sembunyikan</button>`;
+
           return `
-          <tr>
+          <tr style="${isHidden ? 'background: rgba(244, 63, 94, 0.04);' : ''}">
             <td>#${exam.id}</td>
             <td><b>${exam.title}</b></td>
             <td><span class="nav-tag purple">${exam.subject}</span>${classBadge}</td>
             <td><b>⏱️ ${exam.duration_minutes} Menit</b></td>
-            <td>${exam.question_count || 0} Soal (${exam.total_points || 0} Poin)</td>
+            <td>${exam.question_count || 0} Soal Aktif (${exam.total_points || 0} Poin)</td>
+            <td>${statusBadge}</td>
             <td>
-              <div style="display: flex; gap: 6px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                ${toggleActionBtn}
                 <button class="btn btn-secondary btn-sm" onclick="ELearning.openEditExamModal(${exam.id})" title="Edit Paket Kuis & Kelola Soal">
                   ✏️ Edit
                 </button>
@@ -1476,10 +1487,10 @@ const ELearning = {
         `;
         }).join('');
       } else {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Belum ada paket ujian. Klik "Buat Paket Ujian Baru".</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Belum ada paket ujian. Klik "Buat Paket Ujian Baru".</td></tr>`;
       }
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="6" style="color: var(--accent-rose);">Error: ${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="color: var(--accent-rose);">Error: ${e.message}</td></tr>`;
     }
   },
 
@@ -1621,11 +1632,32 @@ const ELearning = {
         const res = await API.deleteExam(examId);
         if (res.success) {
           this.loadAdminExamsTable();
+          this.loadLobbyExams();
           App.showToast("Paket ujian berhasil dihapus.", "success");
         }
       } catch (e) {
         App.showToast(e.message, "error");
       }
+    }
+  },
+
+  async handleToggleExamActive(examId, targetState) {
+    try {
+      const res = await API.toggleExamActive(examId, targetState);
+      if (res.success) {
+        App.showToast(res.message || "Status visibilitas ujian berhasil diperbarui!", "success");
+        this.loadAdminExamsTable();
+        this.loadLobbyExams();
+        if (this.currentAdminExam && this.currentAdminExam.id === examId) {
+          this.currentAdminExam.is_active = res.is_active;
+          const activeSelect = document.getElementById('edit-exam-active');
+          if (activeSelect) activeSelect.value = String(res.is_active);
+        }
+      } else {
+        App.showToast(res.error || "Gagal mengubah status ujian.", "error");
+      }
+    } catch (e) {
+      App.showToast(`Error: ${e.message}`, "error");
     }
   },
 
@@ -1648,12 +1680,25 @@ const ELearning = {
       document.getElementById('edit-exam-subject').value = exam.subject || '';
       document.getElementById('edit-exam-duration').value = exam.duration_minutes || 30;
       document.getElementById('edit-exam-desc').value = exam.description || '';
+      const activeSelect = document.getElementById('edit-exam-active');
+      if (activeSelect) {
+        activeSelect.value = (exam.is_active === 0) ? '0' : '1';
+      }
 
       const addBtn = document.getElementById('btn-edit-exam-add-q');
       if (addBtn) {
         addBtn.onclick = () => {
           this.openAddQuestionModal(exam.id);
         };
+      }
+
+      const bulkHideBtn = document.getElementById('btn-bulk-hide-q');
+      if (bulkHideBtn) {
+        bulkHideBtn.onclick = () => this.handleBulkToggleQuestions(exam.id, 0);
+      }
+      const bulkShowBtn = document.getElementById('btn-bulk-show-q');
+      if (bulkShowBtn) {
+        bulkShowBtn.onclick = () => this.handleBulkToggleQuestions(exam.id, 1);
       }
 
       this.renderAdminExamQuestions(exam);
@@ -1676,6 +1721,8 @@ const ELearning = {
     const subject = document.getElementById('edit-exam-subject').value.trim();
     const duration = parseInt(document.getElementById('edit-exam-duration').value) || 30;
     const desc = document.getElementById('edit-exam-desc').value.trim();
+    const activeSelect = document.getElementById('edit-exam-active');
+    const isActive = activeSelect ? parseInt(activeSelect.value) : 1;
 
     if (!title || !subject) {
       App.showToast("Judul kuis dan mata pelajaran wajib diisi!", "error");
@@ -1688,20 +1735,46 @@ const ELearning = {
         subject: subject,
         duration_minutes: duration,
         description: desc,
-        is_active: 1
+        is_active: isActive
       });
 
       if (res.success) {
         App.showToast("Informasi paket kuis berhasil diperbarui! 🎉", "success");
         this.loadAdminExamsTable();
+        this.loadLobbyExams();
         if (this.currentAdminExam && this.currentAdminExam.id === examId) {
           this.currentAdminExam.title = title;
           this.currentAdminExam.subject = subject;
           this.currentAdminExam.duration_minutes = duration;
           this.currentAdminExam.description = desc;
+          this.currentAdminExam.is_active = isActive;
         }
       } else {
         App.showToast(res.error || "Gagal memperbarui paket kuis.", "error");
+      }
+    } catch (e) {
+      App.showToast(`Error: ${e.message}`, "error");
+    }
+  },
+
+  async handleBulkToggleQuestions(examId, targetState) {
+    const actionText = targetState === 0 ? "menyembunyikan seluruh" : "menampilkan kembali seluruh";
+    if (!confirm(`Apakah Anda yakin ingin ${actionText} butir soal di dalam paket kuis ini?`)) {
+      return;
+    }
+
+    try {
+      const res = await API.bulkToggleQuestions(examId, targetState);
+      if (res.success) {
+        App.showToast(res.message || "Status butir soal berhasil diperbarui!", "success");
+        this.loadAdminExamsTable();
+        const refreshed = await API.getAdminExam(examId);
+        if (refreshed.success && refreshed.exam) {
+          this.currentAdminExam = refreshed.exam;
+          this.renderAdminExamQuestions(refreshed.exam);
+        }
+      } else {
+        App.showToast(res.error || "Gagal memperbarui status butir soal.", "error");
       }
     } catch (e) {
       App.showToast(`Error: ${e.message}`, "error");

@@ -844,6 +844,71 @@ class TestELearningEngine(unittest.TestCase):
         finally:
             delete_exam(test_exam_id)
 
+    def test_25_hide_unhide_entire_exam_and_bulk_questions(self):
+        """Uji fitur menyembunyikan (hide) seluruh paket ujian dari siswa dan bulk toggle butir soal."""
+        from ml_engine.elearning import create_exam, add_question, delete_exam
+
+        test_exam_id = create_exam("Uji Coba Sembunyikan Seluruh Paket", "Deskripsi Uji Seluruh Soal", "Informatika", 25)
+        q1_id = add_question(test_exam_id, "mcq", "Soal Paket 1", ["A. 1", "B. 2"], "A", points=50)
+        q2_id = add_question(test_exam_id, "mcq", "Soal Paket 2", ["A. 3", "B. 4"], "B", points=50)
+
+        try:
+            # 1. Pastikan paket kuis awal tampil di endpoint siswa dan admin
+            student_exams = self.client.get("/api/elearning/exams").get_json()["exams"]
+            self.assertTrue(any(e["id"] == test_exam_id for e in student_exams))
+
+            admin_exams = self.client.get("/api/elearning/admin/exams").get_json()["exams"]
+            self.assertTrue(any(e["id"] == test_exam_id for e in admin_exams))
+
+            # 2. Sembunyikan SELURUH paket ujian dari siswa
+            res_toggle = self.client.post(f"/api/elearning/admin/exams/{test_exam_id}/toggle-active", json={"is_active": 0})
+            self.assertEqual(res_toggle.status_code, 200)
+            self.assertEqual(res_toggle.get_json()["is_active"], 0)
+
+            # 3. Verifikasi: Paket ujian hilang dari daftar siswa
+            student_exams_after = self.client.get("/api/elearning/exams").get_json()["exams"]
+            self.assertFalse(any(e["id"] == test_exam_id for e in student_exams_after))
+
+            # 4. Verifikasi: Siswa diblokir jika mencoba mengakses ujian tersembunyi
+            res_student_get = self.client.get(f"/api/elearning/exams/{test_exam_id}")
+            self.assertEqual(res_student_get.status_code, 403)
+            self.assertIn("dinonaktifkan atau disembunyikan", res_student_get.get_json()["error"])
+
+            # 5. Verifikasi: Admin/Guru tetap dapat melihat paket ujian tersembunyi di tabel admin
+            admin_exams_after = self.client.get("/api/elearning/admin/exams").get_json()["exams"]
+            hidden_exam = next(e for e in admin_exams_after if e["id"] == test_exam_id)
+            self.assertEqual(hidden_exam["is_active"], 0)
+
+            # 6. Tampilkan kembali (Unhide) seluruh paket ujian
+            res_unhide = self.client.post(f"/api/elearning/admin/exams/{test_exam_id}/toggle-active", json={"is_active": 1})
+            self.assertEqual(res_unhide.status_code, 200)
+            self.assertEqual(res_unhide.get_json()["is_active"], 1)
+
+            # Siswa dapat mengakses kembali paket ujian
+            res_student_reget = self.client.get(f"/api/elearning/exams/{test_exam_id}")
+            self.assertEqual(res_student_reget.status_code, 200)
+            self.assertEqual(len(res_student_reget.get_json()["exam"]["questions"]), 2)
+
+            # 7. Uji Bulk Sembunyikan Seluruh Butir Soal dalam Paket
+            res_bulk_hide = self.client.post(f"/api/elearning/admin/exams/{test_exam_id}/questions/toggle-all", json={"is_active": 0})
+            self.assertEqual(res_bulk_hide.status_code, 200)
+            self.assertEqual(res_bulk_hide.get_json()["updated_count"], 2)
+
+            # Siswa melihat 0 soal aktif
+            res_student_bulk = self.client.get(f"/api/elearning/exams/{test_exam_id}").get_json()["exam"]
+            self.assertEqual(len(res_student_bulk["questions"]), 0)
+
+            # 8. Uji Bulk Tampilkan Kembali Seluruh Butir Soal
+            res_bulk_show = self.client.post(f"/api/elearning/admin/exams/{test_exam_id}/questions/toggle-all", json={"is_active": 1})
+            self.assertEqual(res_bulk_show.status_code, 200)
+            self.assertEqual(res_bulk_show.get_json()["updated_count"], 2)
+
+            res_student_bulk_restored = self.client.get(f"/api/elearning/exams/{test_exam_id}").get_json()["exam"]
+            self.assertEqual(len(res_student_bulk_restored["questions"]), 2)
+
+        finally:
+            delete_exam(test_exam_id)
+
     @classmethod
     def tearDownClass(cls):
         from ml_engine.elearning import get_db
