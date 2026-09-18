@@ -16,5 +16,5 @@ EXPOSE 7860
 
 VOLUME ["/app/data"]
 
-# Gunicorn dengan 2 worker & timeout 120 detik, sangat stabil untuk EC2 Free Tier (1GB RAM)
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:7860", "--timeout", "120", "app:app"]
+# Gunicorn dengan 2 worker & 4 threads (mampu menangani 8 request bersamaan dengan hemat RAM)
+CMD ["gunicorn", "-w", "2", "--threads", "4", "-b", "0.0.0.0:7860", "--timeout", "120", "app:app"]
