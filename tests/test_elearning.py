@@ -800,6 +800,50 @@ class TestELearningEngine(unittest.TestCase):
             # Bersihkan data uji
             delete_exam(test_exam_id)
 
+    def test_24_hide_unhide_question_visibility(self):
+        """Uji fitur menyembunyikan (hide) dan menampilkan kembali (unhide) butir soal bagi admin guru."""
+        from ml_engine.elearning import create_exam, add_question, get_exam_details, delete_exam, list_active_exams
+
+        test_exam_id = create_exam("Uji Coba Sembunyikan Soal", "Deskripsi Uji Hide", "Informatika", 20)
+        q1_id = add_question(test_exam_id, "mcq", "Soal 1 Tampil", ["A. 1", "B. 2", "C. 3", "D. 4"], "A", points=50)
+        q2_id = add_question(test_exam_id, "mcq", "Soal 2 Mau Dihide", ["A. Ya", "B. Tidak", "C. Mungkin", "D. Ragu"], "A", points=50)
+
+        try:
+            # 1. Pastikan kedua soal tampil sebelum di-hide
+            student_exam = self.client.get(f"/api/elearning/exams/{test_exam_id}").get_json()["exam"]
+            self.assertEqual(len(student_exam["questions"]), 2)
+
+            admin_exam = self.client.get(f"/api/elearning/admin/exams/{test_exam_id}").get_json()["exam"]
+            self.assertEqual(len(admin_exam["questions"]), 2)
+
+            # 2. Sembunyikan Soal 2 melalui API toggle-active
+            res_toggle = self.client.post(f"/api/elearning/questions/{q2_id}/toggle-active", json={"is_active": 0})
+            self.assertEqual(res_toggle.status_code, 200)
+            self.assertEqual(res_toggle.get_json()["is_active"], 0)
+
+            # 3. Verifikasi: Siswa hanya melihat 1 soal (Soal 1), Soal 2 tidak tampil
+            student_exam_after = self.client.get(f"/api/elearning/exams/{test_exam_id}").get_json()["exam"]
+            self.assertEqual(len(student_exam_after["questions"]), 1)
+            self.assertEqual(student_exam_after["questions"][0]["id"], q1_id)
+
+            # 4. Verifikasi: Guru di admin tetap melihat 2 soal, namun Soal 2 berstatus is_active = 0
+            admin_exam_after = self.client.get(f"/api/elearning/admin/exams/{test_exam_id}").get_json()["exam"]
+            self.assertEqual(len(admin_exam_after["questions"]), 2)
+            q2_admin = next(q for q in admin_exam_after["questions"] if q["id"] == q2_id)
+            self.assertEqual(q2_admin["is_active"], 0)
+
+            # 5. Tampilkan kembali (Unhide) Soal 2
+            res_unhide = self.client.post(f"/api/elearning/questions/{q2_id}/toggle-active", json={"is_active": 1})
+            self.assertEqual(res_unhide.status_code, 200)
+            self.assertEqual(res_unhide.get_json()["is_active"], 1)
+
+            # 6. Verifikasi: Siswa dapat melihat kembali kedua soal
+            student_exam_restored = self.client.get(f"/api/elearning/exams/{test_exam_id}").get_json()["exam"]
+            self.assertEqual(len(student_exam_restored["questions"]), 2)
+
+        finally:
+            delete_exam(test_exam_id)
+
     @classmethod
     def tearDownClass(cls):
         from ml_engine.elearning import get_db

@@ -24,7 +24,7 @@ from ml_engine.project_storage import (
 from ml_engine.ai_copilot import handle_ai_chat, generate_local_feature_spec, generate_local_prd, test_gemini_connection
 from ml_engine.elearning import (
     init_elearning_db, list_active_exams, get_exam_details, create_exam, update_exam, delete_exam,
-    add_question, get_question, update_question, delete_question, execute_python_code, execute_sql_query,
+    add_question, get_question, update_question, toggle_question_active, delete_question, execute_python_code, execute_sql_query,
     get_sql_mock_schema,
     submit_exam_answers, list_submissions, update_submission_score, delete_submission,
     generate_scores_pdf,
@@ -642,7 +642,7 @@ def api_elearning_get_exam(exam_id):
 
 @app.route("/api/elearning/admin/exams/<int:exam_id>", methods=["GET"])
 def api_elearning_admin_get_exam(exam_id):
-    exam = get_exam_details(exam_id, include_correct_answers=True)
+    exam = get_exam_details(exam_id, include_correct_answers=True, include_hidden=True)
     if not exam:
         return jsonify({"success": False, "error": "Ujian tidak ditemukan."}), 404
     return jsonify({"success": True, "exam": exam})
@@ -728,6 +728,7 @@ def api_elearning_update_question(question_id):
     starter_code = data.get("starter_code", "")
     expected_output = data.get("expected_output", "")
     points = data.get("points", 20)
+    is_active = data.get("is_active", 1)
 
     if not question_text:
         return jsonify({"success": False, "error": "Teks pertanyaan wajib diisi."}), 400
@@ -741,9 +742,25 @@ def api_elearning_update_question(question_id):
             correct_answer=correct_answer,
             starter_code=starter_code,
             expected_output=expected_output,
-            points=points
+            points=points,
+            is_active=is_active
         )
         return jsonify({"success": True, "message": "Butir soal berhasil diperbarui!"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@app.route("/api/elearning/questions/<int:question_id>/toggle-active", methods=["POST", "PATCH"])
+def api_elearning_toggle_question_active(question_id):
+    try:
+        data = request.json or {}
+        explicit_state = data.get("is_active") if "is_active" in data else None
+        new_val = toggle_question_active(question_id, explicit_state)
+        status_text = "diaktifkan (tampil ke siswa)" if new_val == 1 else "disembunyikan dari siswa"
+        return jsonify({
+            "success": True, 
+            "is_active": new_val,
+            "message": f"Butir soal berhasil {status_text}."
+        })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
 

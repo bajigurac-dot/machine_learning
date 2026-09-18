@@ -55,6 +55,7 @@ def init_elearning_db():
             starter_code TEXT,          -- Template koding awal
             expected_output TEXT,       -- Output yang diharapkan
             points INTEGER DEFAULT 20,
+            is_active INTEGER DEFAULT 1, -- 1: Aktif / Tampil di siswa, 0: Hidden / Disembunyikan
             FOREIGN KEY (exam_id) REFERENCES exams (id) ON DELETE CASCADE
         );
 
@@ -99,6 +100,11 @@ def init_elearning_db():
         SET student_class = REPLACE(REPLACE(student_class, ' RPL', ''), ' TKJ', '') 
         WHERE student_class LIKE '%SMK Cahaya Pertiwi%';
         """)
+        # Migrasi kolom is_active pada tabel questions jika belum ada
+        try:
+            conn.execute("ALTER TABLE questions ADD COLUMN is_active INTEGER DEFAULT 1")
+        except Exception:
+            pass
         conn.commit()
     seed_default_exams()
     seed_default_students()
@@ -455,7 +461,9 @@ def list_active_exams():
     init_elearning_db()
     with get_db() as conn:
         rows = conn.execute("""
-            SELECT e.*, COUNT(q.id) as question_count, SUM(q.points) as total_points
+            SELECT e.*, 
+                   COUNT(CASE WHEN q.is_active = 1 OR q.is_active IS NULL THEN q.id ELSE NULL END) as question_count, 
+                   COALESCE(SUM(CASE WHEN q.is_active = 1 OR q.is_active IS NULL THEN q.points ELSE 0 END), 0) as total_points
             FROM exams e
             LEFT JOIN questions q ON e.id = q.exam_id
             WHERE e.is_active = 1
@@ -464,18 +472,23 @@ def list_active_exams():
         """).fetchall()
         return [dict(r) for r in rows]
 
-def get_exam_details(exam_id, include_correct_answers=False):
-    """Mengambil detail ujian dan seluruh butir soal."""
+def get_exam_details(exam_id, include_correct_answers=False, include_hidden=False):
+    """Mengambil detail ujian dan seluruh butir soal (dapat menyertakan/mengecualikan soal tersembunyi)."""
     init_elearning_db()
     with get_db() as conn:
         exam = conn.execute("SELECT * FROM exams WHERE id = ?", (exam_id,)).fetchone()
         if not exam:
             return None
             
-        q_rows = conn.execute("SELECT * FROM questions WHERE exam_id = ? ORDER BY id ASC", (exam_id,)).fetchall()
+        if include_hidden:
+            q_rows = conn.execute("SELECT * FROM questions WHERE exam_id = ? ORDER BY id ASC", (exam_id,)).fetchall()
+        else:
+            q_rows = conn.execute("SELECT * FROM questions WHERE exam_id = ? AND (is_active = 1 OR is_active IS NULL) ORDER BY id ASC", (exam_id,)).fetchall()
+
         questions = []
         for q in q_rows:
             d = dict(q)
+            d["is_active"] = 1 if d.get("is_active") is None or d.get("is_active") == 1 else 0
             if d.get("options_json"):
                 try:
                     d["options"] = json.loads(d["options_json"])
@@ -535,6 +548,7 @@ def get_question(question_id):
         if not row:
             return None
         d = dict(row)
+        d["is_active"] = 1 if d.get("is_active") is None or d.get("is_active") == 1 else 0
         if d.get("options_json"):
             try:
                 d["options"] = json.loads(d["options_json"])
@@ -544,31 +558,47 @@ def get_question(question_id):
             d["options"] = []
         return d
 
-def add_question(exam_id, question_type, question_text, options=None, correct_answer=None, starter_code=None, expected_output=None, points=20):
+def add_question(exam_id, question_type, question_text, options=None, correct_answer=None, starter_code=None, expected_output=None, points=20, is_active=1):
     """Menambahkan butir soal ke ujian."""
     init_elearning_db()
     options_json = json.dumps(options) if options else None
     with get_db() as conn:
         cur = conn.execute("""
             INSERT INTO questions 
-            (exam_id, question_type, question_text, options_json, correct_answer, starter_code, expected_output, points)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (exam_id, question_type, question_text, options_json, correct_answer, starter_code, expected_output, int(points)))
+            (exam_id, question_type, question_text, options_json, correct_answer, starter_code, expected_output, points, is_active)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (exam_id, question_type, question_text, options_json, correct_answer, starter_code, expected_output, int(points), 1 if is_active else 0))
         conn.commit()
         return cur.lastrowid
 
-def update_question(question_id, question_type, question_text, options=None, correct_answer=None, starter_code=None, expected_output=None, points=20):
+def update_question(question_id, question_type, question_text, options=None, correct_answer=None, starter_code=None, expected_output=None, points=20, is_active=1):
     """Guru memperbarui butir soal yang sudah ada."""
     init_elearning_db()
     options_json = json.dumps(options) if options else None
     with get_db() as conn:
         conn.execute("""
             UPDATE questions 
-            SET question_type = ?, question_text = ?, options_json = ?, correct_answer = ?, starter_code = ?, expected_output = ?, points = ?
+            SET question_type = ?, question_text = ?, options_json = ?, correct_answer = ?, starter_code = ?, expected_output = ?, points = ?, is_active = ?
             WHERE id = ?
-        """, (question_type, question_text, options_json, correct_answer, starter_code, expected_output, int(points), question_id))
+        """, (question_type, question_text, options_json, correct_answer, starter_code, expected_output, int(points), 1 if is_active else 0, question_id))
         conn.commit()
         return True
+
+def toggle_question_active(question_id, is_active=None):
+    """Menyembunyikan (hide) atau menampilkan kembali (unhide) butir soal."""
+    init_elearning_db()
+    with get_db() as conn:
+        current = conn.execute("SELECT is_active FROM questions WHERE id = ?", (question_id,)).fetchone()
+        if not current:
+            raise ValueError(f"Soal dengan ID #{question_id} tidak ditemukan.")
+        curr_val = 1 if current[0] is None else current[0]
+        if is_active is None:
+            new_val = 0 if curr_val == 1 else 1
+        else:
+            new_val = 1 if is_active else 0
+        conn.execute("UPDATE questions SET is_active = ? WHERE id = ?", (new_val, question_id))
+        conn.commit()
+        return new_val
 
 def delete_question(question_id):
     """Menghapus butir soal."""
@@ -583,10 +613,11 @@ def delete_question(question_id):
 def submit_exam_answers(exam_id, student_info, answers_dict, duration_seconds=0):
     """
     Menilai jawaban ujian siswa secara otomatis (PG & Coding Python/SQL).
+    Hanya butir soal aktif (tidak tersembunyi) yang dinilai dan dihitung poinnya.
     answers_dict format: { question_id: answer_value }
     """
     init_elearning_db()
-    exam = get_exam_details(exam_id, include_correct_answers=True)
+    exam = get_exam_details(exam_id, include_correct_answers=True, include_hidden=False)
     if not exam:
         raise ValueError("Ujian tidak ditemukan.")
 

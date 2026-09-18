@@ -1714,10 +1714,16 @@ const ELearning = {
     if (!container) return;
 
     const questions = exam.questions || [];
-    const totalPoints = questions.reduce((acc, q) => acc + (q.points || 0), 0);
+    const activeQuestions = questions.filter(q => q.is_active !== 0);
+    const hiddenQuestions = questions.filter(q => q.is_active === 0);
+    const totalPoints = activeQuestions.reduce((acc, q) => acc + (q.points || 0), 0);
 
     if (badge) {
-      badge.innerText = `${questions.length} Butir Soal (${totalPoints} Poin)`;
+      if (hiddenQuestions.length > 0) {
+        badge.innerHTML = `${activeQuestions.length} Aktif • <span style="color: #f43f5e; font-weight: 700;">${hiddenQuestions.length} Sembunyi</span> (${totalPoints} Poin)`;
+      } else {
+        badge.innerText = `${questions.length} Butir Soal (${totalPoints} Poin)`;
+      }
     }
 
     if (questions.length === 0) {
@@ -1754,17 +1760,29 @@ const ELearning = {
         answerSnippet = `<span style="font-size: 0.72rem; color: #4b5563; font-family: var(--font-mono);">Output: <code>${shortExp || '-'}</code></span>`;
       }
 
+      const isHidden = (q.is_active === 0);
+      const cardBg = isHidden ? '#f8fafc' : '#ffffff';
+      const cardBorder = isHidden ? '1px dashed #cbd5e1' : '1px solid var(--border-subtle)';
+      const cardOpacity = isHidden ? 'opacity: 0.82;' : '';
+      const statusBadge = isHidden 
+        ? `<span class="nav-tag rose" style="font-size: 0.68rem; padding: 2px 7px;">🙈 Disembunyikan</span>`
+        : `<span class="nav-tag green" style="font-size: 0.68rem; padding: 2px 7px;">✅ Aktif</span>`;
+
       return `
-        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;">
+        <div style="background: ${cardBg}; border: ${cardBorder}; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; ${cardOpacity}">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <b style="font-size: 0.85rem; color: var(--text-main);">No. ${idx + 1}</b>
               <span class="nav-tag ${typeClass}" style="font-size: 0.7rem; padding: 2px 7px;">${typeIcon} ${typeLabel}</span>
+              ${statusBadge}
               <span style="font-size: 0.74rem; font-weight: 700; color: #2563eb; background: rgba(37, 99, 235, 0.08); padding: 2px 8px; border-radius: 9999px;">
                 ${q.points} Poin
               </span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
+              <button class="btn btn-secondary btn-sm" onclick="ELearning.handleToggleQuestionActive(${q.id}, ${exam.id}, ${isHidden ? 1 : 0})" style="padding: 3px 8px; font-size: 0.75rem; color: ${isHidden ? '#059669' : '#d97706'}; font-weight: 600;" title="${isHidden ? 'Tampilkan kembali soal ini ke siswa' : 'Sembunyikan soal ini dari siswa'}">
+                ${isHidden ? '👁️ Tampilkan' : '🙈 Sembunyikan'}
+              </button>
               <button class="btn btn-secondary btn-sm" onclick="ELearning.openEditQuestionModal(${q.id})" style="padding: 3px 8px; font-size: 0.75rem;" title="Edit isi butir soal">
                 ✏️ Edit
               </button>
@@ -1773,10 +1791,10 @@ const ELearning = {
               </button>
             </div>
           </div>
-          <div style="font-size: 0.82rem; color: var(--text-main); font-weight: 500; line-height: 1.4;">
+          <div style="font-size: 0.82rem; color: var(--text-main); font-weight: 500; line-height: 1.4; ${isHidden ? 'color: var(--text-dim);' : ''}">
             ${q.question_text}
           </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+          <div style="display: flex; align-items: center; justify-content: space-between; background: ${isHidden ? '#f1f5f9' : '#f8fafc'}; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
             ${answerSnippet}
             <span style="font-size: 0.68rem; color: var(--text-dim);">ID #${q.id}</span>
           </div>
@@ -1805,10 +1823,15 @@ const ELearning = {
     }
 
     document.getElementById('edit-q-id').value = q.id;
-    document.getElementById('edit-q-exam-id').value = q.exam_id;
+    document.getElementById('edit-q-exam-id').value = q.exam_id || (this.currentAdminExam ? this.currentAdminExam.id : '');
     document.getElementById('edit-q-type').value = q.question_type || 'mcq';
     document.getElementById('edit-q-points').value = q.points || 20;
     document.getElementById('edit-q-text').value = q.question_text || '';
+    
+    const activeSelect = document.getElementById('edit-q-active');
+    if (activeSelect) {
+      activeSelect.value = (q.is_active === 0 ? '0' : '1');
+    }
 
     const isMcq = (q.question_type === 'mcq');
     document.getElementById('edit-q-mcq-fields').classList.toggle('hidden', !isMcq);
@@ -1849,6 +1872,8 @@ const ELearning = {
     const qType = document.getElementById('edit-q-type').value;
     const qText = document.getElementById('edit-q-text').value.trim();
     const points = parseInt(document.getElementById('edit-q-points').value) || 20;
+    const activeEl = document.getElementById('edit-q-active');
+    const isActive = activeEl ? parseInt(activeEl.value) : 1;
 
     if (!qText) {
       App.showToast("Teks pertanyaan tidak boleh kosong!", "error");
@@ -1880,7 +1905,8 @@ const ELearning = {
         correct_answer: correctAnswer,
         starter_code: starterCode,
         expected_output: expectedOutput,
-        points: points
+        points: points,
+        is_active: isActive
       });
 
       if (res.success) {
@@ -1892,6 +1918,27 @@ const ELearning = {
         this.loadAdminExamsTable();
       } else {
         App.showToast(res.error || "Gagal memperbarui soal.", "error");
+      }
+    } catch (e) {
+      App.showToast(`Error: ${e.message}`, "error");
+    }
+  },
+
+  async handleToggleQuestionActive(questionId, examId, targetState) {
+    const targetExamId = examId || (this.currentAdminExam ? this.currentAdminExam.id : null);
+    try {
+      const res = await API.toggleQuestionActive(questionId, targetState);
+      if (res.success) {
+        const msg = res.is_active === 1 
+          ? "Soal sekarang AKTIF dan tampil di halaman ujian siswa. ✅" 
+          : "Soal berhasil DISEMBUNYIKAN dari halaman ujian siswa. 🙈";
+        App.showToast(msg, "success");
+        if (targetExamId) {
+          await this.openEditExamModal(targetExamId);
+        }
+        this.loadAdminExamsTable();
+      } else {
+        App.showToast(res.error || "Gagal mengubah visibilitas butir soal.", "error");
       }
     } catch (e) {
       App.showToast(`Error: ${e.message}`, "error");

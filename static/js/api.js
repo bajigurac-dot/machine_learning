@@ -335,6 +335,15 @@ const API = {
     return await res.json();
   },
 
+  async toggleQuestionActive(id, isActive = null) {
+    const res = await fetch(`/api/elearning/questions/${id}/toggle-active`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(isActive !== null ? { is_active: isActive } : {})
+    });
+    return await res.json();
+  },
+
   async addQuestion(examId, questionType, questionText, options, correctAnswer, starterCode, expectedOutput, points) {
     const res = await fetch('/api/elearning/questions/add', {
       method: 'POST',
