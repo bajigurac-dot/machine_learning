@@ -16,13 +16,20 @@ git fetch origin main
 git checkout -- studio_ml.db 2>/dev/null || true
 git reset --hard origin/main
 
-# 2. Backup database yang saat ini sedang aktif di EC2
+# 2. Matikan kontainer Docker sementara agar database tidak terkunci saat update
+echo "🛑 Menghentikan kontainer Docker agar file database tidak terkunci..."
+sudo docker compose down 2>/dev/null || true
+
+# 3. Backup database yang saat ini sedang aktif di EC2
 echo "💾 Membuat salinan cadangan (backup) database aktif..."
 if [ -f backup_db.sh ]; then
     bash backup_db.sh || true
 fi
 
-# 3. Terapkan database baru hasil git pull ke folder persistensi docker (Pertahankan password EC2)
+# 4. Bersihkan file temporary WAL dan SHM SQLite yang tertinggal
+sudo rm -f data/studio_ml.db-wal data/studio_ml.db-shm
+
+# 5. Terapkan database baru hasil git pull ke folder persistensi docker (Pertahankan password EC2)
 if [ -f studio_ml.db ]; then
     echo "📋 Menyalin database baru ke data/studio_ml.db..."
     mkdir -p data
@@ -47,12 +54,12 @@ except Exception:
     else
         cp studio_ml.db data/studio_ml.db
     fi
+    sudo chmod 666 data/studio_ml.db 2>/dev/null || true
     echo "✅ Database baru berhasil disalin!"
 fi
 
-# 4. Bangun ulang / restart kontainer Docker
+# 6. Bangun ulang dan nyalakan kembali kontainer Docker
 echo "🚀 Menerapkan perubahan ke kontainer Docker..."
-sudo docker compose down 2>/dev/null || true
 sudo docker compose up -d --build
 
 echo "========================================================="
