@@ -1161,26 +1161,12 @@ def generate_student_card_pdf(student_nisn):
 # ==================== DEFAULT PRESET SEED DATA ====================
 
 def seed_informatika_x_exam(conn):
-    """Menambahkan paket Kuis Dasar Informatika & Berpikir Komputasional (Kelas X) jika belum ada."""
-    existing = conn.execute("SELECT id FROM exams WHERE title LIKE '%Informatika%Kelas X%' OR title LIKE '%Informatika (Kelas X)%'").fetchone()
-    if existing:
-        return existing[0]
-
-    cur = conn.execute("""
-        INSERT INTO exams (title, description, subject, duration_minutes)
-        VALUES (?, ?, ?, ?)
-    """, (
-        "Kuis Dasar Informatika & Berpikir Komputasional (Kelas X) — SMK Cahaya Pertiwi",
-        "Kuis evaluasi pemahaman dasar mata pelajaran Informatika untuk siswa kelas X SMK Cahaya Pertiwi (Kurikulum Merdeka). Mencakup 8 Pilar Fondasi Informatika, Siklus IPOS, Berpikir Komputasional (BK), Perangkat Komputer & Jaringan, serta Dasar Algoritma Pemrograman Python.",
-        "Informatika (Fase E)",
-        35
-    ))
-    exam_id = cur.lastrowid
-
+    """Menambahkan atau memperbarui paket Kuis Dasar Informatika & Berpikir Komputasional (Kelas X) (100% Pilihan Ganda, tanpa koding)."""
     mcqs_informatika = [
+        # --- Topik 1: Konsep Dasar Informatika & Siklus IPOS ---
         (
             "Disiplin ilmu mengenai studi, perancangan, dan pembuatan sistem komputasi serta prinsip-prinsip perancangannya disebut?",
-            ["A. Akuntansi", "B. Informatika", "C. Grafika", "D. Logistika"],
+            ["A. Akuntansi", "B. Informatika", "C. Grafika Komunikasi", "D. Logistika"],
             "B"
         ),
         (
@@ -1188,6 +1174,12 @@ def seed_informatika_x_exam(conn):
             ["A. Storage", "B. Process", "C. Output", "D. Delete"],
             "B"
         ),
+        (
+            "Komponen komputer yang berfungsi menampilkan hasil pemrosesan informasi kepada pengguna dalam bentuk visual atau cetak adalah perangkat output. Manakah yang termasuk perangkat output?",
+            ["A. Keyboard dan Mouse", "B. Monitor dan Printer", "C. Scanner dan Mikrofon", "D. Barcode Reader dan Touchpad"],
+            "B"
+        ),
+        # --- Topik 2: Berpikir Komputasional (BK) ---
         (
             "Kemampuan memecah masalah besar atau kompleks menjadi bagian-bagian yang lebih kecil dan mudah dikelola disebut?",
             ["A. Dekomposisi", "B. Abstraksi", "C. Pengenalan Pola", "D. Algoritma"],
@@ -1199,14 +1191,36 @@ def seed_informatika_x_exam(conn):
             "B"
         ),
         (
-            "Melihat kesamaan langkah bahwa setiap pembayaran selalu dihitung dengan rumus (uang bayar - total belanja) merupakan tahapan computational thinking yaitu?",
-            ["A. Pengenalan Pola (Pattern Recognition)", "B. Dekomposisi", "C. Coding", "D. Abstraksi"],
+            "Melihat kesamaan langkah bahwa setiap pembayaran selalu dihitung dengan rumus yang sama yaitu (uang bayar - total belanja) merupakan tahapan computational thinking yaitu?",
+            ["A. Pengenalan Pola (Pattern Recognition)", "B. Dekomposisi", "C. Abstraksi", "D. Kompilasi"],
             "A"
         ),
         (
-            "Urutan langkah-langkah logis dan sistematis yang disusun secara berurutan untuk menyelesaikan suatu permasalahan dinamakan?",
-            ["A. Hardware", "B. Algoritma", "C. Database", "D. Browser"],
-            "B"
+            "Menyusun instruksi langkah demi langkah yang runtut, terstruktur, dan logis untuk membuat alur transaksi kasir kantin dari awal hingga struk dicetak merupakan penerapan dari?",
+            ["A. Dekomposisi", "B. Abstraksi", "C. Perancangan Algoritma", "D. Pengenalan Pola"],
+            "C"
+        ),
+        # --- Topik 3: Teknologi Informasi & Komunikasi (TIK) ---
+        (
+            "Program aplikasi perkantoran yang paling tepat digunakan untuk mengolah data angka, membuat tabel perhitungan nilai otomatis, dan menyajikan diagram grafik adalah?",
+            ["A. Spreadsheet / Lembar Kerja (misal: Microsoft Excel / Google Sheets)", "B. Word Processor / Aplikasi Pengolah Kata", "C. Presentation Software / Aplikasi Presentasi", "D. Media Player"],
+            "A"
+        ),
+        (
+            "Layanan penyimpanan berkas berbasis internet yang memungkinkan siswa dan guru berkolaborasi mengedit dokumen yang sama secara bersamaan (real-time) disebut?",
+            ["A. Cloud Storage (misal: Google Drive / OneDrive)", "B. Flashdisk Fisik", "C. CD-ROM", "D. Local Harddisk"],
+            "A"
+        ),
+        (
+            "Agar hasil pencarian di mesin pencari (search engine) lebih terarah dan hanya menampilkan file dokumen presentasi terkait materi informatika, filter kata kunci yang tepat adalah?",
+            ["A. materi informatika filetype:pptx", "B. cari materi informatika dong", "C. buka file informatika sekarang", "D. download presentasi gratis"],
+            "A"
+        ),
+        # --- Topik 4: Sistem Komputer (SK) ---
+        (
+            "Sistem komputer dapat beroperasi dengan baik jika terjadi interaksi harmonis antara tiga komponen utama, yaitu?",
+            ["A. Hardware, Software, dan Brainware", "B. Keyboard, Mouse, dan Monitor", "C. CPU, RAM, dan Harddisk", "D. Windows, Linux, dan macOS"],
+            "A"
         ),
         (
             "Komponen utama perangkat keras komputer yang berfungsi sebagai otak pemroses dan pengendali seluruh instruksi kerja sistem adalah?",
@@ -1214,121 +1228,120 @@ def seed_informatika_x_exam(conn):
             "B"
         ),
         (
-            "Memori utama komputer yang bersifat sementara (volatile) dan berfungsi menampung data instruksi saat program sedang berjalan adalah?",
-            ["A. Harddisk", "B. RAM (Random Access Memory)", "C. Flashdisk", "D. Optical Disc"],
+            "Memori utama komputer yang bersifat sementara (volatile), artinya data di dalamnya akan hilang saat komputer dimatikan atau kehilangan daya, adalah?",
+            ["A. Harddisk Drive (HDD)", "B. RAM (Random Access Memory)", "C. Solid State Drive (SSD)", "D. Flashdisk"],
             "B"
         ),
         (
-            "Sistem komputer dapat beroperasi dengan baik jika terjadi interaksi harmonis antara tiga komponen utama, yaitu?",
-            ["A. Hardware, Software, dan Brainware", "B. Keyboard, Mouse, dan Monitor", "C. CPU, RAM, dan Harddisk", "D. Windows, Linux, dan macOS"],
+            "Urutan tahapan siklus kerja eksekusi instruksi pada CPU komputer saat memproses suatu perintah secara berurutan adalah?",
+            ["A. Fetch (ambil) -> Decode (terjemahkan) -> Execute (jalankan)", "B. Execute -> Fetch -> Decode", "C. Decode -> Execute -> Fetch", "D. Fetch -> Execute -> Decode"],
             "A"
         ),
+        # --- Topik 5: Jaringan Komputer & Internet (JKI) ---
         (
-            "Urutan tahapan siklus kerja instruksi pada CPU komputer secara berurutan adalah?",
-            ["A. Fetch -> Decode -> Execute", "B. Execute -> Fetch -> Decode", "C. Decode -> Execute -> Fetch", "D. Fetch -> Execute -> Decode"],
-            "A"
-        ),
-        (
-            "Jaringan komputer yang menghubungkan perangkat dalam area geografis terbatas, seperti ruangan lab komputer sekolah, disebut?",
+            "Jaringan komputer yang menghubungkan sejumlah perangkat dalam area geografis terbatas, seperti ruangan laboratorium komputer di SMK Cahaya Pertiwi, disebut?",
             ["A. WAN (Wide Area Network)", "B. LAN (Local Area Network)", "C. MAN (Metropolitan Area Network)", "D. GAN (Global Area Network)"],
             "B"
         ),
         (
-            "Identitas numerik berupa deretan angka unik yang diberikan kepada setiap perangkat yang terhubung ke jaringan internet dinamakan?",
-            ["A. MAC Address", "B. IP Address", "C. IMEI", "D. URL"],
+            "Identitas numerik berupa deretan angka unik (contoh: 192.168.1.1) yang diberikan kepada setiap perangkat yang terhubung ke jaringan komputer atau internet dinamakan?",
+            ["A. MAC Address", "B. IP Address (Internet Protocol)", "C. Nomor IMEI", "D. URL Web"],
             "B"
         ),
         (
-            "Protokol komunikasi transfer dokumen web yang dilengkapi enkripsi keamanan data (SSL/TLS) adalah?",
+            "Protokol komunikasi transfer dokumen web yang dilengkapi enkripsi keamanan data (SSL/TLS) sehingga aman dari penyadapan saat mengirim data sensitif adalah?",
             ["A. HTTP", "B. HTTPS", "C. FTP", "D. TELNET"],
             "B"
         ),
+        # --- Topik 6: Analisis Data (AD) ---
         (
-            "Data berupa angka seperti nilai ulangan (85, 90) dan suhu (36.5) dalam analisis data dikelompokkan ke dalam kategori?",
-            ["A. Data Kategorikal", "B. Data Numerik", "C. Data Citra", "D. Data Audio"],
+            "Data berupa angka seperti nilai ulangan harian (85, 90) dan suhu ruangan (36.5°C) dalam analisis data dikelompokkan ke dalam kategori?",
+            ["A. Data Kategorikal", "B. Data Numerik (Kuantitatif)", "C. Data Citra", "D. Data Audio"],
             "B"
         ),
         (
-            "Tahapan dalam analisis data untuk membersihkan data dari nilai kosong (missing values), duplikasi, dan format tidak konsisten disebut?",
-            ["A. Data Modeling", "B. Data Cleaning", "C. Data Training", "D. Data Prediction"],
+            "Tahapan dalam analisis data untuk membersihkan kumpulan data dari baris kosong (missing values), duplikasi, dan inkonsistensi format disebut?",
+            ["A. Data Modeling", "B. Data Cleaning (Pembersihan Data)", "C. Data Prediction", "D. Data Deploying"],
             "B"
         ),
         (
-            "Etika, sopan santun, dan tata krama dalam berkomunikasi serta berinteraksi di dunia maya/internet dikenal dengan istilah?",
-            ["A. Algoritma", "B. Netiket (Netiquette)", "C. Phishing", "D. Cyber Crime"],
+            "Bentuk penyajian data dalam diagram batang, garis, atau lingkaran untuk memudahkan manusia membaca pola tren dan mengambil keputusan disebut?",
+            ["A. Enkripsi Data", "B. Visualisasi Data", "C. Kompresi Data", "D. Format Harddisk"],
+            "B"
+        ),
+        # --- Topik 7: Algoritma & Logika Pemecahan Masalah (AP Non-Koding) ---
+        (
+            "Urutan langkah-langkah logis dan sistematis yang disusun secara berurutan untuk menyelesaikan suatu permasalahan dinamakan?",
+            ["A. Hardware", "B. Algoritma", "C. Database", "D. Browser"],
             "B"
         ),
         (
-            "Metode penipuan online yang memancing korban untuk memberikan data pribadi, username, dan password melalui website atau pesan palsu disebut?",
-            ["A. Phishing", "B. Defragmenter", "C. Browsing", "D. Compile"],
+            "Dalam diagram alir (flowchart) standar untuk merancang algoritma logika, simbol berbentuk belah ketupat (diamond) digunakan untuk menunjukkan?",
+            ["A. Titik awal atau akhir program (Terminator)", "B. Pengambilan keputusan atau kondisi percabangan (Decision)", "C. Proses perhitungan matematis", "D. Pemasukan data manual oleh pengguna"],
+            "B"
+        ),
+        # --- Topik 8: Dampak Sosial Informatika (DSI) ---
+        (
+            "Etika, sopan santun, dan tata krama yang baik dalam berkomunikasi serta berinteraksi di dunia maya atau internet dikenal dengan istilah?",
+            ["A. Netiket (Netiquette)", "B. Phishing", "C. Ransomware", "D. Cyber Crime"],
             "A"
         ),
         (
-            "Perintah bahasa Python manakah yang benar untuk menyimpan teks nama siswa ke dalam sebuah variabel?",
-            ["A. nama = \"Ahmad\"", "B. var nama: Ahmad", "C. String nama = 'Ahmad';", "D. $nama = Ahmad"],
+            "Metode penipuan online yang memancing korban untuk memberikan data pribadi rahasia seperti username, password, dan nomor identitas melalui pesan atau website tiruan palsu disebut?",
+            ["A. Phishing", "B. Browsing", "C. Defragmenting", "D. Debugging"],
             "A"
         ),
+        # --- Topik 9: Praktik Lintas Bidang (PLB) ---
         (
-            "Struktur logika pada pemrograman yang digunakan untuk mengambil keputusan berdasarkan kondisi benar (True) atau salah (False) adalah?",
-            ["A. Percabangan (Branching / If-Else)", "B. Perulangan (Looping)", "C. Fungsi (Function)", "D. Array"],
-            "A"
-        ),
-        (
-            "Pilar Informatika yang mengajak siswa bekerja secara kolaboratif dalam tim untuk menciptakan produk teknologi guna memecahkan masalah nyata adalah?",
+            "Pilar Informatika yang mengajak siswa bekerja secara kolaboratif dalam tim untuk menciptakan produk teknologi guna memecahkan masalah nyata di lingkungan sekolah atau masyarakat adalah?",
             ["A. Analisis Data", "B. Praktik Lintas Bidang (PLB)", "C. Sistem Komputer", "D. Berpikir Komputasional"],
             "B"
         )
     ]
 
+    exam_desc = (
+        "Kuis evaluasi pemahaman dasar mata pelajaran Informatika untuk siswa kelas X SMK Cahaya Pertiwi (Kurikulum Merdeka). "
+        "Terdiri dari 25 butir soal pilihan ganda seputar 8 Pilar Fondasi Informatika, Siklus IPOS, Berpikir Komputasional (BK), "
+        "Sistem Komputer, Jaringan & Internet, Analisis Data, Etika Digital (DSI), serta Praktik Lintas Bidang (tanpa soal koding)."
+    )
+
+    existing = conn.execute("SELECT id FROM exams WHERE title LIKE '%Informatika%Kelas X%' OR title LIKE '%Informatika (Kelas X)%'").fetchone()
+    if existing:
+        exam_id = existing[0]
+        # Periksa apakah paket ujian masih memiliki soal koding atau belum 25 soal pilihan ganda
+        q_count = conn.execute("SELECT COUNT(*) FROM questions WHERE exam_id = ?", (exam_id,)).fetchone()[0]
+        has_coding = conn.execute("SELECT COUNT(*) FROM questions WHERE exam_id = ? AND question_type != 'mcq'", (exam_id,)).fetchone()[0]
+        if q_count != len(mcqs_informatika) or has_coding > 0:
+            conn.execute("DELETE FROM questions WHERE exam_id = ?", (exam_id,))
+            for text, opts, ans in mcqs_informatika:
+                conn.execute("""
+                    INSERT INTO questions (exam_id, question_type, question_text, options_json, correct_answer, points)
+                    VALUES (?, 'mcq', ?, ?, ?, 4)
+                """, (exam_id, text, json.dumps(opts), ans))
+            conn.execute("""
+                UPDATE exams 
+                SET description = ?, duration_minutes = 35, subject = 'Informatika (Fase E)'
+                WHERE id = ?
+            """, (exam_desc, exam_id))
+            conn.commit()
+        return exam_id
+
+    cur = conn.execute("""
+        INSERT INTO exams (title, description, subject, duration_minutes)
+        VALUES (?, ?, ?, ?)
+    """, (
+        "Kuis Dasar Informatika & Berpikir Komputasional (Kelas X) — SMK Cahaya Pertiwi",
+        exam_desc,
+        "Informatika (Fase E)",
+        35
+    ))
+    exam_id = cur.lastrowid
+
     for text, opts, ans in mcqs_informatika:
         conn.execute("""
             INSERT INTO questions (exam_id, question_type, question_text, options_json, correct_answer, points)
-            VALUES (?, 'mcq', ?, ?, ?, 3)
+            VALUES (?, 'mcq', ?, ?, ?, 4)
         """, (exam_id, text, json.dumps(opts), ans))
-
-    coding_informatika = [
-        (
-            "code_python",
-            "Tuliskan perintah Python menggunakan fungsi print() untuk mencetak salam pembuka materi informatika berikut ke layar monitor:\nHalo Informatika SMK Cahaya Pertiwi",
-            "# Tuliskan fungsi print() untuk mencetak kalimat:\n# Halo Informatika SMK Cahaya Pertiwi\n\nprint(\"Halo Informatika SMK Cahaya Pertiwi\")\n",
-            "Halo Informatika SMK Cahaya Pertiwi",
-            8
-        ),
-        (
-            "code_python",
-            "Lengkapi program Python berikut untuk menghitung total nilai Informatika siswa: variabel nilai_teori = 78 dan nilai_praktik = 86. Jumlahkan keduanya ke variabel total_nilai, lalu cetak hasilnya dengan format: Total Nilai: 164!",
-            "nilai_teori = 78\nnilai_praktik = 86\n\n# Hitung total nilai siswa (nilai_teori ditambah nilai_praktik)\ntotal_nilai = nilai_teori + nilai_praktik\n\n# Cetak hasil penjumlahan\nprint(f\"Total Nilai: {total_nilai}\")\n",
-            "Total Nilai: 164",
-            8
-        ),
-        (
-            "code_python",
-            "Diberikan skor ujian informatika siswa skor = 82. Lengkapi struktur percabangan if-else berikut: jika skor >= 75 maka cetak 'Status: TUNTAS', selain itu cetak 'Status: REMEDIAL'!",
-            "skor = 82\n\n# Periksa ketuntasan KKM 75 pada mata pelajaran Informatika\nif skor >= 75:\n    print(\"Status: TUNTAS\")\nelse:\n    print(\"Status: REMEDIAL\")\n",
-            "Status: TUNTAS",
-            8
-        ),
-        (
-            "code_python",
-            "Lengkapi perulangan for di Python untuk mencetak angka urut 1 sampai 3 ke bawah menggunakan fungsi range(1, 4)!",
-            "# Cetak angka 1, 2, dan 3 menggunakan perulangan for\nfor angka in range(1, 4):\n    print(angka)\n",
-            "1\n2\n3",
-            8
-        ),
-        (
-            "code_python",
-            "Diberikan list komponen perangkat keras komputer hardware = ['Monitor', 'Keyboard', 'Mouse', 'CPU']. Gunakan fungsi len(hardware) untuk menghitung banyaknya elemen, simpan ke variabel jumlah, lalu cetak dengan format: Jumlah Hardware: 4!",
-            "hardware = ['Monitor', 'Keyboard', 'Mouse', 'CPU']\n\n# Hitung jumlah elemen dalam list menggunakan fungsi len()\njumlah = len(hardware)\n\nprint(f\"Jumlah Hardware: {jumlah}\")\n",
-            "Jumlah Hardware: 4",
-            8
-        )
-    ]
-
-    for q_type, text, starter, expected, pts in coding_informatika:
-        conn.execute("""
-            INSERT INTO questions (exam_id, question_type, question_text, starter_code, expected_output, points)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (exam_id, q_type, text, starter, expected, pts))
 
     conn.commit()
     return exam_id

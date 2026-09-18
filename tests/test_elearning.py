@@ -99,7 +99,9 @@ class TestELearningEngine(unittest.TestCase):
         exams = list_active_exams()
         self.assertGreaterEqual(len(exams), 2)
         
-        exam1 = get_exam_details(exams[0]["id"])
+        # Cari paket ujian yang memiliki soal koding (misal: Pemrograman Python / Ulangan Semester)
+        coding_exam = next((e for e in exams if "python" in e["title"].lower() or "pemrograman" in e["title"].lower() or "ulangan" in e["title"].lower()), exams[0])
+        exam1 = get_exam_details(coding_exam["id"])
         self.assertIsNotNone(exam1)
         self.assertGreater(len(exam1["questions"]), 0)
 
@@ -107,6 +109,30 @@ class TestELearningEngine(unittest.TestCase):
         types = [q["question_type"] for q in exam1["questions"]]
         self.assertIn("mcq", types)
         self.assertTrue("code_python" in types or "code_sql" in types)
+
+    def test_04b_informatika_kelas_x_all_mcq_no_coding(self):
+        """Uji paket Kuis Informatika Kelas X: 100% Pilihan Ganda (25 butir soal, total 100 poin, tanpa koding)."""
+        exams = list_active_exams()
+        inf_exam = next((e for e in exams if "informatika" in e["title"].lower() and "kelas x" in e["title"].lower()), None)
+        self.assertIsNotNone(inf_exam, "Paket Kuis Informatika Kelas X harus tersedia di daftar ujian aktif.")
+
+        details = get_exam_details(inf_exam["id"], include_correct_answers=True)
+        self.assertIsNotNone(details)
+        questions = details["questions"]
+
+        # Pastikan tepat 25 soal
+        self.assertEqual(len(questions), 25, "Kuis Informatika Kelas X harus memiliki tepat 25 butir soal.")
+
+        # Pastikan seluruh soal bertipe pilihan ganda (mcq) dan TIDAK ADA soal koding
+        for idx, q in enumerate(questions, 1):
+            self.assertEqual(q["question_type"], "mcq", f"Soal #{idx} harus bertipe 'mcq', bukan koding!")
+            self.assertEqual(q["points"], 4, f"Soal #{idx} harus bernilai 4 poin.")
+            self.assertEqual(len(q["options"]), 4, f"Soal #{idx} harus memiliki 4 pilihan ganda (A, B, C, D).")
+            self.assertIn(q["correct_answer"], ["A", "B", "C", "D"], f"Kunci jawaban soal #{idx} harus valid.")
+
+        # Pastikan total poin adalah 100 (25 soal x 4 poin)
+        total_points = sum(q["points"] for q in questions)
+        self.assertEqual(total_points, 100, "Total bobot nilai Kuis Informatika Kelas X harus tepat 100 poin.")
 
     def test_05_exam_crud(self):
         """Uji pembuatan, penambahan soal, dan penghapusan ujian oleh admin/guru."""
