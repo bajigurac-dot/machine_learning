@@ -749,8 +749,11 @@ def api_elearning_update_question(question_id):
 
 @app.route("/api/elearning/questions/<int:question_id>", methods=["DELETE"])
 def api_elearning_delete_question(question_id):
-    delete_question(question_id)
-    return jsonify({"success": True, "message": "Soal berhasil dihapus."})
+    try:
+        delete_question(question_id)
+        return jsonify({"success": True, "message": "Soal berhasil dihapus."})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
 
 @app.route("/api/elearning/code/run", methods=["POST"])
 def api_elearning_run_code():

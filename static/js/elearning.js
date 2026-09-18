@@ -350,6 +350,11 @@ const ELearning = {
       btnSaveEditQ.addEventListener('click', () => this.handleSaveEditQuestion());
     }
 
+    const btnDeleteEditQ = document.getElementById('btn-delete-editing-question');
+    if (btnDeleteEditQ) {
+      btnDeleteEditQ.addEventListener('click', () => this.handleDeleteCurrentEditingQuestion());
+    }
+
     // Exam Navigation Buttons
     const btnPrev = document.getElementById('btn-prev-question');
     const btnNext = document.getElementById('btn-next-question');
@@ -1894,13 +1899,14 @@ const ELearning = {
   },
 
   async handleDeleteQuestionFromExam(questionId, examId) {
+    const targetExamId = examId || (this.currentAdminExam ? this.currentAdminExam.id : null);
     if (confirm(`Yakin ingin menghapus butir soal #${questionId} ini?`)) {
       try {
         const res = await API.deleteQuestion(questionId);
         if (res.success) {
-          App.showToast("Butir soal berhasil dihapus.", "success");
-          if (examId) {
-            await this.openEditExamModal(examId);
+          App.showToast("Butir soal berhasil dihapus! 🗑️", "success");
+          if (targetExamId) {
+            await this.openEditExamModal(targetExamId);
           }
           this.loadAdminExamsTable();
         } else {
@@ -1910,6 +1916,17 @@ const ELearning = {
         App.showToast(`Error: ${e.message}`, "error");
       }
     }
+  },
+
+  async handleDeleteCurrentEditingQuestion() {
+    const qId = parseInt(document.getElementById('edit-q-id').value);
+    const examId = parseInt(document.getElementById('edit-q-exam-id').value) || (this.currentAdminExam ? this.currentAdminExam.id : null);
+    if (!qId) {
+      App.showToast("ID butir soal tidak ditemukan.", "error");
+      return;
+    }
+    this.closeEditQuestionModal();
+    await this.handleDeleteQuestionFromExam(qId, examId);
   },
 
   // ==================== ADMIN MASTER DATA SISWA ====================

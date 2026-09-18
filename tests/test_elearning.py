@@ -787,6 +787,15 @@ class TestELearningEngine(unittest.TestCase):
             self.assertEqual(len(updated_q["options"]), 4)
             self.assertEqual(updated_q["options"][2], "C. 25")
 
+            # 6. Uji endpoint DELETE /api/elearning/questions/<id> (hapus butir soal)
+            res_del_q = self.client.delete(f"/api/elearning/questions/{q_id}")
+            self.assertEqual(res_del_q.status_code, 200)
+            self.assertTrue(res_del_q.get_json()["success"])
+
+            # Verifikasi butir soal telah terhapus dari DB
+            deleted_q = get_question(q_id)
+            self.assertIsNone(deleted_q)
+
         finally:
             # Bersihkan data uji
             delete_exam(test_exam_id)

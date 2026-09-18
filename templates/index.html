@@ -3074,9 +3074,14 @@ conn.close()
           </div>
         </div>
 
-        <button class="btn btn-primary" id="btn-save-edit-question" style="margin-top: 8px; justify-content: center;">
-          💾 Simpan Perubahan Butir Soal
-        </button>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button class="btn btn-secondary btn-sm" id="btn-delete-editing-question" type="button" style="color: var(--accent-rose); border-color: rgba(244,63,94,0.3); padding: 8px 14px; font-weight: 600;" title="Hapus butir soal ini">
+            🗑️ Hapus Soal
+          </button>
+          <button class="btn btn-primary btn-sm" id="btn-save-edit-question" type="button" style="flex: 1; justify-content: center;">
+            💾 Simpan Perubahan Butir Soal
+          </button>
+        </div>
       </div>
     </div>
   </div>

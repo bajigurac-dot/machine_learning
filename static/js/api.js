@@ -330,6 +330,11 @@ const API = {
     return await res.json();
   },
 
+  async deleteQuestion(id) {
+    const res = await fetch(`/api/elearning/questions/${id}`, { method: 'DELETE' });
+    return await res.json();
+  },
+
   async addQuestion(examId, questionType, questionText, options, correctAnswer, starterCode, expectedOutput, points) {
     const res = await fetch('/api/elearning/questions/add', {
       method: 'POST',
